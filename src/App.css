@@ -1,18 +1,21 @@
 :root {
   --header-height: 60px;
   --main-color: #007bff;
+  --owners-color: #005abb;
+  --padding-for-view-with-header: calc(var(--header-height) + 15px);
 }
 
 .App {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: calc(var(--header-height) + 15px);
+  padding-top: var(--padding-for-view-with-header);
   font-family: 'Rubik', sans-serif;
   font-weight: 100;
 }
 
-.App .app-header {
+.App .app-header,
+.App .modal-header {
   background-color: white;
   height: var(--header-height);
   border-bottom: 1px solid #ccc;
@@ -62,14 +65,15 @@
 
 .petek-container .petek-owner {
   text-align: right;
-  color: #999;
+  color: #5a5858;
   width: 100%;
 }
 
 .petek-container .petek-time {
   text-align: left;
-  color: #999;
+  color: #5a5858;
   width: 100%;
+  margin-top: 15px;
 }
 
 .petek-container .petek-text {
@@ -80,6 +84,13 @@
   font-size: 24px;
   text-align: right;
   font-size: 16px;
+}
+
+.petek-container .petek-situation {
+  font-style: italic;
+  margin-top: 3px;
+  text-align: right;
+  width: 100%;
 }
 
 .petek-container:nth-child(2n + 1) .petek-text {
@@ -102,9 +113,60 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  padding: 20px;
 }
 
 .new-petek-modal-container.visible {
   opacity: 1;
   pointer-events: all;
+}
+
+.new-petek-modal-container .modal-header {
+  font-size: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.new-petek-modal-container .modal-body {
+  padding-top: var(--padding-for-view-with-header);
+}
+
+.new-petek-modal-container .input {
+  width: 100%;
+  height: var(--header-height);
+  font-family: 'Rubik', sans-serif;
+  font-weight: 100;
+  border: none;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+  margin-bottom: 30px;
+  font-size: 20px;
+  padding: 0 10px;
+}
+
+.new-petek-modal-container .modal-body .owners-list-container {
+  display: flex;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.new-petek-modal-container .modal-body .set-owner-button {
+    background-color: var(--owners-color);
+    border-radius: 2px;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 400;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.new-petek-modal-container .input.long-input {
+  resize: none;
+  height: 140px;
 }

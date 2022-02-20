@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, set, push } from "firebase/database";
+import { getDatabase, ref, set, push, get } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,7 +24,7 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 
 export const fetchPetekList = () => {
-    console.log('blah');
+    return get(ref(db, 'peteks/')).then(snap => snap.val());
 }
 
 export const addNewPetek = async (petek) => {
