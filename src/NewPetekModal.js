@@ -7,6 +7,8 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
     const [owner, setOwner] = useState('');
     const [content, setContent] = useState('');
     const [situation, setSituation] = useState('');
+    const [category, setCategory] = useState('');
+    const [allCategories, setAllCategories] = useState([]);
     const [allOwners, setAllOwners] = useState([]);
     const [allRelated, setAllRelated] = useState({});
     const [rating, setRating] = useState(0);
@@ -16,6 +18,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
         setOwner('');
         setContent('');
         setSituation('');
+        setCategory('');
         setRating(0);
     }
 
@@ -28,8 +31,19 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
 
             return result;
         }, {});
-
         setAllOwners(allOwners);
+
+        const allCategories = Object.keys(list).reduce((result, currentPetekKey) => {
+            const currentPetek = list[currentPetekKey];
+            if (currentPetek.category && !result[currentPetek.category] ) {
+                console.log('currentPetek.category', currentPetek.category);
+                result[currentPetek.category] = true;
+            }
+
+            return result;
+        }, {});
+        console.log('allCategories', allCategories);
+        setAllCategories(allCategories);
     }, [list]);
 
     useEffect(() => {
@@ -40,6 +54,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
         setOwner(petekToEdit.owner ?? '');
         setContent(petekToEdit.content ?? '');
         setSituation(petekToEdit.situation ?? '');
+        setCategory(petekToEdit.category ?? '');
         setRating(petekToEdit.rating ?? 0);
         setAllRelated(petekToEdit.allRelated ?? {});
     }, [petekToEdit]);
@@ -51,6 +66,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
             content,
             situation,
             rating,
+            category,
             allRelated: Object.keys(allRelated).length === 0 ? null : allRelated,
             createdAt: petekToEdit?.createdAt ?? (new Date()).toISOString()
         };
@@ -80,6 +96,10 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
                     setSituation(e.target.value);
                     break;
                 }
+                case 'category': {
+                    setCategory(e.target.value);
+                    break;
+                }
             }
         }
     }
@@ -91,6 +111,16 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
             }
 
             setOwner(newOwnerFromButton);
+        }
+    }
+
+    const createHandleCategoryClick = (newCategoryFromButton) => {
+        return () => {
+            if (category === newCategoryFromButton) {
+                setCategory('');
+            }
+
+            setCategory(newCategoryFromButton);
         }
     }
 
@@ -135,7 +165,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
 
                 <Separator emoji="🤦‍♂️" />
 
-                <div className="relation-container">
+                <div className="section-container relation-container">
                     <div className="title">קשור למישהו?</div>
                     <div className="related-list-container">
                         {Object.keys(allOwners).map((owner, index) => {
@@ -147,7 +177,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
 
                 <Separator emoji="🤪" />
 
-                <div className="rating-container">
+                <div className="section-container rating-container">
                     <div className="title">כמה זה טוב?</div>
                     <div className="stars-container">
                         <div className={`star star-1 ${rating >= 1 ? 'selected' : ''}`} onClick={createHandleRatingClick(1)}></div>
@@ -159,6 +189,17 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
                 </div>
 
                 <Separator emoji="🙊" />
+
+                <div className="section-container">
+                    <div className="title">קטגוריה?</div>
+                    <input value={category} className="input" type="text" placeholder="קטגוריה?" onChange={createHandleChange('category')} />
+                    <div className="owners-list-container">
+                        {Object.keys(allCategories).map((currCategory, index) => {
+                            const className = `set-owner-button ${currCategory === category ? 'selected' : ''}`;
+                            return <div key={index} className={className} onClick={createHandleCategoryClick(currCategory)}>{currCategory}</div>
+                        })}
+                    </div>
+                </div>
 
                 <div className="add-new-petek-button" onClick={handleSubmit}>
                     🤦‍♂️ הוסף ציטוט 🤣

@@ -18,6 +18,13 @@ export default ({petek, editPetek}) => {
                     </div>
                 )
             }
+            {
+                petek.category && (
+                    <div className="categories-tags-container">
+                        <div className="category-tag">{petek.category}</div>
+                    </div>
+                )
+            }
             <div className="petek-footer">
                 {petek.rating &&
                     <div className="rating-container">

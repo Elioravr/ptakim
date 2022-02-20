@@ -194,7 +194,8 @@
 
 .new-petek-modal-container .modal-body .set-owner-button,
 .new-petek-modal-container .modal-body .set-related-button,
-.related-tag  {
+.related-tag,
+.category-tag {
     background-color: var(--owners-color);
     border-radius: 2px;
     color: white;
@@ -218,8 +219,7 @@
   padding: 10px;
 }
 
-.new-petek-modal-container .relation-container,
-.new-petek-modal-container .rating-container {
+.new-petek-modal-container .section-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -227,8 +227,7 @@
   margin: 20px 0;
 }
 
-.new-petek-modal-container .relation-container .title,
-.new-petek-modal-container .rating-container .title {
+.new-petek-modal-container .section-container .title {
   font-size: 25px;
   margin-bottom: 20px;
 }
@@ -247,17 +246,23 @@
   border: 2px solid var(--related-color);
 }
 
-.related-tag {
+.petek-container .related-tag,
+.petek-container .category-tag {
   font-size: 14px;
   padding: 5px;
+  margin: 0;
+  margin-left: 5px;
 }
 
-.related-tags-container {
+.related-tags-container,
+.categories-tags-container {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   flex-wrap: wrap;
   padding: 4px 0;
   width: 100%;
+  /* margin: 5px 0; */
 }
 
 .new-petek-modal-container .modal-body .rating-container {
