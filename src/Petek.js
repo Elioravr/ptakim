@@ -11,13 +11,14 @@ export default ({petek, editPetek, deletePetek}) => {
         console.log('deletePetek', deletePetek);
         deletePetek(petek.id);
     }
+    console.log('petek', petek);
 
     return (
         <div className="petek-container" onClick={handleClick}>
             <div className="delete-button" onClick={handleDeleteClick}>X</div>
             <div className="petek-owner">{petek.owner}</div>
             {petek.situation && <div className="petek-situation">{`— ${petek.situation}`}</div>}
-            <div className="petek-text">{petek.content}</div>
+            <div className="petek-text">{petek.content.split('\n').map(line => <div>{line}</div>)}</div>
             {
                 petek.allRelated && (
                     <div className="related-tags-container">
@@ -33,7 +34,7 @@ export default ({petek, editPetek, deletePetek}) => {
                 )
             }
             <div className="petek-footer">
-                {petek.rating &&
+                {petek.rating != null && petek.rating !== 0 &&
                     <div className="rating-container">
                         <span>{petek.rating}</span>
                         <div className="star"></div>
