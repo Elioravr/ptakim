@@ -1,4 +1,5 @@
 import Petek from './Petek';
+import {fetchPetekList} from './apiService'
 
 export default () => {
     const x = [];
@@ -7,9 +8,7 @@ export default () => {
     }
     return (
         <div className="petek-list-container">
-            {
-                x.map(petek => <Petek petek={petek} />)
-            }
+            {x.map((petek, index) => <Petek key={index} petek={petek} />)}
         </div>
     );
 }
