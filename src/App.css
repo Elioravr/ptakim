@@ -1,38 +1,85 @@
+:root {
+  --header-height: 60px;
+  --main-color: #007bff;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: calc(var(--header-height) + 15px);
+}
+
+.App .app-header {
+  background-color: white;
+  height: var(--header-height);
+  border-bottom: 1px solid #ccc;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.App .app-header .logo {
+  font-family: 'Dancing Script', cursive;
+  font-weight: bold;
+  font-size: 36px;
+}
+
+.add-new-petek-button {
+  width: 90%;
+  max-width: 350px;
+  height: 80px;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 33px;
   color: white;
+  border: 3px solid white;
+  background-color: var(--main-color);
 }
 
-.App-link {
-  color: #61dafb;
+.petek-list-container {
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.petek-container {
+  border-bottom: 1px solid #ccc;
+  margin: 10px 0;
+  width: 100%;
+  padding: 8px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.petek-container .petek-owner {
+  text-align: right;
+  color: #999;
+  width: 100%;
+  text-align: right;
+}
+
+.petek-container .petek-text {
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 10px 0;
+  font-size: 24px;
+  text-align: right;
+  font-size: 16px;
+}
+
+.petek-container:nth-child(2n + 1) .petek-text {
+  background-color: #dfdbdb;
+}
+
+.petek-container:nth-child(2n + 2) .petek-text {
+  background-color: var(--main-color);
+  color: white;
 }
