@@ -48,7 +48,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
             content,
             situation,
             allRelated: Object.keys(allRelated).length === 0 ? null : allRelated,
-            createdAt: (new Date()).toISOString()
+            createdAt: petekToEdit?.createdAt ?? (new Date()).toISOString()
         };
 
         clearForm();

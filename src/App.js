@@ -15,6 +15,10 @@ function App() {
       fetchPetekList()
         .then(list => list && setList(list))
         .catch(e => fetchPetekList().then(list => list && setList(list)));
+
+      if (!isNewPetekModalOpen) {
+        setPetekToEdit(null);
+      }
   }, [isNewPetekModalOpen]);
 
   const editPetek = (petek) => {
