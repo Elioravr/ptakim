@@ -181,6 +181,7 @@
   font-weight: 100;
   border: none;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+  -webkit-appearance: none;
   margin-bottom: 30px;
   font-size: 20px;
   padding: 0 10px;
@@ -207,6 +208,10 @@
     margin-bottom: 10px;
     border: 2px solid var(--owners-color);
   }
+
+.new-petek-modal-container .modal-body .category-tag {
+  font-size: 16px;
+}
 
 .new-petek-modal-container .modal-body .set-owner-button.selected {
   background-color: white;

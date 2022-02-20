@@ -195,11 +195,13 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
                     <input value={category} className="input" type="text" placeholder="קטגוריה?" onChange={createHandleChange('category')} />
                     <div className="owners-list-container">
                         {Object.keys(allCategories).map((currCategory, index) => {
-                            const className = `set-owner-button ${currCategory === category ? 'selected' : ''}`;
+                            const className = `category-tag ${currCategory === category ? 'selected' : ''}`;
                             return <div key={index} className={className} onClick={createHandleCategoryClick(currCategory)}>{currCategory}</div>
                         })}
                     </div>
                 </div>
+
+                <Separator emoji="🤩" />
 
                 <div className="add-new-petek-button" onClick={handleSubmit}>
                     🤦‍♂️ הוסף ציטוט 🤣

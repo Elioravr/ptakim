@@ -9,8 +9,8 @@ export default ({petek, editPetek}) => {
     return (
         <div className="petek-container" onClick={handleClick}>
             <div className="petek-owner">{petek.owner}</div>
+            {petek.situation && <div className="petek-situation">{`— ${petek.situation}`}</div>}
             <div className="petek-text">{petek.content}</div>
-            {petek.situation && <div className="petek-situation">{petek.situation}</div>}
             {
                 petek.allRelated && (
                     <div className="related-tags-container">
