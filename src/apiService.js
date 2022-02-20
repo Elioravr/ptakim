@@ -24,12 +24,18 @@ const analytics = getAnalytics(app);
 const db = getDatabase(app);
 
 export const fetchPetekList = () => {
-    return get(ref(db, 'peteks/')).then(snap => snap.val());
+    return get(ref(db, 'peteks/')).then(snap => {
+        return snap.val();
+    });
 }
 
 export const addNewPetek = async (petek) => {
-    console.log('petek', petek);
-    push(ref(db, 'peteks/'), petek);
+    if (petek.id) {
+        console.log('petek', petek);
+        return set(ref(db, `peteks/${petek.id}`), petek);
+    }
+
+    return push(ref(db, 'peteks/'), petek);
 
 
     // db.ref('meals').push(petek);

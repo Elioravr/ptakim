@@ -9,10 +9,18 @@ import './App.css';
 function App() {
   const [isNewPetekModalOpen, setIsNewPetekModalOpen] = useState(false);
   const [list, setList] = useState([]);
+  const [petekToEdit, setPetekToEdit] = useState(null);
 
-    useEffect(() => {
-        fetchPetekList().then(list => list && setList(list));
-    }, [isNewPetekModalOpen]);
+  useEffect(() => {
+      fetchPetekList()
+        .then(list => list && setList(list))
+        .catch(e => fetchPetekList().then(list => list && setList(list)));
+  }, [isNewPetekModalOpen]);
+
+  const editPetek = (petek) => {
+    setIsNewPetekModalOpen(true);
+    setPetekToEdit(petek)
+  }
 
   return (
     <div className="App">
@@ -21,9 +29,9 @@ function App() {
           <span className="logo">Ptakim</span>
         </div>
         <AddNewPetekButton setIsNewPetekModalOpen={setIsNewPetekModalOpen} />
-        <PetekList list={list} />
+        <PetekList list={list} editPetek={editPetek} />
       </div>
-      <NewPetekModal isOpen={isNewPetekModalOpen} setIsOpen={setIsNewPetekModalOpen} list={list} />
+      <NewPetekModal isOpen={isNewPetekModalOpen} setIsOpen={setIsNewPetekModalOpen} list={list} petekToEdit={petekToEdit} />
     </div>
   );
 }

@@ -3,13 +3,12 @@ import {useState, useEffect} from 'react';
 import Separator from './Separator';
 import {addNewPetek} from './apiService';
 
-export default ({isOpen, setIsOpen, list}) => {
+export default ({isOpen, setIsOpen, list, petekToEdit}) => {
     const [owner, setOwner] = useState('');
     const [content, setContent] = useState('');
     const [situation, setSituation] = useState('');
     const [allOwners, setAllOwners] = useState([]);
     const [allRelated, setAllRelated] = useState({});
-    console.log('allRelated', allRelated);
     const className = `page new-petek-modal-container ${isOpen ? 'visible' : ''}`
 
     const clearForm = () => {
@@ -28,12 +27,30 @@ export default ({isOpen, setIsOpen, list}) => {
             return result;
         }, {});
 
-        console.log('allOwners', allOwners);
         setAllOwners(allOwners);
     }, [list]);
 
+    useEffect(() => {
+        if (!petekToEdit) {
+            return;
+        }
+
+        setOwner(petekToEdit.owner ?? '');
+        setContent(petekToEdit.content ?? '');
+        setSituation(petekToEdit.situation ?? '');
+        setAllRelated(petekToEdit.allRelated ?? {});
+    }, [petekToEdit]);
+
     const handleSubmit = () => {
-        const petek = {owner, content, situation, createdAt: (new Date()).toISOString()};
+        const petek = {
+            id: petekToEdit?.id ?? null,
+            owner,
+            content,
+            situation,
+            allRelated: Object.keys(allRelated).length === 0 ? null : allRelated,
+            createdAt: (new Date()).toISOString()
+        };
+
         clearForm();
         addNewPetek(petek);
         setIsOpen(false);
@@ -104,7 +121,7 @@ export default ({isOpen, setIsOpen, list}) => {
                 <Separator emoji="🤣" />
 
                 <textarea value={content} className="input long-input" placeholder="מה אמרו?" onChange={createHandleChange('content')} />
-                <input value={situation} className="input" type="text" placeholder="באיזה סיטואציה?" onChange={createHandleChange('situation')} />
+                <textarea value={situation} className="input long-input" type="text" placeholder="באיזה סיטואציה?" onChange={createHandleChange('situation')} />
 
                 <Separator emoji="🤦‍♂️" />
 
