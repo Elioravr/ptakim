@@ -16,11 +16,13 @@ function App() {
 
   return (
     <div className="App">
-      <div className="app-header">
-        <span className="logo">Ptakim</span>
+      <div className={`page ${isNewPetekModalOpen ? '' : 'visible'}`}>
+        <div className="app-header">
+          <span className="logo">Ptakim</span>
+        </div>
+        <AddNewPetekButton setIsNewPetekModalOpen={setIsNewPetekModalOpen} />
+        <PetekList list={list} />
       </div>
-      <AddNewPetekButton setIsNewPetekModalOpen={setIsNewPetekModalOpen} />
-      <PetekList list={list} />
       <NewPetekModal isOpen={isNewPetekModalOpen} setIsOpen={setIsNewPetekModalOpen} list={list} />
     </div>
   );

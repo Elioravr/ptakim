@@ -8,7 +8,9 @@ export default ({isOpen, setIsOpen, list}) => {
     const [content, setContent] = useState('');
     const [situation, setSituation] = useState('');
     const [allOwners, setAllOwners] = useState([]);
-    const className = `new-petek-modal-container ${isOpen ? 'visible' : ''}`
+    const [allRelated, setAllRelated] = useState({});
+    console.log('allRelated', allRelated);
+    const className = `page new-petek-modal-container ${isOpen ? 'visible' : ''}`
 
     const clearForm = () => {
         setOwner('');
@@ -61,10 +63,26 @@ export default ({isOpen, setIsOpen, list}) => {
         }
     }
 
-    const createHandleOwnerClick = (owner) => {
+    const createHandleOwnerClick = (newOwnerFromButton) => {
         return () => {
-            console.log('owner', owner);
-            setOwner(owner);
+            if (owner === newOwnerFromButton) {
+                setOwner('');
+            }
+
+            setOwner(newOwnerFromButton);
+        }
+    }
+
+    const createHandleRelatedClick = (related) => {
+        return () => {
+            const newRelated = {...allRelated};
+            if (newRelated[related]) {
+                Reflect.deleteProperty(newRelated, related);
+            } else {
+                newRelated[related] = true;
+            }
+
+            setAllRelated(newRelated);
         }
     }
 
@@ -77,7 +95,10 @@ export default ({isOpen, setIsOpen, list}) => {
             <div className="modal-body">
                 <input value={owner} className="input" type="text" placeholder="מי אמר?" onChange={createHandleChange('owner')} />
                 <div className="owners-list-container">
-                    {Object.keys(allOwners).map((owner, index) => <div key={index} class="set-owner-button" onClick={createHandleOwnerClick(owner)}>{owner}</div>)}
+                    {Object.keys(allOwners).map((currOwner, index) => {
+                        const className = `set-owner-button ${currOwner === owner ? 'selected' : ''}`;
+                        return <div key={index} className={className} onClick={createHandleOwnerClick(currOwner)}>{currOwner}</div>
+                    })}
                 </div>
 
                 <Separator emoji="🤣" />
@@ -90,9 +111,14 @@ export default ({isOpen, setIsOpen, list}) => {
                 <div className="relation-container">
                     <div className="title">קשור למישהו?</div>
                     <div className="related-list-container">
-                        {Object.keys(allOwners).map((owner, index) => <div key={index} class="set-related-button" onClick={createHandleOwnerClick(owner)}>{owner}</div>)}
+                        {Object.keys(allOwners).map((owner, index) => {
+                            const className = `set-related-button ${allRelated[owner] ? 'selected' : ''}`;
+                            return <div key={index} className={className} onClick={createHandleRelatedClick(owner)}>{owner}</div>
+                        })}
                     </div>
                 </div>
+
+                <Separator emoji="🤪" />
 
                 <div className="add-new-petek-button" onClick={handleSubmit}>
                     🤦‍♂️ הוסף ציטוט 🤣

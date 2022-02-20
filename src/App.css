@@ -10,9 +10,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: var(--padding-for-view-with-header);
   font-family: 'Rubik', sans-serif;
   font-weight: 100;
+}
+
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: var(--padding-for-view-with-header);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.page.visible {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .App .app-header,
@@ -37,6 +53,7 @@
 
 .add-new-petek-button {
   width: 90%;
+  margin: auto;
   max-width: 350px;
   height: 80px;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
@@ -104,16 +121,8 @@
 }
 
 .new-petek-modal-container {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   z-index: 1;
   background-color: white;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
   justify-self: center;
@@ -166,11 +175,19 @@
     font-weight: 400;
     margin-left: 10px;
     margin-bottom: 10px;
+    border: 2px solid var(--owners-color);
+  }
+
+.new-petek-modal-container .modal-body .set-owner-button.selected {
+  background-color: white;
+  border: 2px solid var(--owners-color);
+  color: var(--owners-color);
 }
 
 .new-petek-modal-container .input.long-input {
   resize: none;
   height: 140px;
+  padding: 5px;
 }
 
 .new-petek-modal-container .relation-container {
@@ -183,7 +200,7 @@
 
 .new-petek-modal-container .relation-container .title {
   font-size: 25px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .new-petek-modal-container .relation-container .related-list-container {
@@ -196,6 +213,13 @@
 
 .new-petek-modal-container .modal-body .set-related-button {
   background-color: var(--related-color);
+  border: 2px solid var(--related-color);
+}
+
+.new-petek-modal-container .modal-body .set-related-button.selected {
+  background-color: white;
+  border: 2px solid var(--related-color);
+  color: var(--related-color);
 }
 
 .separator::before,
