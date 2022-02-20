@@ -31,6 +31,7 @@
   opacity: 1;
   pointer-events: all;
   overflow: auto;
+  text-align: center;
 }
 
 .App .app-header,
@@ -312,4 +313,40 @@
   justify-content: space-between;
   align-items: center;
   margin: 20px 0;
+}
+
+.loading-container {
+    padding: 50px;
+}
+
+.loading-container.small {
+    padding: 30px;
+}
+.loading-container.small .stage {
+    font-size: 40px;
+}
+
+.loading-container.small .text {
+    font-size: 15px;
+}
+
+.loading-container .stage {
+  font-size: 70px;
+  animation: icon-popup 1s ease-in-out infinite;
+}
+
+.loading-container .text {
+  font-size: 20px;
+}
+
+@keyframes icon-popup {
+  0% {
+    transform: scale(0) rotate(-90deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    transform: scale(0) rotate(90deg);
+  }
 }
