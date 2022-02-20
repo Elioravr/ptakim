@@ -24,11 +24,13 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease-in-out;
+  overflow: hidden;
 }
 
 .page.visible {
   opacity: 1;
   pointer-events: all;
+  overflow: auto;
 }
 
 .App .app-header,
@@ -69,7 +71,6 @@
 .petek-list-container {
   width: 100%;
 }
-
 .petek-container {
   border-bottom: 1px solid #ccc;
   margin: 10px 0;
@@ -79,6 +80,10 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.petek-container:last-child {
+  border-bottom: none;
 }
 
 .petek-container .petek-owner {

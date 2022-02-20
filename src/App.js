@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import AddNewPetekButton from './AddNewPetekButton'
 import PetekList from './PetekList'
 import NewPetekModal from './NewPetekModal'
+import Separator from './Separator'
 import {fetchPetekList} from './apiService';
 import './App.css';
 
@@ -34,6 +35,7 @@ function App() {
         </div>
         <AddNewPetekButton setIsNewPetekModalOpen={setIsNewPetekModalOpen} />
         <PetekList list={list} editPetek={editPetek} />
+        <Separator emoji="🤷‍♂️" />
       </div>
       <NewPetekModal isOpen={isNewPetekModalOpen} setIsOpen={setIsNewPetekModalOpen} list={list} petekToEdit={petekToEdit} />
     </div>
