@@ -20,6 +20,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
         setSituation('');
         setCategory('');
         setRating(0);
+        setAllRelated({});
     }
 
     useEffect(() => {
@@ -36,13 +37,11 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
         const allCategories = Object.keys(list).reduce((result, currentPetekKey) => {
             const currentPetek = list[currentPetekKey];
             if (currentPetek.category && !result[currentPetek.category] ) {
-                console.log('currentPetek.category', currentPetek.category);
                 result[currentPetek.category] = true;
             }
 
             return result;
         }, {});
-        console.log('allCategories', allCategories);
         setAllCategories(allCategories);
     }, [list]);
 
@@ -195,8 +194,6 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
                     <input value={category} className="input" type="text" placeholder="קטגוריה?" onChange={createHandleChange('category')} />
                     <div className="owners-list-container">
                         {Object.keys(allCategories).map((currCategory, index) => {
-                            console.log('currCategory', currCategory);
-                            console.log('category', category);
                             const className = `category-tag ${currCategory === category ? 'selected' : ''}`;
                             return <div key={index} className={className} onClick={createHandleCategoryClick(currCategory)}>{currCategory}</div>
                         })}

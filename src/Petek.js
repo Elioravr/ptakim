@@ -2,7 +2,6 @@ export default ({petek, editPetek, deletePetek}) => {
     const dateAsString = (new Date(petek.createdAt)).toLocaleDateString();
 
     const handleClick = () => {
-        console.log('petek', petek);
         editPetek(petek);
     }
 
@@ -11,7 +10,6 @@ export default ({petek, editPetek, deletePetek}) => {
         console.log('deletePetek', deletePetek);
         deletePetek(petek.id);
     }
-    console.log('petek', petek);
 
     return (
         <div className="petek-container" onClick={handleClick}>
