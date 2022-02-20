@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 
+import Separator from './Separator';
 import {addNewPetek} from './apiService';
 
 export default ({isOpen, setIsOpen, list}) => {
@@ -78,8 +79,21 @@ export default ({isOpen, setIsOpen, list}) => {
                 <div className="owners-list-container">
                     {Object.keys(allOwners).map((owner, index) => <div key={index} class="set-owner-button" onClick={createHandleOwnerClick(owner)}>{owner}</div>)}
                 </div>
+
+                <Separator emoji="🤣" />
+
                 <textarea value={content} className="input long-input" placeholder="מה אמרו?" onChange={createHandleChange('content')} />
                 <input value={situation} className="input" type="text" placeholder="באיזה סיטואציה?" onChange={createHandleChange('situation')} />
+
+                <Separator emoji="🤦‍♂️" />
+
+                <div className="relation-container">
+                    <div className="title">קשור למישהו?</div>
+                    <div className="related-list-container">
+                        {Object.keys(allOwners).map((owner, index) => <div key={index} class="set-related-button" onClick={createHandleOwnerClick(owner)}>{owner}</div>)}
+                    </div>
+                </div>
+
                 <div className="add-new-petek-button" onClick={handleSubmit}>
                     🤦‍♂️ הוסף ציטוט 🤣
                 </div>

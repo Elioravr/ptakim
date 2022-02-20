@@ -2,6 +2,7 @@
   --header-height: 60px;
   --main-color: #007bff;
   --owners-color: #005abb;
+  --related-color: #FF530F;
   --padding-for-view-with-header: calc(var(--header-height) + 15px);
 }
 
@@ -155,7 +156,8 @@
   justify-content: center;
 }
 
-.new-petek-modal-container .modal-body .set-owner-button {
+.new-petek-modal-container .modal-body .set-owner-button,
+.new-petek-modal-container .modal-body .set-related-button  {
     background-color: var(--owners-color);
     border-radius: 2px;
     color: white;
@@ -169,4 +171,46 @@
 .new-petek-modal-container .input.long-input {
   resize: none;
   height: 140px;
+}
+
+.new-petek-modal-container .relation-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.new-petek-modal-container .relation-container .title {
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.new-petek-modal-container .relation-container .related-list-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.new-petek-modal-container .modal-body .set-related-button {
+  background-color: var(--related-color);
+}
+
+.separator::before,
+.separator::after {
+  content: ' ';
+  height: 1px;
+  width: 130px;
+  background-color: #ccc;
+  display: block;
+}
+
+.separator {
+  font-size: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
 }
