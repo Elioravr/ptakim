@@ -1,4 +1,4 @@
-export default ({petek, editPetek}) => {
+export default ({petek, editPetek, deletePetek}) => {
     const dateAsString = (new Date(petek.createdAt)).toLocaleDateString();
 
     const handleClick = () => {
@@ -6,8 +6,15 @@ export default ({petek, editPetek}) => {
         editPetek(petek);
     }
 
+    const handleDeleteClick = (e) => {
+        e.stopPropagation();
+        console.log('deletePetek', deletePetek);
+        deletePetek(petek.id);
+    }
+
     return (
         <div className="petek-container" onClick={handleClick}>
+            <div className="delete-button" onClick={handleDeleteClick}>X</div>
             <div className="petek-owner">{petek.owner}</div>
             {petek.situation && <div className="petek-situation">{`— ${petek.situation}`}</div>}
             <div className="petek-text">{petek.content}</div>

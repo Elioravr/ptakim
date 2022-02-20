@@ -82,6 +82,14 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative;
+}
+
+.petek-container .delete-button {
+  position: absolute;
+  left: 14px;
+  top: 7px;
+  font-size: 16px;
 }
 
 .petek-container:last-child {

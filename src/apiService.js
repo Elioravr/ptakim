@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, set, push, get } from "firebase/database";
+import { getDatabase, ref, set, push, get, remove } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -36,14 +36,8 @@ export const addNewPetek = async (petek) => {
     }
 
     return push(ref(db, 'peteks/'), petek);
+}
 
-
-    // db.ref('meals').push(petek);
-    // debugger;
-    // console.log('db', db);
-    // console.log('db.db', db.db);
-    // console.log('ref(db, "/peteks")', ref(db, '/peteks'));
-    // const citiesCol = collection(db, 'cities');
-    // const citySnapshot = await getDocs(citiesCol);
-    // ref(db, '/peteks').push(petek);
+export const deletePetek = (petekId) => {
+    remove(ref(db, `peteks/${petekId}`));
 }

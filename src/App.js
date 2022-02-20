@@ -5,7 +5,7 @@ import PetekList from './PetekList'
 import NewPetekModal from './NewPetekModal'
 import Separator from './Separator'
 import Loading from './Loading'
-import {fetchPetekList} from './apiService';
+import {fetchPetekList, deletePetek} from './apiService';
 import './App.css';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [petekToEdit, setPetekToEdit] = useState(null);
 
-  useEffect(() => {
+  const loadList = () => {
     setIsLoading(true);
     fetchPetekList()
       .then(list => {
@@ -25,6 +25,10 @@ function App() {
         list && setList(list);
         setIsLoading(false);
       }));
+  }
+
+  useEffect(() => {
+    loadList();
 
     if (!isNewPetekModalOpen) {
       setPetekToEdit(null);
@@ -36,6 +40,13 @@ function App() {
     setPetekToEdit(petek)
   }
 
+  const deletePetekAndLoadList = (petekId) => {
+    if (window.confirm('בטוח שאתה רוצה למחוק את הפתק?')) {
+      deletePetek(petekId);
+      loadList();
+    }
+  }
+
   return (
     <div className="App">
       <div className={`page ${isNewPetekModalOpen ? '' : 'visible'}`}>
@@ -45,7 +56,7 @@ function App() {
         {isLoading ? <Loading /> :
         <>
           <AddNewPetekButton setIsNewPetekModalOpen={setIsNewPetekModalOpen} />
-          <PetekList list={list} editPetek={editPetek} />
+          <PetekList list={list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} />
           <Separator emoji="🤷‍♂️" />
         </>}
       </div>
