@@ -1,10 +1,16 @@
-// import * as firebase from 'firebase';
-import { initializeApp } from 'firebase/app';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, set, push } from "firebase/database";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDaBFPa0M5fMCw-WmSYBknzwvdMsPRW6B0",
   authDomain: "ptakim-4f594.firebaseapp.com",
+  databaseURL: "https://ptakim-4f594-default-rtdb.firebaseio.com",
   projectId: "ptakim-4f594",
   storageBucket: "ptakim-4f594.appspot.com",
   messagingSenderId: "128907605631",
@@ -13,8 +19,25 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const x = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getDatabase(app);
 
 export const fetchPetekList = () => {
     console.log('blah');
+}
+
+export const addNewPetek = async (petek) => {
+    console.log('petek', petek);
+    push(ref(db, 'peteks/'), petek);
+
+
+    // db.ref('meals').push(petek);
+    // debugger;
+    // console.log('db', db);
+    // console.log('db.db', db.db);
+    // console.log('ref(db, "/peteks")', ref(db, '/peteks'));
+    // const citiesCol = collection(db, 'cities');
+    // const citySnapshot = await getDocs(citiesCol);
+    // ref(db, '/peteks').push(petek);
 }

@@ -90,3 +90,21 @@
   background-color: var(--main-color);
   color: white;
 }
+
+.new-petek-modal-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background-color: white;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.new-petek-modal-container.visible {
+  opacity: 1;
+  pointer-events: all;
+}
