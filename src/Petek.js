@@ -18,7 +18,20 @@ export default ({petek, editPetek, deletePetek}) => {
             <div className="delete-button" onClick={handleDeleteClick}>X</div>
             <div className="petek-owner">{petek.owner}</div>
             {petek.situation && <div className="petek-situation">{`— ${petek.situation}`}</div>}
-            <div className="petek-text">{petek.content.split('\n').map(line => <div>{line}</div>)}</div>
+            <div className="petek-text">
+                {petek.content.split('\n').map(line => {
+                    // let lineWithBoldSupport = '';
+                    // line.split('*').map
+                    // Support for lines and bold
+                    return <div>{line.split('*').map((part, index) => {
+                        if (index % 2 === 0) {
+                            return part;
+                        } else {
+                            return <b>{part}</b>;
+                        }
+                    })}</div>;
+                })}
+            </div>
             {
                 petek.allRelated && (
                     <div className="related-tags-container">
