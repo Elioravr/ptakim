@@ -18,7 +18,15 @@ export default ({petek, editPetek}) => {
                     </div>
                 )
             }
-            <div className="petek-time">התווסף ב: {dateAsString}</div>
+            <div className="petek-footer">
+                {petek.rating &&
+                    <div className="rating-container">
+                        <span>{petek.rating}</span>
+                        <div className="star"></div>
+                    </div>
+                }
+                <div className="petek-time">התווסף ב: {dateAsString}</div>
+            </div>
         </div>
     );
 }

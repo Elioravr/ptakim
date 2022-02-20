@@ -9,12 +9,14 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
     const [situation, setSituation] = useState('');
     const [allOwners, setAllOwners] = useState([]);
     const [allRelated, setAllRelated] = useState({});
+    const [rating, setRating] = useState(0);
     const className = `page new-petek-modal-container ${isOpen ? 'visible' : ''}`
 
     const clearForm = () => {
         setOwner('');
         setContent('');
         setSituation('');
+        setRating(0);
     }
 
     useEffect(() => {
@@ -38,6 +40,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
         setOwner(petekToEdit.owner ?? '');
         setContent(petekToEdit.content ?? '');
         setSituation(petekToEdit.situation ?? '');
+        setRating(petekToEdit.rating ?? 0);
         setAllRelated(petekToEdit.allRelated ?? {});
     }, [petekToEdit]);
 
@@ -47,6 +50,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
             owner,
             content,
             situation,
+            rating,
             allRelated: Object.keys(allRelated).length === 0 ? null : allRelated,
             createdAt: petekToEdit?.createdAt ?? (new Date()).toISOString()
         };
@@ -103,6 +107,12 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
         }
     }
 
+    const createHandleRatingClick = (selectedRating) => {
+        return () => {
+            setRating(selectedRating);
+        }
+    }
+
     return (
         <div className={className}>
             <div className="modal-header">
@@ -136,6 +146,19 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
                 </div>
 
                 <Separator emoji="🤪" />
+
+                <div className="rating-container">
+                    <div className="title">כמה זה טוב?</div>
+                    <div className="stars-container">
+                        <div className={`star star-1 ${rating >= 1 ? 'selected' : ''}`} onClick={createHandleRatingClick(1)}></div>
+                        <div className={`star star-2 ${rating >= 2 ? 'selected' : ''}`} onClick={createHandleRatingClick(2)}></div>
+                        <div className={`star star-3 ${rating >= 3 ? 'selected' : ''}`} onClick={createHandleRatingClick(3)}></div>
+                        <div className={`star star-4 ${rating >= 4 ? 'selected' : ''}`} onClick={createHandleRatingClick(4)}></div>
+                        <div className={`star star-5 ${rating >= 5 ? 'selected' : ''}`} onClick={createHandleRatingClick(5)}></div>
+                    </div>
+                </div>
+
+                <Separator emoji="🙊" />
 
                 <div className="add-new-petek-button" onClick={handleSubmit}>
                     🤦‍♂️ הוסף ציטוט 🤣
