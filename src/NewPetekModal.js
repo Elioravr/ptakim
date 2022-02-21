@@ -217,7 +217,7 @@ export default ({list, petekToEdit, page, setPage}) => {
 
                 <Separator emoji="🤩" />
 
-                <div className="add-new-petek-button" onClick={handleSubmit}>
+                <div className="main-submit-button" onClick={handleSubmit}>
                     🤦‍♂️ הוסף ציטוט 🤣
                 </div>
             </div>

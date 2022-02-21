@@ -2,16 +2,36 @@ import {useState, useEffect, useRef} from 'react';
 
 import Separator from './Separator';
 
-export default ({page, setPage, list, setFilteredList}) => {
+export default ({page, setPage, list, setFilteredList, filteredList}) => {
     const [freeTextFilter, setFreeTextFilter] = useState('');
     const [allOwners, setAllOwners] = useState({});
     const [allCategories, setAllCategories] = useState({});
     const [allRelated, setAllRelated] = useState({});
     const [owner, setOwner] = useState('');
     const [category, setCategory] = useState('');
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(0)
     const pageRef = useRef(null);
+    const summaryRef = useRef(null);
+    const submitButtonRef = useRef(null);
     const className = `page modal search-page ${page === 'search' ? 'visible' : ''}`;
+
+    const isFilteredBySomething = (
+        freeTextFilter !== '' ||
+        owner !== '' ||
+        category !== '' ||
+        Object.keys(allRelated).length !== 0 ||
+        rating !== 0
+    );
+
+    const clearAllFilters = () => {
+        setFreeTextFilter('');
+        setOwner('');
+        setCategory('');
+        setAllRelated({});
+        setRating(0);
+
+        setFilteredList(null);
+    }
 
     useEffect(() => {
         const allOwners = Object.keys(list).reduce((result, currentPetekKey) => {
@@ -36,10 +56,27 @@ export default ({page, setPage, list, setFilteredList}) => {
     }, [list]);
 
     useEffect(() => {
+        let submitButtonMarginTop = 0;
+        if (isFilteredBySomething) {
+            submitButtonMarginTop = summaryRef.current.getBoundingClientRect().height;
+        }
+
+        submitButtonRef.current.style = `margin-top: ${submitButtonMarginTop + 15}px`;
+    }, [freeTextFilter, owner, category, allRelated, rating])
+
+    useEffect(() => {
         if (page === 'search') {
             pageRef?.current?.scrollTo(0, 0);
         }
     }, [page]);
+
+    // Used to clear all filters after clearing the filters from outside
+    useEffect(() => {
+        if (filteredList === null) {
+            console.log('clearing');
+            clearAllFilters();
+        }
+    }, [filteredList])
 
     const handleClose = () => {
         setPage('app');
@@ -240,8 +277,20 @@ export default ({page, setPage, list, setFilteredList}) => {
 
                 <Separator emoji="🤪" />
 
-                <div className="add-new-petek-button" onClick={handleSubmit}>
+                <div className={`main-submit-button filter-button ${isFilteredBySomething ? 'has-filter' : ''}`} onClick={handleSubmit} ref={submitButtonRef}>
                     🤦‍♂️ חפש 🤣
+                </div>
+
+                <div className={`filter-summary-container ${isFilteredBySomething ? 'visible' : ''}`} ref={summaryRef}>
+                    <div className="summary">
+                        <b>סינון לפי:</b>
+                        {freeTextFilter !== '' && <div>טקסט חופשי</div>}
+                        {owner !== '' && <div>{'🙊 מי אמר?'}</div>}
+                        {category !== '' && <div>{'☝️ קטגוריה'}</div>}
+                        {Object.keys(allRelated).length !== 0 && <div>{'🧬 קשור למישהו?'}</div>}
+                        {rating !== 0 && <div>{'⭐️ דירוג'}</div>}
+                        <div className="clear-search-button" onClick={clearAllFilters}>נקה חיפוש</div>
+                    </div>
                 </div>
             </div>
         </div>

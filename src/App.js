@@ -73,7 +73,7 @@ function App() {
           <Separator emoji="🤷‍♂️" />
         </>}
       </div>
-      <SearchPage page={page} setPage={setPage} list={list} setFilteredList={setFilteredList} />
+      <SearchPage page={page} setPage={setPage} list={list} setFilteredList={setFilteredList} filteredList={filteredList} />
       <NewPetekModal list={list} petekToEdit={petekToEdit} page={page} setPage={setPage} />
       <div className={searchButtonClassName}>
         {filteredList && <div className="indicator">{Object.keys(filteredList).length}</div>}

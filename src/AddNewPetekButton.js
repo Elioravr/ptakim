@@ -4,7 +4,7 @@ export default ({setPage}) => {
     }
 
     return (
-        <div className="add-new-petek-button" onClick={handleClick}>
+        <div className="main-submit-button" onClick={handleClick}>
             🤦‍♂️ הוסף ציטוט 🤣
         </div>
     );
