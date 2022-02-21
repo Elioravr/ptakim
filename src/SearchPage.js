@@ -65,6 +65,19 @@ export default ({page, setPage, list, setFilteredList}) => {
             }, {});
         }
 
+        // Category
+        if (category) {
+            result = Object.keys(result).reduce((filtered, currentPetekKey) => {
+                const currentPetek = list[currentPetekKey];
+
+                if (currentPetek?.category === category) {
+                    filtered[currentPetekKey] = currentPetek;
+                }
+
+                return filtered;
+            }, {});
+        }
+
         setFilteredList(result);
     }
 
@@ -75,6 +88,16 @@ export default ({page, setPage, list, setFilteredList}) => {
 
     const handleFreeTextFilterChange = (e) => {
         setFreeTextFilter(e.target.value);
+    }
+
+    const handleCategoryChange = (e) => {
+        setCategory(e.target.value);
+    }
+
+    const createHandleCategoryClick = (selected) => {
+        return () => {
+            setCategory(selected);
+        }
     }
 
     return (
@@ -126,11 +149,16 @@ export default ({page, setPage, list, setFilteredList}) => {
 
                 <div className="section-container">
                     <div className="title">קטגוריה?</div>
-                    <input value={category} className="input" type="text" placeholder="כתוב או בחר קטגוריה" />
+                    <div className="category-input-container">
+                        <input value={category} className="input" type="text" placeholder="כתוב או בחר קטגוריה" onChange={handleCategoryChange} />
+                        <div className="clear-category-text" onClick={() => {setCategory('')}}>x</div>
+                    </div>
                     <div className="owners-list-container">
-                        {Object.keys(allCategories).map((currCategory, index) => {
+                        {Object.keys(allCategories).filter(currCategory => {
+                            return !category || currCategory.includes(category);
+                        }).map((currCategory, index) => {
                             const className = `category-tag ${currCategory === category ? 'selected' : ''}`;
-                            return <div key={index} className={className}>{currCategory}</div>
+                            return <div key={index} className={className} onClick={createHandleCategoryClick(currCategory)}>{currCategory}</div>
                         })}
                     </div>
                 </div>
