@@ -9,7 +9,7 @@ export default ({page, setPage, list, setFilteredList}) => {
     const [allRelated, setAllRelated] = useState({});
     const [owner, setOwner] = useState('');
     const [category, setCategory] = useState('');
-    const [rating, setRating] = useState(4);
+    const [rating, setRating] = useState(0);
     const pageRef = useRef(null);
     const className = `page modal search-page ${page === 'search' ? 'visible' : ''}`;
 
@@ -78,12 +78,25 @@ export default ({page, setPage, list, setFilteredList}) => {
             }, {});
         }
 
-        // related
+        // Related
         if (allRelated) {
             result = Object.keys(result).reduce((filtered, currentPetekKey) => {
                 const currentPetek = list[currentPetekKey];
 
                 if (Object.keys(allRelated).every(related => currentPetek?.allRelated && Object.keys(currentPetek?.allRelated).includes(related))) {
+                    filtered[currentPetekKey] = currentPetek;
+                }
+
+                return filtered;
+            }, {});
+        }
+
+        // Rating
+        if (rating !== 0) {
+            result = Object.keys(result).reduce((filtered, currentPetekKey) => {
+                const currentPetek = list[currentPetekKey];
+
+                if (currentPetek?.rating != null && currentPetek.rating >= rating) {
                     filtered[currentPetekKey] = currentPetek;
                 }
 
@@ -144,6 +157,16 @@ export default ({page, setPage, list, setFilteredList}) => {
         }
     }
 
+    const createHandleRatingClick = (selectedRating) => {
+        return () => {
+            if (selectedRating === rating) {
+                return setRating(0);
+            }
+
+            setRating(selectedRating)
+        }
+    }
+
     return (
         <div className={className} ref={pageRef}>
             <div className="page-header">
@@ -179,13 +202,17 @@ export default ({page, setPage, list, setFilteredList}) => {
                 <Separator emoji="✍️" />
 
                 <div className="section-container rating-container">
-                    <div className="title">{`רק ${rating} כוכבים ומעלה`}</div>
+                    <div className="title">{
+                        rating === 0 ?
+                        'כל הפתקים בלי דירוג' :
+                        `רק ${rating} כוכבים ומעלה`
+                    }</div>
                     <div className="stars-container">
-                        <div className={`star star-1 ${rating >= 1 ? 'selected' : ''}`}></div>
-                        <div className={`star star-2 ${rating >= 2 ? 'selected' : ''}`}></div>
-                        <div className={`star star-3 ${rating >= 3 ? 'selected' : ''}`}></div>
-                        <div className={`star star-4 ${rating >= 4 ? 'selected' : ''}`}></div>
-                        <div className={`star star-5 ${rating >= 5 ? 'selected' : ''}`}></div>
+                        <div className={`star star-1 ${rating >= 1 ? 'selected' : ''}`} onClick={createHandleRatingClick(1)}></div>
+                        <div className={`star star-2 ${rating >= 2 ? 'selected' : ''}`} onClick={createHandleRatingClick(2)}></div>
+                        <div className={`star star-3 ${rating >= 3 ? 'selected' : ''}`} onClick={createHandleRatingClick(3)}></div>
+                        <div className={`star star-4 ${rating >= 4 ? 'selected' : ''}`} onClick={createHandleRatingClick(4)}></div>
+                        <div className={`star star-5 ${rating >= 5 ? 'selected' : ''}`} onClick={createHandleRatingClick(5)}></div>
                     </div>
                 </div>
 
