@@ -75,7 +75,7 @@ function App() {
         {isLoading ? <Loading /> :
         <>
           <AddNewPetekButton setPage={setPage} />
-          <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} />
+          <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} random={filteredList === null} />
           <Separator emoji="🤷‍♂️" />
         </>}
       </div>
