@@ -34,6 +34,11 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
     }
 
     useEffect(() => {
+        // Reset search in case the list changes (on edit for example)
+        if (isFilteredBySomething) {
+            search();
+        }
+
         const allOwners = Object.keys(list).reduce((result, currentPetekKey) => {
             const currentPetek = list[currentPetekKey];
             if (!result[currentPetek.owner]) {

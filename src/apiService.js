@@ -31,7 +31,6 @@ export const fetchPetekList = () => {
 
 export const addNewPetek = async (petek) => {
     if (petek.id) {
-        console.log('petek', petek);
         return set(ref(db, `peteks/${petek.id}`), petek);
     }
 
