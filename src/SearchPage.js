@@ -65,6 +65,19 @@ export default ({page, setPage, list, setFilteredList}) => {
             }, {});
         }
 
+        // Owner
+        if (owner) {
+            result = Object.keys(result).reduce((filtered, currentPetekKey) => {
+                const currentPetek = list[currentPetekKey];
+
+                if (currentPetek?.owner === owner) {
+                    filtered[currentPetekKey] = currentPetek;
+                }
+
+                return filtered;
+            }, {});
+        }
+
         // Category
         if (category) {
             result = Object.keys(result).reduce((filtered, currentPetekKey) => {
@@ -100,6 +113,12 @@ export default ({page, setPage, list, setFilteredList}) => {
         }
     }
 
+    const createHandleOwnerClick = (selected) => {
+        return () => {
+            setOwner(selected)
+        }
+    }
+
     return (
         <div className={className} ref={pageRef}>
             <div className="page-header">
@@ -115,7 +134,7 @@ export default ({page, setPage, list, setFilteredList}) => {
                     <div className="owners-list-container">
                     {Object.keys(allOwners).map((currOwner, index) => {
                         const className = `set-owner-button ${currOwner === owner ? 'selected' : ''}`;
-                        return <div key={index} className={className}>{currOwner}</div>
+                        return <div key={index} className={className} onClick={createHandleOwnerClick(currOwner)}>{currOwner}</div>
                     })}
                     </div>
                 </div>
