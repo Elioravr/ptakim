@@ -8,6 +8,8 @@ export default ({page, setPage, list}) => {
     const [allCategories, setAllCategories] = useState({});
     const [allRelated, setAllRelated] = useState({});
     const [owner, setOwner] = useState('');
+    const [category, setCategory] = useState('');
+    const [rating, setRating] = useState(4);
     const className = `page modal search-page ${page === 'search' ? 'visible' : ''}`;
 
     useEffect(() => {
@@ -50,11 +52,14 @@ export default ({page, setPage, list}) => {
                 <input value={freeTextFilter} className="input" type="text" placeholder="טקסט חופשי לחיפוש" onChange={() => {}}/>
                 <Separator emoji="🔍" />
 
-                <div className="owners-list-container">
+                <div className="section-container">
+                    <div className="title">מי אמר?</div>
+                    <div className="owners-list-container">
                     {Object.keys(allOwners).map((currOwner, index) => {
                         const className = `set-owner-button ${currOwner === owner ? 'selected' : ''}`;
                         return <div key={index} className={className}>{currOwner}</div>
                     })}
+                    </div>
                 </div>
 
                 <Separator emoji="🤣" />
@@ -65,6 +70,32 @@ export default ({page, setPage, list}) => {
                         {Object.keys(allOwners).map((owner, index) => {
                             const className = `set-related-button ${allRelated[owner] ? 'selected' : ''}`;
                             return <div key={index} className={className}>{owner}</div>
+                        })}
+                    </div>
+                </div>
+
+                <Separator emoji="✍️" />
+
+                <div className="section-container rating-container">
+                    <div className="title">{`רק ${rating} כוכבים ומעלה`}</div>
+                    <div className="stars-container">
+                        <div className={`star star-1 ${rating >= 1 ? 'selected' : ''}`}></div>
+                        <div className={`star star-2 ${rating >= 2 ? 'selected' : ''}`}></div>
+                        <div className={`star star-3 ${rating >= 3 ? 'selected' : ''}`}></div>
+                        <div className={`star star-4 ${rating >= 4 ? 'selected' : ''}`}></div>
+                        <div className={`star star-5 ${rating >= 5 ? 'selected' : ''}`}></div>
+                    </div>
+                </div>
+
+                <Separator emoji="🤭" />
+
+                <div className="section-container">
+                    <div className="title">קטגוריה?</div>
+                    <input value={category} className="input" type="text" placeholder="כתוב או בחר קטגוריה" />
+                    <div className="owners-list-container">
+                        {Object.keys(allCategories).map((currCategory, index) => {
+                            const className = `category-tag ${currCategory === category ? 'selected' : ''}`;
+                            return <div key={index} className={className}>{currCategory}</div>
                         })}
                     </div>
                 </div>
