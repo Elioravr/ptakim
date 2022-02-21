@@ -4,6 +4,7 @@ import AddNewPetekButton from './AddNewPetekButton'
 import PetekList from './PetekList'
 import NewPetekModal from './NewPetekModal'
 import SearchPage from './SearchPage'
+import StatisticsPage from './StatisticsPage'
 import Separator from './Separator'
 import Loading from './Loading'
 import {fetchPetekList, deletePetek} from './apiService';
@@ -54,6 +55,10 @@ function App() {
     setPage('search');
   }
 
+  const handleOpenStatistics = () => {
+    setPage('statistics');
+  }
+
   const clearFilter = () => {
     setFilteredList(null);
   }
@@ -65,6 +70,7 @@ function App() {
       <div className={`page ${page === 'app' ? 'visible' : ''}`}>
         <div className="app-header">
           <span className="logo">Ptakim</span>
+          <div className="statistics-button" onClick={handleOpenStatistics}>{'📈'}</div>
         </div>
         {isLoading ? <Loading /> :
         <>
@@ -80,6 +86,7 @@ function App() {
         <div className="button" onClick={handleSearchPageClick}>חפש</div>
         {filteredList && <div className="button clear-button" onClick={clearFilter}><div>נקה</div><div>חיפוש</div></div>}
       </div>
+      <StatisticsPage page={page} setPage={setPage} list={list} />
     </div>
   );
 }

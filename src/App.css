@@ -50,6 +50,12 @@
   z-index: 1;
 }
 
+.App .app-header .statistics-button {
+  position: absolute;
+  left: 14px;
+  font-size: 30px;
+}
+
 .App .app-header .logo {
   font-family: 'Dancing Script', cursive;
   font-weight: bold;
@@ -180,7 +186,7 @@
 }
 
 .modal .modal-header,
-.search-page .page-header {
+.page .page-header {
   font-size: 30px;
   display: flex;
   justify-content: space-between;
@@ -429,6 +435,31 @@
   font-weight: bold;
 }
 
+.statistics-page .section-container {
+  width: 100%;
+}
+
+.statistics-page .statistic-container {
+  width: 100%;
+  text-align: right;
+  margin: 10px 0;
+  padding: 20px 0;
+}
+
+.statistics-page .statistic-container .metadata-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font-size: 20px;
+}
+
+.statistics-page .statistic-container .count-graph {
+  height: 20px;
+  background-color: var(--main-color);
+  animation: grow 2s ease-in-out;
+  transform-origin: right;
+}
+
 .loading-container {
     padding: 50px;
 }
@@ -462,5 +493,14 @@
   }
   100% {
     transform: scale(0) rotate(90deg);
+  }
+}
+
+@keyframes grow {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
   }
 }
