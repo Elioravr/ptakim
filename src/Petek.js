@@ -23,9 +23,9 @@ export default ({petek, editPetek, deletePetek}) => {
                     // Support for lines and bold
                     return <div>{line.split('*').map((part, index) => {
                         if (index % 2 === 0) {
-                            return part;
+                            return <span key={index}>{part}</span>;
                         } else {
-                            return <b>{part}</b>;
+                            return <b key={index}>{part}</b>;
                         }
                     })}</div>;
                 })}

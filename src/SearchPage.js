@@ -141,7 +141,11 @@ export default ({page, setPage, list, setFilteredList}) => {
 
     const createHandleOwnerClick = (selected) => {
         return () => {
-            setOwner(selected)
+            if (selected === owner) {
+                return setOwner('');
+            }
+
+            setOwner(selected);
         }
     }
 
