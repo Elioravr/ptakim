@@ -145,6 +145,10 @@ export default ({list, petekToEdit, page, setPage}) => {
 
     const createHandleRatingClick = (selectedRating) => {
         return () => {
+            if (selectedRating === rating) {
+                return setRating(0);
+            }
+
             setRating(selectedRating);
         }
     }
@@ -184,7 +188,11 @@ export default ({list, petekToEdit, page, setPage}) => {
                 <Separator emoji="🤪" />
 
                 <div className="section-container rating-container">
-                    <div className="title">כמה זה טוב?</div>
+                    <div className="title">{
+                        rating === 0 ?
+                        'כמה זה טוב?' :
+                        `זה שווה ${rating} כוכבים`
+                    }</div>
                     <div className="stars-container">
                         <div className={`star star-1 ${rating >= 1 ? 'selected' : ''}`} onClick={createHandleRatingClick(1)}></div>
                         <div className={`star star-2 ${rating >= 2 ? 'selected' : ''}`} onClick={createHandleRatingClick(2)}></div>
