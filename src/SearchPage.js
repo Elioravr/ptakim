@@ -56,12 +56,13 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
     }, [list]);
 
     useEffect(() => {
-        let submitButtonMarginTop = 0;
+        let submitButtonPaddingBottom = 0;
         if (isFilteredBySomething) {
-            submitButtonMarginTop = summaryRef.current.getBoundingClientRect().height;
+            submitButtonPaddingBottom =
+                summaryRef.current.getBoundingClientRect().height + submitButtonRef.current.getBoundingClientRect().height;
         }
 
-        submitButtonRef.current.style = `margin-top: ${submitButtonMarginTop + 15}px`;
+        pageRef.current.style = `padding-bottom: ${submitButtonPaddingBottom + 35}px`;
     }, [freeTextFilter, owner, category, allRelated, rating])
 
     useEffect(() => {
@@ -73,7 +74,6 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
     // Used to clear all filters after clearing the filters from outside
     useEffect(() => {
         if (filteredList === null) {
-            console.log('clearing');
             clearAllFilters();
         }
     }, [filteredList])
@@ -284,11 +284,11 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
                 <div className={`filter-summary-container ${isFilteredBySomething ? 'visible' : ''}`} ref={summaryRef}>
                     <div className="summary">
                         <b>סינון לפי:</b>
-                        {freeTextFilter !== '' && <div>טקסט חופשי</div>}
-                        {owner !== '' && <div>{'🙊 מי אמר?'}</div>}
-                        {category !== '' && <div>{'☝️ קטגוריה'}</div>}
-                        {Object.keys(allRelated).length !== 0 && <div>{'🧬 קשור למישהו?'}</div>}
-                        {rating !== 0 && <div>{'⭐️ דירוג'}</div>}
+                        {freeTextFilter !== '' && <div>{'✏️ טקסט חופשי: '} <span>{freeTextFilter}</span></div>}
+                        {owner !== '' && <div>{'🙊 מי אמר: '}<span>{owner}</span></div>}
+                        {Object.keys(allRelated).length !== 0 && <div>{'🧬 קשור למישהו: '}<span>{Object.keys(allRelated).join(', ')}</span></div>}
+                        {rating !== 0 && <div>{'⭐️ דירוג: '}<span>{rating}</span></div>}
+                        {category !== '' && <div>{'☝️ קטגוריה: '} <span>{category}</span></div>}
                         <div className="clear-search-button" onClick={clearAllFilters}>נקה חיפוש</div>
                     </div>
                 </div>

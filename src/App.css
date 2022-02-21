@@ -73,7 +73,8 @@
 
 
 .main-submit-button.filter-button.has-filter {
-  /* margin-top: 60px; */
+  position: fixed;
+  bottom: 20px;
 }
 
 .petek-list-container {
@@ -401,7 +402,7 @@
   position: fixed;
   right: 0;
   left: 0;
-  bottom: 100px;
+  bottom: 120px;
   display: flex;
   justify-content: center;
   align-items: center;
