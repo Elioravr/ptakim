@@ -1,6 +1,6 @@
-export default ({setIsNewPetekModalOpen}) => {
+export default ({setPage}) => {
     const handleClick = () => {
-        setIsNewPetekModalOpen(true);
+        setPage('add-petek-modal');
     }
 
     return (

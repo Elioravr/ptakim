@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import Separator from './Separator';
 import {addNewPetek} from './apiService';
 
-export default ({isOpen, setIsOpen, list, petekToEdit}) => {
+export default ({list, petekToEdit, page, setPage}) => {
     const [owner, setOwner] = useState('');
     const [content, setContent] = useState('');
     const [situation, setSituation] = useState('');
@@ -12,7 +12,7 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
     const [allOwners, setAllOwners] = useState([]);
     const [allRelated, setAllRelated] = useState({});
     const [rating, setRating] = useState(0);
-    const className = `page new-petek-modal-container ${isOpen ? 'visible' : ''}`
+    const className = `page modal new-petek-modal-container ${page === 'add-petek-modal' ? 'visible' : ''}`
 
     const clearForm = () => {
         setOwner('');
@@ -72,12 +72,12 @@ export default ({isOpen, setIsOpen, list, petekToEdit}) => {
 
         clearForm();
         addNewPetek(petek);
-        setIsOpen(false);
+        setPage('app');
     }
 
     const handleClose = () => {
         clearForm();
-        setIsOpen(false);
+        setPage('app');
     }
 
     const createHandleChange = (fieldName) => {
