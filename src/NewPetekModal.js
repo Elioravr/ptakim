@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 import Separator from './Separator';
 import {addNewPetek} from './apiService';
@@ -12,6 +12,7 @@ export default ({list, petekToEdit, page, setPage}) => {
     const [allOwners, setAllOwners] = useState([]);
     const [allRelated, setAllRelated] = useState({});
     const [rating, setRating] = useState(0);
+    const pageRef = useRef(null);
     const className = `page modal new-petek-modal-container ${page === 'add-petek-modal' ? 'visible' : ''}`
 
     const clearForm = () => {
@@ -44,6 +45,12 @@ export default ({list, petekToEdit, page, setPage}) => {
         }, {});
         setAllCategories(allCategories);
     }, [list]);
+
+    useEffect(() => {
+        if (page === 'add-petek-modal') {
+            pageRef?.current?.scrollTo(0, 0);
+        }
+    }, [page]);
 
     useEffect(() => {
         if (!petekToEdit) {
@@ -143,7 +150,7 @@ export default ({list, petekToEdit, page, setPage}) => {
     }
 
     return (
-        <div className={className}>
+        <div className={className} ref={pageRef}>
             <div className="modal-header">
                 <span>הוסף פתק</span>
                 <div onClick={handleClose}>X</div>

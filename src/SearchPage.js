@@ -1,8 +1,8 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 import Separator from './Separator';
 
-export default ({page, setPage, list}) => {
+export default ({page, setPage, list, setFilteredList}) => {
     const [freeTextFilter, setFreeTextFilter] = useState('');
     const [allOwners, setAllOwners] = useState({});
     const [allCategories, setAllCategories] = useState({});
@@ -10,6 +10,7 @@ export default ({page, setPage, list}) => {
     const [owner, setOwner] = useState('');
     const [category, setCategory] = useState('');
     const [rating, setRating] = useState(4);
+    const pageRef = useRef(null);
     const className = `page modal search-page ${page === 'search' ? 'visible' : ''}`;
 
     useEffect(() => {
@@ -34,22 +35,56 @@ export default ({page, setPage, list}) => {
         setAllCategories(allCategories);
     }, [list]);
 
+    useEffect(() => {
+        if (page === 'search') {
+            pageRef?.current?.scrollTo(0, 0);
+        }
+    }, [page]);
+
     const handleClose = () => {
         setPage('app');
     };
 
+    const search = () => {
+        let result = {...list};
+
+        // Free text search
+        if (freeTextFilter) {
+            result = Object.keys(list).reduce((filtered, currentPetekKey) => {
+                const currentPetek = list[currentPetekKey];
+
+                if (currentPetek.content?.includes(freeTextFilter) ||
+                    currentPetek.category?.includes(freeTextFilter) ||
+                    currentPetek.owner?.includes(freeTextFilter) ||
+                    currentPetek.related?.includes(freeTextFilter) ||
+                    currentPetek.situation?.includes(freeTextFilter)) {
+                    filtered[currentPetekKey] = currentPetek;
+                }
+
+                return filtered;
+            }, {});
+        }
+
+        setFilteredList(result);
+    }
+
     const handleSubmit = () => {
+        search();
         setPage('app');
     }
 
+    const handleFreeTextFilterChange = (e) => {
+        setFreeTextFilter(e.target.value);
+    }
+
     return (
-        <div className={className}>
+        <div className={className} ref={pageRef}>
             <div className="page-header">
                 <span>חפש פתק</span>
                 <div onClick={handleClose}>X</div>
             </div>
             <div className="modal-body">
-                <input value={freeTextFilter} className="input" type="text" placeholder="טקסט חופשי לחיפוש" onChange={() => {}}/>
+                <input value={freeTextFilter} className="input" type="text" placeholder="טקסט חופשי לחיפוש" onChange={handleFreeTextFilterChange}/>
                 <Separator emoji="🔍" />
 
                 <div className="section-container">

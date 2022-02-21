@@ -338,6 +338,12 @@
   position: fixed;
   bottom: 60px;
   left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-button .button {
   border-radius: 50%;
   width: 70px;
   height: 70px;
@@ -349,6 +355,28 @@
   color: #fff;
   font-size: 25px;
   font-weight: 700;
+}
+
+.search-button .clear-button {
+  background-color: var(--main-color);
+  font-size: 18px;
+  margin-right: 10px;
+  flex-direction: column;
+}
+
+.search-button .indicator {
+  content: ' ';
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: var(--main-color);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
 }
 
 .loading-container {

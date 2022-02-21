@@ -12,6 +12,7 @@ import './App.css';
 function App() {
   // const [isNewPetekModalOpen, setIsNewPetekModalOpen] = useState(false);
   const [list, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [petekToEdit, setPetekToEdit] = useState(null);
   const [page, setPage] = useState('app');
@@ -53,6 +54,12 @@ function App() {
     setPage('search');
   }
 
+  const clearFilter = () => {
+    setFilteredList(null);
+  }
+
+  const searchButtonClassName = `search-button ${filteredList ? 'has-filter' : ''}`;
+
   return (
     <div className="App">
       <div className={`page ${page === 'app' ? 'visible' : ''}`}>
@@ -62,13 +69,17 @@ function App() {
         {isLoading ? <Loading /> :
         <>
           <AddNewPetekButton setPage={setPage} />
-          <PetekList list={list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} />
+          <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} />
           <Separator emoji="🤷‍♂️" />
         </>}
       </div>
-      <SearchPage page={page} setPage={setPage} list={list} />
+      <SearchPage page={page} setPage={setPage} list={list} setFilteredList={setFilteredList} />
       <NewPetekModal list={list} petekToEdit={petekToEdit} page={page} setPage={setPage} />
-      <div className="search-button" onClick={handleSearchPageClick}>חפש</div>
+      <div className={searchButtonClassName}>
+        {filteredList && <div className="indicator">{Object.keys(filteredList).length}</div>}
+        <div className="button" onClick={handleSearchPageClick}>חפש</div>
+        {filteredList && <div className="button clear-button" onClick={clearFilter}><div>נקה</div><div>חיפוש</div></div>}
+      </div>
     </div>
   );
 }
