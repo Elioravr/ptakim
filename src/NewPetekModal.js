@@ -153,7 +153,7 @@ export default ({list, petekToEdit, page, setPage}) => {
         <div className={className} ref={pageRef}>
             <div className="modal-header">
                 <span>הוסף פתק</span>
-                <div onClick={handleClose}>X</div>
+                <div onClick={handleClose}>x</div>
             </div>
             <div className="modal-body">
                 <input value={owner} className="input" type="text" placeholder="מי אמר?" onChange={createHandleChange('owner')} />

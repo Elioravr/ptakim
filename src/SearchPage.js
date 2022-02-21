@@ -78,6 +78,19 @@ export default ({page, setPage, list, setFilteredList}) => {
             }, {});
         }
 
+        // related
+        if (allRelated) {
+            result = Object.keys(result).reduce((filtered, currentPetekKey) => {
+                const currentPetek = list[currentPetekKey];
+
+                if (Object.keys(allRelated).every(related => currentPetek?.allRelated && Object.keys(currentPetek?.allRelated).includes(related))) {
+                    filtered[currentPetekKey] = currentPetek;
+                }
+
+                return filtered;
+            }, {});
+        }
+
         // Category
         if (category) {
             result = Object.keys(result).reduce((filtered, currentPetekKey) => {
@@ -119,11 +132,23 @@ export default ({page, setPage, list, setFilteredList}) => {
         }
     }
 
+    const createHandleRelatedClick = (selected) => {
+        return () => {
+            if (allRelated[selected]) {
+                const newRelated = {...allRelated};
+                Reflect.deleteProperty(newRelated, selected);
+                setAllRelated(newRelated);
+            } else {
+                setAllRelated({...allRelated, [selected]: true});
+            }
+        }
+    }
+
     return (
         <div className={className} ref={pageRef}>
             <div className="page-header">
                 <span>חפש פתק</span>
-                <div onClick={handleClose}>X</div>
+                <div onClick={handleClose}>x</div>
             </div>
             <div className="modal-body">
                 <input value={freeTextFilter} className="input" type="text" placeholder="טקסט חופשי לחיפוש" onChange={handleFreeTextFilterChange}/>
@@ -144,9 +169,9 @@ export default ({page, setPage, list, setFilteredList}) => {
                 <div className="section-container relation-container">
                     <div className="title">קשור למישהו?</div>
                     <div className="related-list-container">
-                        {Object.keys(allOwners).map((owner, index) => {
-                            const className = `set-related-button ${allRelated[owner] ? 'selected' : ''}`;
-                            return <div key={index} className={className}>{owner}</div>
+                        {Object.keys(allOwners).map((currRelated, index) => {
+                            const className = `set-related-button ${allRelated[currRelated] ? 'selected' : ''}`;
+                            return <div key={index} className={className} onClick={createHandleRelatedClick(currRelated)}>{currRelated}</div>
                         })}
                     </div>
                 </div>
