@@ -2,6 +2,7 @@ import {useEffect, useState, useMemo} from 'react';
 
 import Separator from './Separator';
 import CountUp from 'react-countup';
+import { PieChart } from 'react-minimal-pie-chart';
 
 export default ({page, setPage, list}) => {
     const [statistics, setStatistics] = useState({});
@@ -90,6 +91,36 @@ export default ({page, setPage, list}) => {
                         <Stats stats={ratingStats} sortedList={ratingSortedList} maxCount={ratingMaxCount} namePrefix="⭐️" />
                     </div>
 
+                    <Separator emoji="📊" />
+
+                    <div className="section-container">
+                        <div className="title">התפלגות לפי ציונים</div>
+                        <PieChart
+                            animate={true}
+                            animationDuration={500}
+                            labelPosition={100 - 60 / 2}
+                            style={{
+                                fontFamily: '"Roboto Sans", -apple-system, Helvetica, Arial, sans-serif',
+                                fontSize: '8px',
+                                color: 'white'
+                            }}
+                            label={({ dataEntry }) => dataEntry.title}
+                            data={Object.keys(ratingStats).map((ratingLabel, index) => {
+                                let color = '';
+                                if (index % 3 === 0) {
+                                    color = '007bff'
+                                } else if (index % 3 === 1) {
+                                    color = 'FF530F'
+                                } else {
+                                    color = '005abb'
+                                }
+
+                                return {title: `⭐️ ${ratingLabel}`, value: ratingStats[ratingLabel], color: `#${color}`};
+                            })}
+                        />
+                    </div>
+
+                    <Separator emoji="🤩" />
                 </div>
             }
         </div>
