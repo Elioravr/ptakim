@@ -53,6 +53,7 @@ export default ({page, setPage, list}) => {
             .sort((a, b) => {
                 return ratingStats[b] - ratingStats[a];
             });
+    const ratingMaxCount = ratingStats[ratingSortedList[0]];
     // ratingSortedList = ratingSortedList.slice(1, ratingSortedList.length);
 
     // console.log('ratingSortedList', ratingSortedList);
@@ -86,7 +87,7 @@ export default ({page, setPage, list}) => {
 
                     <div className="section-container">
                         <div className="title">התפלגות לפי ציונים</div>
-                        <Stats stats={ratingStats} sortedList={ratingSortedList} maxCount={maxCount} namePrefix="⭐️" />
+                        <Stats stats={ratingStats} sortedList={ratingSortedList} maxCount={ratingMaxCount} namePrefix="⭐️" />
                     </div>
 
                 </div>
