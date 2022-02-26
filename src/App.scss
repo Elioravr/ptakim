@@ -48,6 +48,12 @@ $padding-for-view-with-header: calc($header-height + 15px);
   }
 
   .app-header {
+    .sign-in-button {
+      position: absolute;
+      right: 14px;
+      font-size: 18px;
+    }
+
     .statistics-button {
       position: absolute;
       left: 14px;

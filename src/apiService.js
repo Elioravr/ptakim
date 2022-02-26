@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getDatabase, ref, set, push, get, remove } from "firebase/database";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,6 +23,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
+const auth = getAuth();
+auth.languageCode = 'he';
+console.log('auth', auth);
 
 export const fetchPetekList = () => {
     return get(ref(db, 'peteks/')).then(snap => {
@@ -40,3 +44,35 @@ export const addNewPetek = async (petek) => {
 export const deletePetek = (petekId) => {
     remove(ref(db, `peteks/${petekId}`));
 }
+
+export const createUserWithPhoneNumber = () => {
+    const appVerifier = window.recaptchaVerifier;
+
+    const auth = getAuth();
+    signInWithPhoneNumber(auth, '+972545405558', appVerifier)
+        .then((confirmationResult) => {
+            console.log('confirmationResult', confirmationResult);
+        // SMS sent. Prompt user to type the code from the message, then sign the
+        // user in with confirmationResult.confirm(code).
+        window.confirmationResult = confirmationResult;
+        // ...
+        }).catch((error) => {
+            console.log('error', error);
+        // Error; SMS not sent
+        // ...
+        });
+}
+
+console.log('RecaptchaVerifier', RecaptchaVerifier);
+
+window.recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
+  'size': 'invisible',
+  'callback': (response) => {
+    // reCAPTCHA solved, allow signInWithPhoneNumber.
+    console.log('blahhhhh');
+  }
+}, auth);
+// window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {}, auth);
+// const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container');
+// console.log('recaptchaVerifier', recaptchaVerifier);
+// window.recaptchaVerifier = recaptchaVerifier;

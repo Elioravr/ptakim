@@ -7,7 +7,7 @@ import SearchPage from './SearchPage'
 import StatisticsPage from './StatisticsPage'
 import Separator from './Separator'
 import Loading from './Loading'
-import {fetchPetekList, deletePetek} from './apiService';
+import {fetchPetekList, deletePetek, createUserWithPhoneNumber} from './apiService';
 import './App.scss';
 
 function App() {
@@ -69,12 +69,14 @@ function App() {
     <div className="App">
       <div className={`page ${page === 'app' ? 'visible' : ''}`}>
         <div className="app-header">
+          <div className="sign-in-button" onClick={handleOpenStatistics}>התחבר</div>
           <span className="logo">Ptakim</span>
           <div className="statistics-button" onClick={handleOpenStatistics}>{'📈'}</div>
         </div>
         {isLoading ? <Loading /> :
         <>
           <AddNewPetekButton setPage={setPage} />
+          <div onClick={createUserWithPhoneNumber}>הירשם עם מספר טלפון</div>
           <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} random={filteredList === null} />
           <Separator emoji="🤷‍♂️" />
         </>}
