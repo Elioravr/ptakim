@@ -18,6 +18,11 @@ export default ({page, setPage}) => {
     const className = `page modal sign-in-page ${page === 'sign-in' ? 'visible' : ''}`;
 
     const handleClose = () => {
+        setPhoneNumber('');
+        setCode('');
+        setStage(PHONE_STAGE);
+        setEnableErrorMessage(false);
+
         setPage('app');
     };
 
