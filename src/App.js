@@ -28,6 +28,11 @@ function App() {
       .then(list => {
         list && setList(list);
         setIsLoading(false);
+
+        fetchCurrentUser().then((user) => {
+          console.log('user', user);
+          setCurrentUser(user);
+        });
       })
       .catch(e => fetchPetekList().then(list => {
         list && setList(list);
@@ -35,12 +40,11 @@ function App() {
       }));
   }
 
+  // useEffect(() => {
+  // }, [setCurrentUser])
+
   useEffect(() => {
     loadList();
-    fetchCurrentUser().then((user) => {
-      setCurrentUser(user);
-    });
-
     if (page !== 'add-petek-modal') {
       setPetekToEdit(null);
     }
@@ -76,6 +80,7 @@ function App() {
         setIsLoading(true);
         logout().then(() => {
           setIsLoading(false);
+          setCurrentUser(null);
         });
       }
     } else {
@@ -94,8 +99,8 @@ function App() {
       <div className={`page ${page === 'app' ? 'visible' : ''}`}>
         <div className="app-header">
           <div className="user-button" onClick={handleOpenSignIn}>
-            {getCurrentUser() ?
-              <><div>{"ברוך הבא, "}</div><div>{currentUser?.name.split(' ')[0]}</div></>
+            {currentUser ?
+              <><div>{"ברוך הבא,"}</div><div>{currentUser?.name.split(' ')[0]}</div></>
               :
               "התחבר"
             }
