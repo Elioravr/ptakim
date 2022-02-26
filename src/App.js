@@ -95,7 +95,7 @@ function App() {
         <div className="app-header">
           <div className="user-button" onClick={handleOpenSignIn}>
             {getCurrentUser() ?
-              `ברוך הבא, ${currentUser?.name.split(' ')[0]}`
+              <><div>{"ברוך הבא, "}</div><div>{currentUser?.name.split(' ')[0]}</div></>
               :
               "התחבר"
             }
