@@ -8,7 +8,7 @@ import StatisticsPage from './StatisticsPage'
 import Separator from './Separator'
 import Loading from './Loading'
 import {fetchPetekList, deletePetek} from './apiService';
-import './App.css';
+import './App.scss';
 
 function App() {
   // const [isNewPetekModalOpen, setIsNewPetekModalOpen] = useState(false);
