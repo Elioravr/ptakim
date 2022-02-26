@@ -41,6 +41,13 @@ export const fetchPetekList = () => {
     });
 }
 
+export const fetchCurrentUser = () => {
+    const currentUser = getCurrentUser()
+    return get(ref(db, `users/${currentUser.phoneNumber}`)).then(snap => {
+        return snap.val();
+    });
+}
+
 export const addNewPetek = async (petek) => {
     if (petek.id) {
         return set(ref(db, `peteks/${petek.id}`), petek);
@@ -51,6 +58,10 @@ export const addNewPetek = async (petek) => {
 
 export const deletePetek = (petekId) => {
     return remove(ref(db, `peteks/${petekId}`));
+}
+
+export const createUser = (phoneNumber, name) => {
+    return set(ref(db, `users/${phoneNumber}`), {name, phoneNumber});
 }
 
 export const createUserWithPhoneNumber = (phoneNumber) => {
@@ -70,11 +81,13 @@ export const createUserWithPhoneNumber = (phoneNumber) => {
         });
 }
 
-export const verifyCode = (code) => {
+export const verifyCode = (code, name) => {
     return window.confirmationResult.confirm(code).then((result) => {
         // User signed in successfully.
         const user = result.user;
-        return user
+        // console.log('user', user);
+        return createUser(user.phoneNumber, name);
+        // return user
         // ...
     });
 }

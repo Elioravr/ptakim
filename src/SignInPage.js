@@ -11,6 +11,7 @@ const CODE_STAGE = 'code_stage';
 export default ({page, setPage}) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [code, setCode] = useState('');
+    const [name, setName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [stage, setStage] = useState(PHONE_STAGE);
     const [enableErrorMessage, setEnableErrorMessage] = useState(false);
@@ -34,6 +35,10 @@ export default ({page, setPage}) => {
         setCode(e.target.value);
     }
 
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    }
+
     const handleSignInClick = () => {
         setIsLoading(true);
         if (stage === PHONE_STAGE) {
@@ -42,7 +47,8 @@ export default ({page, setPage}) => {
                 setStage(CODE_STAGE);
             });
         } else if (stage === CODE_STAGE) {
-            verifyCode(code).then(user => {
+            console.log('name', name);
+            verifyCode(code, name).then(user => {
                 setIsLoading(false);
                 setPage('app');
 
@@ -51,6 +57,7 @@ export default ({page, setPage}) => {
                 setStage(PHONE_STAGE);
                 setEnableErrorMessage(false);
             }).catch(e => {
+                console.log('e', e);
                 setIsLoading(false);
                 setCode('');
                 setEnableErrorMessage(true);
@@ -73,8 +80,11 @@ export default ({page, setPage}) => {
                         </div>
                         <Separator emoji={"☎️"} />
 
+                        <input value={name} className="input" type="text" placeholder="שם מלא" onChange={handleNameChange} />
                         {stage === PHONE_STAGE ?
-                            <input value={phoneNumber} className="input" type="text" placeholder="מספר טלפון" onChange={handlePhoneNumberInputChange} />
+                            <>
+                                <input value={phoneNumber} className="input" type="text" placeholder="מספר טלפון" onChange={handlePhoneNumberInputChange} />
+                            </>
                             :
                             <input value={code} className="input" type="text" placeholder="מה הקוד שקיבלת?" onChange={handleCodeInputChange} />
                         }

@@ -9,7 +9,7 @@ import SignInPage from './SignInPage'
 import Separator from './Separator'
 import Loading from './Loading'
 import PermissionDenied from './PermissionDenied'
-import {fetchPetekList, deletePetek, getCurrentUser, logout} from './apiService';
+import {fetchPetekList, deletePetek, getCurrentUser, logout, fetchCurrentUser} from './apiService';
 import './App.scss';
 
 function App() {
@@ -18,6 +18,7 @@ function App() {
   const [filteredList, setFilteredList] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [petekToEdit, setPetekToEdit] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [page, setPage] = useState('app');
   const [isPermissionDenied, setIsPermissionDenied] = useState(false);
 
@@ -36,6 +37,9 @@ function App() {
 
   useEffect(() => {
     loadList();
+    fetchCurrentUser().then((user) => {
+      setCurrentUser(user);
+    });
 
     if (page !== 'add-petek-modal') {
       setPetekToEdit(null);
@@ -91,7 +95,7 @@ function App() {
         <div className="app-header">
           <div className="user-button" onClick={handleOpenSignIn}>
             {getCurrentUser() ?
-              "ברוך הבא"
+              `ברוך הבא, ${currentUser?.name.split(' ')[0]}`
               :
               "התחבר"
             }
