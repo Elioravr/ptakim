@@ -53,7 +53,6 @@ function App() {
         .then(() => {
           loadList();
         }).catch(e => {
-          console.log('setting true!!');
           setIsPermissionDenied(true);
         });
     }
