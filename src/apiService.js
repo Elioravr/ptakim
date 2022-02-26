@@ -42,7 +42,11 @@ export const fetchPetekList = () => {
 }
 
 export const fetchCurrentUser = () => {
-    const currentUser = getCurrentUser()
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+        return Promise.resolve(null);
+    }
+
     return get(ref(db, `users/${currentUser.phoneNumber}`)).then(snap => {
         return snap.val();
     });
