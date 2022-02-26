@@ -8,6 +8,7 @@ import StatisticsPage from './StatisticsPage'
 import SignInPage from './SignInPage'
 import Separator from './Separator'
 import Loading from './Loading'
+import PermissionDenied from './PermissionDenied'
 import {fetchPetekList, deletePetek, getCurrentUser, logout} from './apiService';
 import './App.scss';
 
@@ -18,6 +19,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [petekToEdit, setPetekToEdit] = useState(null);
   const [page, setPage] = useState('app');
+  const [isPermissionDenied, setIsPermissionDenied] = useState(false);
 
   const loadList = () => {
     setIsLoading(true);
@@ -47,8 +49,13 @@ function App() {
 
   const deletePetekAndLoadList = (petekId) => {
     if (window.confirm('בטוח שאתה רוצה למחוק את הפתק?')) {
-      deletePetek(petekId);
-      loadList();
+      deletePetek(petekId)
+        .then(() => {
+          loadList();
+        }).catch(e => {
+          console.log('setting true!!');
+          setIsPermissionDenied(true);
+        });
     }
   }
 
@@ -101,7 +108,7 @@ function App() {
         </>}
       </div>
       <SearchPage page={page} setPage={setPage} list={list} setFilteredList={setFilteredList} filteredList={filteredList} />
-      <NewPetekModal list={list} petekToEdit={petekToEdit} page={page} setPage={setPage} />
+      <NewPetekModal list={list} petekToEdit={petekToEdit} page={page} setPage={setPage} setIsPermissionDenied={setIsPermissionDenied} />
       <div className={searchButtonClassName}>
         {filteredList && <div className="indicator">{Object.keys(filteredList).length}</div>}
         <div className="button" onClick={handleSearchPageClick}>חפש</div>
@@ -109,6 +116,7 @@ function App() {
       </div>
       <StatisticsPage page={page} setPage={setPage} list={list} />
       <SignInPage page={page} setPage={setPage} />
+      <PermissionDenied isOpen={isPermissionDenied} setIsOpen={setIsPermissionDenied} />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import {useState, useEffect, useRef} from 'react';
 import Separator from './Separator';
 import {addNewPetek} from './apiService';
 
-export default ({list, petekToEdit, page, setPage}) => {
+export default ({list, petekToEdit, page, setPage, setIsPermissionDenied}) => {
     const [owner, setOwner] = useState('');
     const [content, setContent] = useState('');
     const [situation, setSituation] = useState('');
@@ -78,7 +78,10 @@ export default ({list, petekToEdit, page, setPage}) => {
         };
 
         clearForm();
-        addNewPetek(petek);
+        addNewPetek(petek)
+            .catch(e => {
+                setIsPermissionDenied(true);
+            });
         setPage('app');
     }
 

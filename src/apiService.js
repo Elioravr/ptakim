@@ -50,7 +50,7 @@ export const addNewPetek = async (petek) => {
 }
 
 export const deletePetek = (petekId) => {
-    remove(ref(db, `peteks/${petekId}`));
+    return remove(ref(db, `peteks/${petekId}`));
 }
 
 export const createUserWithPhoneNumber = (phoneNumber) => {

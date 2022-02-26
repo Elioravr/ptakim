@@ -510,6 +510,35 @@ $padding-for-view-with-header: calc($header-height + 15px);
   }
 }
 
+.permission-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  .modal {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 20px;
+
+    .emoji {
+      font-size: 60px;
+    }
+  }
+}
+
 .loading-container {
   padding: 50px;
 
