@@ -57,8 +57,6 @@ export default ({page, setPage, list}) => {
     const ratingMaxCount = ratingStats[ratingSortedList[0]];
     // ratingSortedList = ratingSortedList.slice(1, ratingSortedList.length);
 
-    // console.log('ratingSortedList', ratingSortedList);
-
     const handleClose = () => {
         setPage('app');
     };
@@ -129,8 +127,6 @@ export default ({page, setPage, list}) => {
 
 const Stats = ({sortedList, stats, maxCount, namePrefix}) => {
     return sortedList.map((item, index) => {
-        // console.log('sortedList', sortedList);
-        // console.log('sortedList[item]', sortedList[item]);
         const count = stats[item];
 
         return (

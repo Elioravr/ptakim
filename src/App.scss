@@ -48,10 +48,12 @@ $padding-for-view-with-header: calc($header-height + 15px);
   }
 
   .app-header {
-    .sign-in-button {
+    .user-button {
       position: absolute;
       right: 14px;
       font-size: 18px;
+      color: $main-color;
+      font-weight: bold;
     }
 
     .statistics-button {
@@ -494,6 +496,17 @@ $padding-for-view-with-header: calc($header-height + 15px);
       animation: grow 2s ease-in-out;
       transform-origin: right;
     }
+  }
+}
+
+.sign-in-page {
+  .input {
+    text-align: center;
+  }
+
+  .error-message {
+    color: red;
+    margin: 15px 0;
   }
 }
 

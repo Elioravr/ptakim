@@ -7,7 +7,6 @@ export default ({petek, editPetek, deletePetek}) => {
 
     const handleDeleteClick = (e) => {
         e.stopPropagation();
-        console.log('deletePetek', deletePetek);
         deletePetek(petek.id);
     }
 

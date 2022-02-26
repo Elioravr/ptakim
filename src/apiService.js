@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getDatabase, ref, set, push, get, remove } from "firebase/database";
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,9 +23,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
+
 const auth = getAuth();
+const recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
+  'size': 'invisible',
+  'callback': (response) => {
+    // reCAPTCHA solved, allow signInWithPhoneNumber.
+  }
+}, auth);
+
 auth.languageCode = 'he';
-console.log('auth', auth);
+// let confirmationResult = null;
 
 export const fetchPetekList = () => {
     return get(ref(db, 'peteks/')).then(snap => {
@@ -45,34 +53,41 @@ export const deletePetek = (petekId) => {
     remove(ref(db, `peteks/${petekId}`));
 }
 
-export const createUserWithPhoneNumber = () => {
-    const appVerifier = window.recaptchaVerifier;
+export const createUserWithPhoneNumber = (phoneNumber) => {
+    const appVerifier = recaptchaVerifier;
 
     const auth = getAuth();
-    signInWithPhoneNumber(auth, '+972545405558', appVerifier)
+    return signInWithPhoneNumber(auth, `+972${phoneNumber}`, appVerifier)
         .then((confirmationResult) => {
-            console.log('confirmationResult', confirmationResult);
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-        window.confirmationResult = confirmationResult;
-        // ...
+            // SMS sent. Prompt user to type the code from the message, then sign the
+            // user in with confirmationResult.confirm(code).
+            window.confirmationResult = confirmationResult;
+            // ...
         }).catch((error) => {
             console.log('error', error);
-        // Error; SMS not sent
-        // ...
+            // Error; SMS not sent
+            // ...
         });
 }
 
-console.log('RecaptchaVerifier', RecaptchaVerifier);
+export const verifyCode = (code) => {
+    return window.confirmationResult.confirm(code).then((result) => {
+        // User signed in successfully.
+        const user = result.user;
+        return user
+        // ...
+    });
+}
 
-window.recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
-  'size': 'invisible',
-  'callback': (response) => {
-    // reCAPTCHA solved, allow signInWithPhoneNumber.
-    console.log('blahhhhh');
-  }
-}, auth);
-// window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {}, auth);
-// const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container');
-// console.log('recaptchaVerifier', recaptchaVerifier);
-// window.recaptchaVerifier = recaptchaVerifier;
+export const logout = () => {
+    return signOut(auth).then(() => {
+        // Sign-out successful.
+    }).catch((error) => {
+        console.log('error', error);
+    });
+}
+
+export const getCurrentUser = () => {
+    const user = auth.currentUser;
+    return user;
+}

@@ -1,13 +1,14 @@
 import {useState, useEffect} from 'react';
 
-import AddNewPetekButton from './AddNewPetekButton'
+import MainButton from './MainButton'
 import PetekList from './PetekList'
 import NewPetekModal from './NewPetekModal'
 import SearchPage from './SearchPage'
 import StatisticsPage from './StatisticsPage'
+import SignInPage from './SignInPage'
 import Separator from './Separator'
 import Loading from './Loading'
-import {fetchPetekList, deletePetek, createUserWithPhoneNumber} from './apiService';
+import {fetchPetekList, deletePetek, getCurrentUser, logout} from './apiService';
 import './App.scss';
 
 function App() {
@@ -59,6 +60,19 @@ function App() {
     setPage('statistics');
   }
 
+  const handleOpenSignIn = () => {
+    if (getCurrentUser()) {
+      if (window.confirm('בטוח שאתה רוצה להתנתק?')) {
+        setIsLoading(true);
+        logout().then(() => {
+          setIsLoading(false);
+        });
+      }
+    } else {
+      setPage('sign-in');
+    }
+  }
+
   const clearFilter = () => {
     setFilteredList(null);
   }
@@ -69,14 +83,19 @@ function App() {
     <div className="App">
       <div className={`page ${page === 'app' ? 'visible' : ''}`}>
         <div className="app-header">
-          <div className="sign-in-button" onClick={handleOpenStatistics}>התחבר</div>
+          <div className="user-button" onClick={handleOpenSignIn}>
+            {getCurrentUser() ?
+              "ברוך הבא"
+              :
+              "התחבר"
+            }
+          </div>
           <span className="logo">Ptakim</span>
           <div className="statistics-button" onClick={handleOpenStatistics}>{'📈'}</div>
         </div>
         {isLoading ? <Loading /> :
         <>
-          <AddNewPetekButton setPage={setPage} />
-          <div onClick={createUserWithPhoneNumber}>הירשם עם מספר טלפון</div>
+          <MainButton content={"🤦‍♂️ הוסף ציטוט 🤣"} onClick={() => setPage('add-petek-modal')} />
           <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} random={filteredList === null} />
           <Separator emoji="🤷‍♂️" />
         </>}
@@ -89,6 +108,7 @@ function App() {
         {filteredList && <div className="button clear-button" onClick={clearFilter}><div>נקה</div><div>חיפוש</div></div>}
       </div>
       <StatisticsPage page={page} setPage={setPage} list={list} />
+      <SignInPage page={page} setPage={setPage} />
     </div>
   );
 }
