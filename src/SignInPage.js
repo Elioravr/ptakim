@@ -9,7 +9,7 @@ const PHONE_STAGE = 'phone_stage';
 const CODE_STAGE = 'code_stage';
 
 export default ({page, setPage}) => {
-    const [phoneNumber, setPhoneNumber] = useState('0545405558');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [code, setCode] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [stage, setStage] = useState(PHONE_STAGE);
