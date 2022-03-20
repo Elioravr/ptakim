@@ -14,8 +14,8 @@ export default ({petek, editPetek, deletePetek}) => {
         <div className="petek-container" onClick={handleClick}>
             <div className="delete-button" onClick={handleDeleteClick}>X</div>
             <div className="petek-owner">{petek.owner}</div>
-            {petek.situation && <div className="petek-situation">{`— ${petek.situation}`}</div>}
             <div className="petek-text" direction="auto">
+                {petek.situation && <div className="petek-situation">{`${petek.situation}`}</div>}
                 {petek.content.split('\n').map(line => {
                     // let lineWithBoldSupport = '';
                     // line.split('*').map
