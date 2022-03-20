@@ -15,12 +15,12 @@ export default ({petek, editPetek, deletePetek}) => {
             <div className="delete-button" onClick={handleDeleteClick}>X</div>
             <div className="petek-owner">{petek.owner}</div>
             {petek.situation && <div className="petek-situation">{`— ${petek.situation}`}</div>}
-            <div className="petek-text">
+            <div className="petek-text" direction="auto">
                 {petek.content.split('\n').map(line => {
                     // let lineWithBoldSupport = '';
                     // line.split('*').map
                     // Support for lines and bold
-                    return <div>{line.split('*').map((part, index) => {
+                    return <div dir="auto">{line.split('*').map((part, index) => {
                         if (index % 2 === 0) {
                             return <span key={index}>{part}</span>;
                         } else {

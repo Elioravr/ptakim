@@ -1,8 +1,18 @@
+@font-face {
+  font-family: 'DanaYadAlefAlefAlef-Normal';
+  src: local('DanaYadAlefAlefAlef-Normal'), url(./fonts/DanaYadAlefAlefAlef-Normal.woff) format('woff');
+}
+
 $header-height:60px;
 $main-color:#007bff;
 $owners-color:#005abb;
 $related-color:#FF530F;
 $padding-for-view-with-header: calc($header-height + 15px);
+
+
+html:lang(en) .petek-text {
+  font-size: 22px;
+}
 
 .App {
   display: flex;
@@ -136,13 +146,22 @@ $padding-for-view-with-header: calc($header-height + 15px);
   }
 
   .petek-text {
+    color:#000;
+    background:#ffc;
+    display:block;
+    padding: 12px;
+    min-height: 60px;
+    margin: 15px 0;
+    box-shadow: 5px 5px 7px rgba(33,33,33,.31);
+    transform: rotate(-3deg);
     width: 100%;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 3px 0;
-    font-size: 24px;
-    text-align: right;
-    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: transform .15s linear;
+    font-family: 'DanaYadAlefAlefAlef-Normal', 'Dancing Script';
+    font-size: 22px;
   }
 
   .petek-situation {
@@ -169,13 +188,31 @@ $padding-for-view-with-header: calc($header-height + 15px);
     }
   }
 
-  &:nth-child(2n + 1) .petek-text {
-    background-color: #dfdbdb;
-  }
+  // &:nth-child(2n + 1) .petek-text {
+  //   // background-color: #dfdbdb;
+  // }
 
-  &:nth-child(2n + 2) .petek-text {
-    background-color: $main-color;
-    color: white;
+  // &:nth-child(2n + 2) .petek-text {
+  //   background-color: $main-color;
+  //   color: white;
+  // }
+
+  &:nth-child(even) .petek-text{
+    transform:rotate(3deg);
+    // position:relative;
+    // top:5px;
+    background:#cfc;
+  }
+  &:nth-child(3n) .petek-text{
+    transform:rotate(-3deg);
+    // position:relative;
+    // top:-5px;
+    background:#ccf;
+  }
+  &:nth-child(5n) .petek-text{
+    transform:rotate(2deg);
+    // position:relative;
+    // top:-10px;
   }
 }
 
