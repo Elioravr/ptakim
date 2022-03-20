@@ -2,6 +2,9 @@ import {useState, useEffect, useRef} from 'react';
 
 import Separator from './Separator';
 
+const RATING_SEARCH_TYPE_AND_ABOVE = 'and_above';
+const RATING_SEARCH_TYPE_ONLY = 'only';
+
 export default ({page, setPage, list, setFilteredList, filteredList}) => {
     const [freeTextFilter, setFreeTextFilter] = useState('');
     const [allOwners, setAllOwners] = useState({});
@@ -9,7 +12,8 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
     const [allRelated, setAllRelated] = useState({});
     const [owner, setOwner] = useState('');
     const [category, setCategory] = useState('');
-    const [rating, setRating] = useState(0)
+    const [rating, setRating] = useState(0);
+    const [ratingSearchType, setRatingSearchType] = useState(RATING_SEARCH_TYPE_AND_ABOVE)
     const pageRef = useRef(null);
     const summaryRef = useRef(null);
     const submitButtonRef = useRef(null);
@@ -29,6 +33,7 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
         setCategory('');
         setAllRelated({});
         setRating(0);
+        setRatingSearchType(RATING_SEARCH_TYPE_AND_ABOVE);
 
         setFilteredList(null);
     }
@@ -137,8 +142,9 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
         if (rating !== 0) {
             result = Object.keys(result).reduce((filtered, currentPetekKey) => {
                 const currentPetek = list[currentPetekKey];
+                const isInRating = ratingSearchType === RATING_SEARCH_TYPE_AND_ABOVE ? currentPetek.rating >= rating : currentPetek.rating === rating;
 
-                if (currentPetek?.rating != null && currentPetek.rating >= rating) {
+                if (currentPetek?.rating != null && isInRating) {
                     filtered[currentPetekKey] = currentPetek;
                 }
 
@@ -213,6 +219,12 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
         }
     }
 
+    const createHandleRatingSearchTypeClick = (ratingSearchType) => {
+        return () => {
+            setRatingSearchType(ratingSearchType);
+        }
+    }
+
     return (
         <div className={className} ref={pageRef}>
             <div className="page-header">
@@ -251,7 +263,7 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
                     <div className="title">{
                         rating === 0 ?
                         'כל הפתקים בלי דירוג' :
-                        `רק ${rating} כוכבים ומעלה`
+                        `רק ${rating} כוכבים ${ratingSearchType === RATING_SEARCH_TYPE_AND_ABOVE ? 'ומעלה' : ''}`
                     }</div>
                     <div className="stars-container">
                         <div className={`star star-1 ${rating >= 1 ? 'selected' : ''}`} onClick={createHandleRatingClick(1)}></div>
@@ -259,6 +271,10 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
                         <div className={`star star-3 ${rating >= 3 ? 'selected' : ''}`} onClick={createHandleRatingClick(3)}></div>
                         <div className={`star star-4 ${rating >= 4 ? 'selected' : ''}`} onClick={createHandleRatingClick(4)}></div>
                         <div className={`star star-5 ${rating >= 5 ? 'selected' : ''}`} onClick={createHandleRatingClick(5)}></div>
+                    </div>
+                    <div className="rating-search-type-container">
+                        <div className={`search-type-button option-1 ${ratingSearchType === RATING_SEARCH_TYPE_AND_ABOVE ? 'selected' : ''}`} onClick={createHandleRatingSearchTypeClick(RATING_SEARCH_TYPE_AND_ABOVE)}>ומעלה</div>
+                        <div className={`search-type-button option-2 ${ratingSearchType === RATING_SEARCH_TYPE_ONLY ? 'selected' : ''}`} onClick={createHandleRatingSearchTypeClick(RATING_SEARCH_TYPE_ONLY)}>רק</div>
                     </div>
                 </div>
 
@@ -292,7 +308,7 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
                         {freeTextFilter !== '' && <div>{'✏️ טקסט חופשי: '} <span>{freeTextFilter}</span></div>}
                         {owner !== '' && <div>{'🙊 מי אמר: '}<span>{owner}</span></div>}
                         {Object.keys(allRelated).length !== 0 && <div>{'🧬 קשור למישהו: '}<span>{Object.keys(allRelated).join(', ')}</span></div>}
-                        {rating !== 0 && <div>{'⭐️ דירוג: '}<span>{rating}</span></div>}
+                        {rating !== 0 && <div>{'⭐️ דירוג: '}<span>{rating}</span>{ratingSearchType === RATING_SEARCH_TYPE_ONLY ? ' (רק)' : ' (ומעלה)'}</div>}
                         {category !== '' && <div>{'☝️ קטגוריה: '} <span>{category}</span></div>}
                         <div className="clear-search-button" onClick={clearAllFilters}>נקה חיפוש</div>
                     </div>

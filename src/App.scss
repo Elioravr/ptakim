@@ -415,6 +415,33 @@ html:lang(en) .petek-text {
         filter: grayscale(0);
       }
     }
+
+    .rating-search-type-container {
+      font-size: 22px;
+      width: 160px;
+      display: flex;
+      height: 60px;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid $owners-color;
+      margin-top: 20px;
+      border-radius: 5px;
+      background-color: $owners-color;
+      color: white;
+
+      .search-type-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        height: 100%;
+
+        &.selected {
+          background-color: white;
+          color: $owners-color;
+        }
+      }
+    }
   }
 
   .set-related-button.selected {
