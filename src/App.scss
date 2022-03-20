@@ -159,11 +159,15 @@ html:lang(en) .petek-text {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: column;
     transition: transform .15s linear;
     font-family: 'DanaYadAlefAlefAlef-Normal', 'Dancing Script';
     font-size: 22px;
+
+    div {
+      text-align: right;
+    }
 
     .petek-situation {
       font-family: 'Fredoka', sans-serif;
@@ -560,6 +564,14 @@ html:lang(en) .petek-text {
       justify-content: space-between;
       margin-bottom: 3px;
       font-size: 20px;
+
+      .name-and-rating-container {
+        display: flex;
+
+        .average-rating {
+          margin-right: 10px;
+        }
+      }
     }
 
     .count-graph {

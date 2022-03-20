@@ -6,6 +6,7 @@ import { PieChart } from 'react-minimal-pie-chart';
 
 export default ({page, setPage, list}) => {
     const [statistics, setStatistics] = useState({});
+    const [ratingPerPerson, setRatingPerPerson] = useState({});
     const [ratingStats, setRatingStats] = useState({});
     const className = `page modal statistics-page ${page === 'statistics' ? 'visible' : ''}`;
 
@@ -41,6 +42,37 @@ export default ({page, setPage, list}) => {
         }, {});
 
         setRatingStats(calculatedRatingStats);
+
+        let calculatedRatingPerPerson = Object.keys(list).reduce((result, currentPetekKey) => {
+            const currentPetek = list[currentPetekKey];
+            // console.log('result', result);
+            // console.log('currentPetek.owner', currentPetek.owner);
+            // console.log('result[currentPetek.owner]', result[currentPetek.owner]);
+
+            if (result[currentPetek.owner] == null) {
+                console.log('1');
+                result[currentPetek.owner] = {
+                    count: 1,
+                    sum: currentPetek.rating
+                };
+
+                console.log('result', result);
+            } else {
+                console.log('2');
+                result[currentPetek.owner].count++;
+                result[currentPetek.owner].sum += currentPetek.rating;
+            }
+
+            return result;
+        }, {});
+
+        Object.keys(calculatedRatingPerPerson).forEach(currentPetekKey => {
+            const {sum, count} = calculatedRatingPerPerson[currentPetekKey];
+            calculatedRatingPerPerson[currentPetekKey].average = (sum / count).toFixed(1);
+        });
+
+        console.log('calculatedRatingPerPerson', calculatedRatingPerPerson);
+        setRatingPerPerson(calculatedRatingPerPerson);
     }, [list]);
 
 
@@ -61,6 +93,8 @@ export default ({page, setPage, list}) => {
         setPage('app');
     };
 
+    console.log('ratingPerPerson', ratingPerPerson);
+
     return (
         <div className={className}>
             <div className="page-header">
@@ -80,7 +114,7 @@ export default ({page, setPage, list}) => {
 
                     <Separator emoji="😱" />
 
-                    <Stats stats={statistics} sortedList={sortedList} maxCount={maxCount} />
+                    <Stats stats={statistics} sortedList={sortedList} maxCount={maxCount} ratingPerPerson={ratingPerPerson} />
 
                     <Separator emoji="⭐️" />
 
@@ -125,14 +159,22 @@ export default ({page, setPage, list}) => {
     );
 }
 
-const Stats = ({sortedList, stats, maxCount, namePrefix}) => {
+const Stats = ({sortedList, stats, maxCount, namePrefix, ratingPerPerson}) => {
+    console.log('ratingPerPerson', ratingPerPerson);
+
+    console.log('sortedList', sortedList);
     return sortedList.map((item, index) => {
+        console.log('item', item);
         const count = stats[item];
+        // console.log('namePrefix', namePrefix);
 
         return (
             <div className="statistic-container" key={index}>
                 <div className="metadata-container">
-                    <div className="owner-name">{`${namePrefix ? `${namePrefix} ` : ''}${item}`}</div>
+                    <div className="name-and-rating-container">
+                        <div className="owner-name">{`${namePrefix ? `${namePrefix} ` : ''}${item}`}</div>
+                        {ratingPerPerson && <div className="average-rating">{`(${ratingPerPerson[item].average} ⭐️)`}</div>}
+                    </div>
                     <CountUp end={count} duration={2} />
                 </div>
                 <div className="count-graph" style={{width: `${(count / maxCount) * 100}%`}}></div>
