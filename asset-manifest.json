@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/ptakim/static/css/main.8928cd53.css",
+    "main.css": "/ptakim/static/css/main.2a21dde2.css",
     "main.js": "/ptakim/static/js/main.b8b3ae02.js",
     "static/js/787.15496adf.chunk.js": "/ptakim/static/js/787.15496adf.chunk.js",
     "static/media/DanaYadAlefAlefAlef-Normal.woff": "/ptakim/static/media/DanaYadAlefAlefAlef-Normal.faa7adba8b581fadafcb.woff",
     "index.html": "/ptakim/index.html",
-    "main.8928cd53.css.map": "/ptakim/static/css/main.8928cd53.css.map",
+    "main.2a21dde2.css.map": "/ptakim/static/css/main.2a21dde2.css.map",
     "main.b8b3ae02.js.map": "/ptakim/static/js/main.b8b3ae02.js.map",
     "787.15496adf.chunk.js.map": "/ptakim/static/js/787.15496adf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8928cd53.css",
+    "static/css/main.2a21dde2.css",
     "static/js/main.b8b3ae02.js"
   ]
 }
