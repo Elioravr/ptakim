@@ -45,20 +45,13 @@ export default ({page, setPage, list}) => {
 
         let calculatedRatingPerPerson = Object.keys(list).reduce((result, currentPetekKey) => {
             const currentPetek = list[currentPetekKey];
-            // console.log('result', result);
-            // console.log('currentPetek.owner', currentPetek.owner);
-            // console.log('result[currentPetek.owner]', result[currentPetek.owner]);
 
             if (result[currentPetek.owner] == null) {
-                console.log('1');
                 result[currentPetek.owner] = {
                     count: 1,
                     sum: currentPetek.rating
                 };
-
-                console.log('result', result);
             } else {
-                console.log('2');
                 result[currentPetek.owner].count++;
                 result[currentPetek.owner].sum += currentPetek.rating;
             }
@@ -71,7 +64,6 @@ export default ({page, setPage, list}) => {
             calculatedRatingPerPerson[currentPetekKey].average = (sum / count).toFixed(1);
         });
 
-        console.log('calculatedRatingPerPerson', calculatedRatingPerPerson);
         setRatingPerPerson(calculatedRatingPerPerson);
     }, [list]);
 
@@ -92,8 +84,6 @@ export default ({page, setPage, list}) => {
     const handleClose = () => {
         setPage('app');
     };
-
-    console.log('ratingPerPerson', ratingPerPerson);
 
     return (
         <div className={className}>
@@ -147,7 +137,7 @@ export default ({page, setPage, list}) => {
                                     color = '005abb'
                                 }
 
-                                return {title: `⭐️ ${ratingLabel}`, value: ratingStats[ratingLabel], color: `#${color}`};
+                                return {title: `⭐️ ${ratingLabel}`, value: ratingStats[ratingLabel], color: `#${color}`, key: index};
                             })}
                         />
                     </div>
@@ -160,13 +150,9 @@ export default ({page, setPage, list}) => {
 }
 
 const Stats = ({sortedList, stats, maxCount, namePrefix, ratingPerPerson}) => {
-    console.log('ratingPerPerson', ratingPerPerson);
 
-    console.log('sortedList', sortedList);
     return sortedList.map((item, index) => {
-        console.log('item', item);
         const count = stats[item];
-        // console.log('namePrefix', namePrefix);
 
         return (
             <div className="statistic-container" key={index}>

@@ -1,7 +1,13 @@
-export default ({petek, editPetek, deletePetek}) => {
+const NO_OWNER_PIC_PLACEHOLDER = 'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
+
+export default ({petek, editPetek, deletePetek, ownerPic, ownerPics, enableScaleDown, isHidden}) => {
     const dateAsString = (new Date(petek.createdAt)).toLocaleDateString();
 
     const handleClick = () => {
+        if (editPetek == null) {
+            return;
+        }
+
         editPetek(petek);
     }
 
@@ -11,9 +17,15 @@ export default ({petek, editPetek, deletePetek}) => {
     }
 
     return (
-        <div className="petek-container" onClick={handleClick}>
-            <div className="delete-button" onClick={handleDeleteClick}>X</div>
-            <div className="petek-owner">{petek.owner}</div>
+        <div className={`petek-container ${isHidden ? 'hidden' : ''}`} onClick={handleClick} style={enableScaleDown ? {transform: `scale(0.8)`} : {}}>
+            {deletePetek && <div className="delete-button" onClick={handleDeleteClick}>X</div>}
+            <div className="petek-owner">
+                <div className="picture">
+                    {petek.owner === 'אליאור' ? <div className="crown">👑</div> : null}
+                    <img src={ownerPic || NO_OWNER_PIC_PLACEHOLDER} />
+                </div>
+                {petek.owner}
+            </div>
             <div className="petek-text" direction="auto">
                 {petek.situation && <div className="petek-situation">{`${petek.situation}`}</div>}
                 {petek.content.split('\n').map(line => {
@@ -32,7 +44,10 @@ export default ({petek, editPetek, deletePetek}) => {
             {
                 petek.allRelated && (
                     <div className="related-tags-container">
-                        {Object.keys(petek.allRelated).map(relatedKey => <div key={relatedKey} className="related-tag">{relatedKey}</div>)}
+                        {Object.keys(petek.allRelated).map(relatedKey => {
+                            const relatedPic = ownerPics && ownerPics[relatedKey];
+                            return <div key={relatedKey} className="related-tag"><img src={relatedPic || NO_OWNER_PIC_PLACEHOLDER} /> {relatedKey}</div>
+                        })}
                     </div>
                 )
             }

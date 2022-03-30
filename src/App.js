@@ -1,16 +1,21 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
+import usePrevious from 'use-previous';
 
 import MainButton from './MainButton'
 import PetekList from './PetekList'
 import NewPetekModal from './NewPetekModal'
 import SearchPage from './SearchPage'
 import StatisticsPage from './StatisticsPage'
+import StoryPage from './StoryPage'
 import SignInPage from './SignInPage'
 import Separator from './Separator'
 import Loading from './Loading'
 import PermissionDenied from './PermissionDenied'
-import {fetchPetekList, deletePetek, getCurrentUser, logout, fetchCurrentUser} from './apiService';
+import {fetchPetekList, deletePetek, getCurrentUser, logout, fetchCurrentUser, fetchOwnerPics} from './apiService';
 import './App.scss';
+
+const PAGE_ANIMATION_DELAY = 300;
+let currentScroll = 0;
 
 function App() {
   // const [isNewPetekModalOpen, setIsNewPetekModalOpen] = useState(false);
@@ -19,7 +24,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [petekToEdit, setPetekToEdit] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [ownerPics, setOwnerPics] = useState(null);
   const [page, setPage] = useState('app');
+  const [lastAppScroll, setLastAppScroll] = useState(0);
+  const prevPage = usePrevious(page);
+  const prevFilteredList = usePrevious(filteredList);
   const [isPermissionDenied, setIsPermissionDenied] = useState(false);
 
   const loadList = () => {
@@ -29,29 +38,65 @@ function App() {
         list && setList(list);
         setIsLoading(false);
 
-        fetchCurrentUser().then((user) => {
-          console.log('user', user);
-          setCurrentUser(user);
-        });
+        return fetchCurrentUser();
       })
-      .catch(e => fetchPetekList().then(list => {
-        list && setList(list);
-        setIsLoading(false);
-      }));
+      .then((user) => {
+        setCurrentUser(user);
+        return fetchOwnerPics();
+      })
+      .then((fetchedOwnerPics) => {
+        setOwnerPics(fetchedOwnerPics);
+      })
+      .catch(e => setTimeout(() => {
+        console.log('trying again!');
+        loadList()
+      }, 300));
   }
 
   // useEffect(() => {
   // }, [setCurrentUser])
 
   useEffect(() => {
-    loadList();
+    if (page === 'app' &&
+        (list.length === 0 || prevPage === 'add-petek-modal' || (filteredList !== null && filteredList !== prevFilteredList))) {
+      loadList();
+    } else if (page === 'app') {
+      window.scrollTo({top: lastAppScroll});
+    }
+
     if (page !== 'add-petek-modal') {
       setPetekToEdit(null);
     }
-  }, [page]);
+
+    if (page !== 'app') {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  }, [page, lastAppScroll]);
+
+  const handleScroll = useCallback((e) => {
+    if (page === 'app') {
+      currentScroll = window.scrollY;
+    }
+  }, [page])
+
+  useEffect(() => {
+    document.addEventListener('scroll', handleScroll);
+
+    return () => {
+      return document.removeEventListener('scroll', handleScroll);
+    }
+  });
+
+  const changeToPage = (nextPage) => {
+    if (page === 'app') {
+      setLastAppScroll(currentScroll);
+    }
+
+    setPage(nextPage);
+  }
 
   const editPetek = (petek) => {
-    setPage('add-petek-modal');
+    changeToPage('add-petek-modal');
     setPetekToEdit(petek)
   }
 
@@ -67,11 +112,15 @@ function App() {
   }
 
   const handleSearchPageClick = () => {
-    setPage('search');
+    changeToPage('search');
   }
 
   const handleOpenStatistics = () => {
-    setPage('statistics');
+    changeToPage('statistics');
+  }
+
+  const handleOpenStory = () => {
+    changeToPage('story');
   }
 
   const handleOpenSignIn = () => {
@@ -84,7 +133,7 @@ function App() {
         });
       }
     } else {
-      setPage('sign-in');
+      changeToPage('sign-in');
     }
   }
 
@@ -106,12 +155,15 @@ function App() {
             }
           </div>
           <span className="logo">Ptakim</span>
-          <div className="statistics-button" onClick={handleOpenStatistics}>{'📈'}</div>
+          <div className="buttons-container">
+            <div className="statistics-button page-button" onClick={handleOpenStory}>{'📚'}</div>
+            <div className="statistics-button page-button" onClick={handleOpenStatistics}>{'📈'}</div>
+          </div>
         </div>
         {isLoading ? <Loading /> :
         <>
           <MainButton content={"🤦‍♂️ הוסף ציטוט 🤣"} onClick={() => setPage('add-petek-modal')} />
-          <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} random={filteredList === null} />
+          <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} random={filteredList === null} ownerPics={ownerPics} />
           <Separator emoji="🤷‍♂️" />
         </>}
       </div>
@@ -123,6 +175,7 @@ function App() {
         {filteredList && <div className="button clear-button" onClick={clearFilter}><div>נקה</div><div>חיפוש</div></div>}
       </div>
       <StatisticsPage page={page} setPage={setPage} list={list} />
+      <StoryPage page={page} setPage={setPage} list={list} ownerPics={ownerPics} />
       <SignInPage page={page} setPage={setPage} />
       <PermissionDenied isOpen={isPermissionDenied} setIsOpen={setIsPermissionDenied} />
     </div>

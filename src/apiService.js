@@ -41,6 +41,12 @@ export const fetchPetekList = () => {
     });
 }
 
+export const fetchOwnerPics = () => {
+    return get(ref(db, 'ownerPics/')).then(snap => {
+        return snap.val();
+    });
+}
+
 export const fetchCurrentUser = () => {
     const currentUser = getCurrentUser();
     if (!currentUser) {
