@@ -5,7 +5,7 @@ import Separator from './Separator';
 const RATING_SEARCH_TYPE_AND_ABOVE = 'and_above';
 const RATING_SEARCH_TYPE_ONLY = 'only';
 
-export default ({page, setPage, list, setFilteredList, filteredList}) => {
+export default ({page, setPage, list, setFilteredList, filteredList, setOwnerFilterHeader}) => {
     const [freeTextFilter, setFreeTextFilter] = useState('');
     const [allOwners, setAllOwners] = useState({});
     const [allCategories, setAllCategories] = useState({});
@@ -166,6 +166,7 @@ export default ({page, setPage, list, setFilteredList, filteredList}) => {
         }
 
         setFilteredList(result);
+        setOwnerFilterHeader(owner, {overrideList: false});
     }
 
     const handleSubmit = () => {

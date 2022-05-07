@@ -1,6 +1,6 @@
 const NO_OWNER_PIC_PLACEHOLDER = 'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
 
-export default ({petek, editPetek, deletePetek, ownerPic, ownerPics, enableScaleDown, isHidden}) => {
+export default ({petek, editPetek, deletePetek, ownerPic, ownerPics, enableScaleDown, isHidden, onOwnerClick}) => {
     const dateAsString = (new Date(petek.createdAt)).toLocaleDateString();
 
     const handleClick = () => {
@@ -16,10 +16,15 @@ export default ({petek, editPetek, deletePetek, ownerPic, ownerPics, enableScale
         deletePetek(petek.id);
     }
 
+    const handleOwnerClick = (e) => {
+        e.stopPropagation();
+        onOwnerClick(petek.owner)
+    }
+
     return (
         <div className={`petek-container ${isHidden ? 'hidden' : ''}`} onClick={handleClick} style={enableScaleDown ? {transform: `scale(0.8)`} : {}}>
             {deletePetek && <div className="delete-button" onClick={handleDeleteClick}>X</div>}
-            <div className="petek-owner">
+            <div className="petek-owner" onClick={handleOwnerClick}>
                 <div className="picture">
                     {petek.owner === 'אליאור' ? <div className="crown">👑</div> : null}
                     <img src={ownerPic || NO_OWNER_PIC_PLACEHOLDER} />

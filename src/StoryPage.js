@@ -65,8 +65,8 @@ export default ({page, setPage, list, ownerPics}) => {
                     />
                 );
             })}
-            <div className="story-button next-button" onClick={() => setCurrentIndex(currentIndex + 1)}></div>
-            <div className="story-button prev-button" onClick={() => setCurrentIndex(currentIndex - 1)}></div>
+            <div className="story-button next-button" onClick={() => setCurrentIndex(currentIndex === Object.keys(list).length - 1 ? 0 : currentIndex + 1)}></div>
+            <div className="story-button prev-button" onClick={() => setCurrentIndex(currentIndex === 0 ? 0 : currentIndex - 1)}></div>
         </div>
     );
 }

@@ -13,6 +13,7 @@ import Loading from './Loading'
 import PermissionDenied from './PermissionDenied'
 import {fetchPetekList, deletePetek, getCurrentUser, logout, fetchCurrentUser, fetchOwnerPics} from './apiService';
 import './App.scss';
+import { setCurrentScreen } from 'firebase/analytics';
 
 const PAGE_ANIMATION_DELAY = 300;
 let currentScroll = 0;
@@ -21,6 +22,7 @@ function App() {
   // const [isNewPetekModalOpen, setIsNewPetekModalOpen] = useState(false);
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState(null);
+  const [filteredByOwner, setFilteredByOwner] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [petekToEdit, setPetekToEdit] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -139,6 +141,47 @@ function App() {
 
   const clearFilter = () => {
     setFilteredList(null);
+    setFilteredByOwner(null);
+  }
+
+  const setOwnerFilterHeader = (owner, {overrideList=true} = {}) => {
+    let result = {...list};
+
+    result = Object.keys(result).reduce((filtered, currentPetekKey) => {
+        const currentPetek = list[currentPetekKey];
+
+        if (currentPetek?.owner === owner) {
+            filtered[currentPetekKey] = currentPetek;
+        }
+
+        return filtered;
+    }, {});
+
+    const totalAmount = Object.keys(list).reduce((total, currentPetekId) => {
+      if (list[currentPetekId].owner === owner) {
+        return total + 1;
+      }
+
+      return total;
+    }, 0);
+
+    const totalRating = Object.keys(list).reduce((total, currentPetekId) => {
+      if (list[currentPetekId].owner === owner) {
+        return total + list[currentPetekId].rating;
+      }
+
+      return total;
+    }, 0);
+
+    if (overrideList) {
+      setFilteredList(result);
+    }
+
+    setFilteredByOwner({owner, statistics: {
+      totalAmount,
+      averageRating: (totalRating / totalAmount).toFixed(1)
+    }});
+    setPage('app');
   }
 
   const searchButtonClassName = `search-button ${filteredList ? 'has-filter' : ''}`;
@@ -162,19 +205,19 @@ function App() {
         </div>
         {isLoading ? <Loading /> :
         <>
-          <MainButton content={"🤦‍♂️ הוסף ציטוט 🤣"} onClick={() => setPage('add-petek-modal')} />
-          <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} random={filteredList === null} ownerPics={ownerPics} />
+          {!filteredList && <MainButton content={"🤦‍♂️ הוסף ציטוט 🤣"} onClick={() => setPage('add-petek-modal')} />}
+          <PetekList list={filteredList || list} editPetek={editPetek} deletePetek={deletePetekAndLoadList} random={filteredList === null} ownerPics={ownerPics} filteredByOwner={filteredByOwner} onOwnerClick={setOwnerFilterHeader} />
           <Separator emoji="🤷‍♂️" />
         </>}
       </div>
-      <SearchPage page={page} setPage={setPage} list={list} setFilteredList={setFilteredList} filteredList={filteredList} />
+      <SearchPage page={page} setPage={setPage} list={list} setFilteredList={setFilteredList} filteredList={filteredList} setOwnerFilterHeader={setOwnerFilterHeader} />
       <NewPetekModal list={list} petekToEdit={petekToEdit} page={page} setPage={setPage} setIsPermissionDenied={setIsPermissionDenied} />
       <div className={searchButtonClassName}>
         {filteredList && <div className="indicator">{Object.keys(filteredList).length}</div>}
         <div className="button" onClick={handleSearchPageClick}>חפש</div>
         {filteredList && <div className="button clear-button" onClick={clearFilter}><div>נקה</div><div>חיפוש</div></div>}
       </div>
-      <StatisticsPage page={page} setPage={setPage} list={list} />
+      <StatisticsPage page={page} setPage={setPage} list={list} onOwnerClick={setOwnerFilterHeader} />
       <StoryPage page={page} setPage={setPage} list={list} ownerPics={ownerPics} />
       <SignInPage page={page} setPage={setPage} />
       <PermissionDenied isOpen={isPermissionDenied} setIsOpen={setIsPermissionDenied} />

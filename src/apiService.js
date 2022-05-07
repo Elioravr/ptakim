@@ -95,7 +95,6 @@ export const verifyCode = (code, name) => {
     return window.confirmationResult.confirm(code).then((result) => {
         // User signed in successfully.
         const user = result.user;
-        // console.log('user', user);
         return createUser(user.phoneNumber, name);
         // return user
         // ...

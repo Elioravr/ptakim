@@ -4,7 +4,7 @@ import Separator from './Separator';
 import CountUp from 'react-countup';
 import { PieChart } from 'react-minimal-pie-chart';
 
-export default ({page, setPage, list}) => {
+export default ({page, setPage, list, onOwnerClick}) => {
     const [statistics, setStatistics] = useState({});
     const [ratingPerPerson, setRatingPerPerson] = useState({});
     const [ratingStats, setRatingStats] = useState({});
@@ -104,7 +104,7 @@ export default ({page, setPage, list}) => {
 
                     <Separator emoji="😱" />
 
-                    <Stats stats={statistics} sortedList={sortedList} maxCount={maxCount} ratingPerPerson={ratingPerPerson} />
+                    <Stats stats={statistics} sortedList={sortedList} maxCount={maxCount} ratingPerPerson={ratingPerPerson} onOwnerClick={onOwnerClick} />
 
                     <Separator emoji="⭐️" />
 
@@ -149,13 +149,16 @@ export default ({page, setPage, list}) => {
     );
 }
 
-const Stats = ({sortedList, stats, maxCount, namePrefix, ratingPerPerson}) => {
+const Stats = ({sortedList, stats, maxCount, namePrefix, ratingPerPerson, onOwnerClick}) => {
+    const handleOwnerClick = (item) => {
+        onOwnerClick(item);
+    }
 
     return sortedList.map((item, index) => {
         const count = stats[item];
 
         return (
-            <div className="statistic-container" key={index}>
+            <div className="statistic-container" key={index} onClick={() => handleOwnerClick(item)}>
                 <div className="metadata-container">
                     <div className="name-and-rating-container">
                         <div className="owner-name">{`${namePrefix ? `${namePrefix} ` : ''}${item}`}</div>

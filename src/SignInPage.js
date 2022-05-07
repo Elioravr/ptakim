@@ -47,7 +47,6 @@ export default ({page, setPage}) => {
                 setStage(CODE_STAGE);
             });
         } else if (stage === CODE_STAGE) {
-            console.log('name', name);
             verifyCode(code, name).then(user => {
                 setIsLoading(false);
                 setPage('app');
