@@ -27,7 +27,7 @@ export default ({list, editPetek, deletePetek, random=false, ownerPics, filtered
 
     return (
         <>
-            {filteredByOwner &&
+            {filteredByOwner?.owner &&
                 <>
                 <div className="filtered-by-owner-container">
                     <div className="picture">
