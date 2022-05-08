@@ -181,6 +181,7 @@ function App() {
       totalAmount,
       averageRating: (totalRating / totalAmount).toFixed(1)
     }});
+    window.scrollTo({top: 0, behavior: 'smooth'});
     setPage('app');
   }
 
