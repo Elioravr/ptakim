@@ -1,3 +1,5 @@
+// @flow
+
 import {useState, useEffect, useCallback} from 'react';
 import usePrevious from 'use-previous';
 
