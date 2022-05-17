@@ -3,7 +3,7 @@
   src: local('DanaYadAlefAlefAlef-Normal'), url(./fonts/DanaYadAlefAlefAlef-Normal.woff) format('woff');
 }
 
-$header-height:60px;
+$header-height:100px;
 $main-color:#007bff;
 $owners-color:#005abb;
 $related-color:#FF530F;
@@ -47,6 +47,7 @@ html:lang(en) .petek-text {
   .app-header, .modal-header, .page-header {
     background-color: white;
     height: $header-height;
+    padding-top: 40px;
     border-bottom: 1px solid #ccc;
     display: flex;
     justify-content: center;
@@ -327,6 +328,7 @@ html:lang(en) .petek-text {
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
+  padding-top: 40px;
 }
 
 .search-page {
@@ -732,7 +734,7 @@ html:lang(en) .petek-text {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 0px;
     top: 0;
   }
 
@@ -769,7 +771,7 @@ html:lang(en) .petek-text {
     width: 90%;
     background: #ccc;
     position: absolute;
-    top: 80px;
+    top: 120px;
     margin: auto;
     direction: ltr;
 
