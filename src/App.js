@@ -1,3 +1,7 @@
+// @flow
+import type { MixedElement } from "react";
+
+import React from "react";
 import { useState, useEffect, useCallback } from "react";
 import usePrevious from "use-previous";
 
@@ -19,14 +23,15 @@ import {
   fetchCurrentUser,
   fetchOwnerPics,
 } from "./apiService";
+// $FlowIgnore - this module exists
 import "./App.scss";
+// $FlowIgnore - this is also fine and comes from the node modules
 import { setCurrentScreen } from "firebase/analytics";
 
 const PAGE_ANIMATION_DELAY = 300;
 let currentScroll = 0;
 
-function App() {
-  // const [isNewPetekModalOpen, setIsNewPetekModalOpen] = useState(false);
+function App(): MixedElement {
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState(null);
   const [filteredByOwner, setFilteredByOwner] = useState(null);
@@ -88,14 +93,11 @@ function App() {
     }
   }, [page, lastAppScroll]);
 
-  const handleScroll = useCallback(
-    (e) => {
-      if (page === "app") {
-        currentScroll = window.scrollY;
-      }
-    },
-    [page]
-  );
+  const handleScroll = useCallback(() => {
+    if (page === "app") {
+      currentScroll = window.scrollY;
+    }
+  }, [page]);
 
   useEffect(() => {
     document.addEventListener("scroll", handleScroll);

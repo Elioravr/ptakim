@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "eslint-config-prettier": "^8.5.0",
     "firebase": "^9.6.7",
+    "flow-bin": "^0.178.1",
     "prettier": "^2.6.2",
     "react": "^17.0.2",
     "react-countup": "^6.1.1",
@@ -25,7 +26,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": [
