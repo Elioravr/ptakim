@@ -1,19 +1,18 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from "react";
 
 export default (list, random) => {
-    const [listToDisplay, setListToDisplay] = useState([]);
-    useEffect(() => {
-        const sortedList = Object.keys(list)
-            .sort((a, b) => {
-                if (random) {
-                    return 0.5 - Math.random();
-                }
+  const [listToDisplay, setListToDisplay] = useState([]);
+  useEffect(() => {
+    const sortedList = Object.keys(list).sort((a, b) => {
+      if (random) {
+        return 0.5 - Math.random();
+      }
 
-                return (new Date(list[b].createdAt)) - (new Date(list[a].createdAt));
-            });
+      return new Date(list[b].createdAt) - new Date(list[a].createdAt);
+    });
 
-        setListToDisplay(sortedList);
-    }, [random, list]);
+    setListToDisplay(sortedList);
+  }, [random, list]);
 
-    return [listToDisplay];
-}
+  return [listToDisplay];
+};

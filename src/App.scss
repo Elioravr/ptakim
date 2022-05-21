@@ -1,14 +1,14 @@
 @font-face {
-  font-family: 'DanaYadAlefAlefAlef-Normal';
-  src: local('DanaYadAlefAlefAlef-Normal'), url(./fonts/DanaYadAlefAlefAlef-Normal.woff) format('woff');
+  font-family: "DanaYadAlefAlefAlef-Normal";
+  src: local("DanaYadAlefAlefAlef-Normal"),
+    url(./fonts/DanaYadAlefAlefAlef-Normal.woff) format("woff");
 }
 
-$header-height:60px;
-$main-color:#007bff;
-$owners-color:#005abb;
-$related-color:#FF530F;
+$header-height: 60px;
+$main-color: #007bff;
+$owners-color: #005abb;
+$related-color: #ff530f;
 $padding-for-view-with-header: calc($header-height + 15px);
-
 
 html:lang(en) .petek-text {
   font-size: 22px;
@@ -18,7 +18,7 @@ html:lang(en) .petek-text {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Fredoka', sans-serif;
+  font-family: "Fredoka", sans-serif;
   font-weight: 100;
 }
 
@@ -44,7 +44,9 @@ html:lang(en) .petek-text {
 }
 
 .App {
-  .app-header, .modal-header, .page-header {
+  .app-header,
+  .modal-header,
+  .page-header {
     background-color: white;
     height: $header-height;
     border-bottom: 1px solid #ccc;
@@ -84,7 +86,7 @@ html:lang(en) .petek-text {
     }
 
     .logo {
-      font-family: 'Dancing Script', cursive;
+      font-family: "Dancing Script", cursive;
       font-weight: bold;
       font-size: 36px;
     }
@@ -222,21 +224,21 @@ html:lang(en) .petek-text {
   }
 
   .petek-text {
-    color:#000;
-    background:#ffc;
-    display:block;
+    color: #000;
+    background: #ffc;
+    display: block;
     padding: 12px;
     min-height: 60px;
     margin: 15px 0;
-    box-shadow: 5px 5px 7px rgba(33,33,33,.31);
+    box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.31);
     transform: rotate(-3deg);
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-    transition: transform .15s linear;
-    font-family: 'DanaYadAlefAlefAlef-Normal', 'Dancing Script';
+    transition: transform 0.15s linear;
+    font-family: "DanaYadAlefAlefAlef-Normal", "Dancing Script";
     font-size: 22px;
 
     div {
@@ -244,7 +246,7 @@ html:lang(en) .petek-text {
     }
 
     .petek-situation {
-      font-family: 'Fredoka', sans-serif;
+      font-family: "Fredoka", sans-serif;
       font-style: italic;
       margin-bottom: 10px;
       text-align: right;
@@ -281,20 +283,20 @@ html:lang(en) .petek-text {
   //   color: white;
   // }
 
-  &:nth-child(even) .petek-text{
-    transform:rotate(3deg);
+  &:nth-child(even) .petek-text {
+    transform: rotate(3deg);
     // position:relative;
     // top:5px;
-    background:#cfc;
+    background: #cfc;
   }
-  &:nth-child(3n) .petek-text{
-    transform:rotate(-3deg);
+  &:nth-child(3n) .petek-text {
+    transform: rotate(-3deg);
     // position:relative;
     // top:-5px;
-    background:#ccf;
+    background: #ccf;
   }
-  &:nth-child(5n) .petek-text{
-    transform:rotate(2deg);
+  &:nth-child(5n) .petek-text {
+    transform: rotate(2deg);
     // position:relative;
     // top:-10px;
   }
@@ -353,7 +355,7 @@ html:lang(en) .petek-text {
   .input {
     width: 100%;
     height: $header-height;
-    font-family: 'Fredoka', sans-serif;
+    font-family: "Fredoka", sans-serif;
     font-weight: 100;
     border: none;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
@@ -371,7 +373,8 @@ html:lang(en) .petek-text {
       justify-content: center;
     }
 
-    .set-owner-button, .set-related-button {
+    .set-owner-button,
+    .set-related-button {
       background-color: $owners-color;
       border-radius: 2px;
       color: white;
@@ -385,7 +388,8 @@ html:lang(en) .petek-text {
   }
 }
 
-.related-tag, .category-tag {
+.related-tag,
+.category-tag {
   background-color: $owners-color;
   border-radius: 2px;
   color: white;
@@ -403,7 +407,8 @@ html:lang(en) .petek-text {
       font-size: 16px;
     }
 
-    .set-owner-button.selected, .category-tag.selected {
+    .set-owner-button.selected,
+    .category-tag.selected {
       background-color: white;
       border: 2px solid $owners-color;
       color: $owners-color;
@@ -449,7 +454,8 @@ html:lang(en) .petek-text {
 }
 
 .petek-container {
-  .related-tag, .category-tag {
+  .related-tag,
+  .category-tag {
     font-size: 14px;
     padding: 5px;
     margin: 0;
@@ -476,7 +482,8 @@ html:lang(en) .petek-text {
   }
 }
 
-.related-tags-container, .categories-tags-container {
+.related-tags-container,
+.categories-tags-container {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -549,8 +556,9 @@ html:lang(en) .petek-text {
 }
 
 .separator {
-  &::before, &::after {
-    content: ' ';
+  &::before,
+  &::after {
+    content: " ";
     height: 1px;
     width: 130px;
     background-color: #ccc;
@@ -595,7 +603,7 @@ html:lang(en) .petek-text {
   }
 
   .indicator {
-    content: ' ';
+    content: " ";
     height: 30px;
     width: 30px;
     border-radius: 50%;

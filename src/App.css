@@ -2,7 +2,7 @@
   --header-height: 60px;
   --main-color: #007bff;
   --owners-color: #005abb;
-  --related-color: #FF530F;
+  --related-color: #ff530f;
   --padding-for-view-with-header: calc(var(--header-height) + 15px);
 }
 
@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 100;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .App .app-header .logo {
-  font-family: 'Dancing Script', cursive;
+  font-family: "Dancing Script", cursive;
   font-weight: bold;
   font-size: 36px;
 }
@@ -76,7 +76,6 @@
   border: 3px solid white;
   background-color: var(--main-color);
 }
-
 
 .main-submit-button.filter-button.has-filter {
   position: fixed;
@@ -154,11 +153,11 @@
 }
 
 .petek-container .rating-container .star {
-    background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gold_Star.svg/1200px-Gold_Star.svg.png);
-    height: 22px;
-    width: 22px;
-    margin-right: 3px;
-    background-size: 100%;
+  background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gold_Star.svg/1200px-Gold_Star.svg.png);
+  height: 22px;
+  width: 22px;
+  margin-right: 3px;
+  background-size: 100%;
 }
 
 .petek-container:nth-child(2n + 1) .petek-text {
@@ -214,7 +213,7 @@
 .modal .input {
   width: 100%;
   height: var(--header-height);
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 100;
   border: none;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
@@ -235,16 +234,16 @@
 .modal .modal-body .set-related-button,
 .related-tag,
 .category-tag {
-    background-color: var(--owners-color);
-    border-radius: 2px;
-    color: white;
-    padding: 10px;
-    font-size: 20px;
-    font-weight: 400;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    border: 2px solid var(--owners-color);
-  }
+  background-color: var(--owners-color);
+  border-radius: 2px;
+  color: white;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 400;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  border: 2px solid var(--owners-color);
+}
 
 .modal .modal-body .category-tag {
   font-size: 16px;
@@ -343,7 +342,7 @@
 
 .separator::before,
 .separator::after {
-  content: ' ';
+  content: " ";
   height: 1px;
   width: 130px;
   background-color: #ccc;
@@ -390,7 +389,7 @@
 }
 
 .search-button .indicator {
-  content: ' ';
+  content: " ";
   height: 30px;
   width: 30px;
   border-radius: 50%;
@@ -424,7 +423,7 @@
 
 .search-page .filter-summary-container .summary {
   width: 80%;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 10px;
   font-size: 18px;
@@ -461,18 +460,18 @@
 }
 
 .loading-container {
-    padding: 50px;
+  padding: 50px;
 }
 
 .loading-container.small {
-    padding: 30px;
+  padding: 30px;
 }
 .loading-container.small .stage {
-    font-size: 40px;
+  font-size: 40px;
 }
 
 .loading-container.small .text {
-    font-size: 15px;
+  font-size: 15px;
 }
 
 .loading-container .stage {
