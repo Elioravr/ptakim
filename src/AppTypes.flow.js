@@ -23,13 +23,19 @@ export type OwnerPics = $Shape<{
   [string]: string,
 }>;
 
-export enum Page {
-  App = 'app',
-  AddNewPetek = 'add-petek-modal',
-  Story = 'story',
-  SignIn = 'sign-in',
-  Statistics = 'statistics',
-  Search = 'search',
-}
+export const Page = {
+  App: 'app',
+  AddNewPetek: 'add-petek-modal',
+  Story: 'story',
+  SignIn: 'sign-in',
+  Statistics: 'statistics',
+  Search: 'search',
+};
 
-export type PageType = Page;
+export type PageType =
+  | 'app'
+  | 'add-petek-modal'
+  | 'story'
+  | 'sign-in'
+  | 'statistics'
+  | 'search';

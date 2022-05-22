@@ -1,5 +1,6 @@
 // @flow
-import type { MixedElement } from 'react';
+
+import type {MixedElement} from 'react';
 import type {
   OwnerPics,
   PageType,
@@ -9,10 +10,10 @@ import type {
 } from './AppTypes.flow';
 
 import React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import usePrevious from 'use-previous';
 
-import { Page } from './AppTypes.flow';
+import {Page} from './AppTypes.flow';
 import MainButton from './MainButton';
 import PetekList from './PetekList';
 import NewPetekModal from './NewPetekModal';
@@ -31,8 +32,9 @@ import {
   fetchCurrentUser,
   fetchOwnerPics,
 } from './apiService';
+// $FlowIgnore - This module exists
 import './App.scss';
-import { setCurrentScreen } from 'firebase/analytics';
+import {setCurrentScreen} from 'firebase/analytics';
 
 const PAGE_ANIMATION_DELAY = 300;
 let currentScroll = 0;
@@ -70,7 +72,7 @@ function App(): MixedElement {
       .catch((e) =>
         setTimeout(() => {
           loadList();
-        }, 300)
+        }, 300),
       );
   };
 
@@ -81,12 +83,12 @@ function App(): MixedElement {
     if (
       page === Page.App &&
       (Object.keys(list).length === 0 ||
-        prevPage === 'add-petek-modal' ||
+        prevPage === Page.AddNewPetek ||
         (filteredList !== null && filteredList !== prevFilteredList))
     ) {
       loadList();
     } else if (page === Page.App) {
-      window.scrollTo({ top: lastAppScroll });
+      window.scrollTo({top: lastAppScroll});
     }
 
     if (page !== Page.AddNewPetek) {
@@ -94,7 +96,7 @@ function App(): MixedElement {
     }
 
     if (page !== Page.App) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({top: 0, behavior: 'smooth'});
     }
   }, [page, lastAppScroll]);
 
@@ -168,8 +170,8 @@ function App(): MixedElement {
     setFilteredByOwner(null);
   };
 
-  const setOwnerFilterHeader = (owner, { overrideList = true } = {}) => {
-    let result = { ...list };
+  const setOwnerFilterHeader = (owner, {overrideList = true} = {}) => {
+    let result = {...list};
 
     result = Object.keys(result).reduce((filtered, currentPetekKey) => {
       const currentPetek = list[currentPetekKey];
@@ -208,7 +210,7 @@ function App(): MixedElement {
         averageRating: (totalRating / totalAmount).toFixed(1),
       },
     });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({top: 0, behavior: 'smooth'});
     setPage(Page.App);
   };
 
@@ -217,10 +219,10 @@ function App(): MixedElement {
   }`;
 
   return (
-    <div className='App'>
+    <div className="App">
       <div className={`page ${page === Page.App ? 'visible' : ''}`}>
-        <div className='app-header'>
-          <div className='user-button' onClick={handleOpenSignIn}>
+        <div className="app-header">
+          <div className="user-button" onClick={handleOpenSignIn}>
             {currentUser ? (
               <>
                 <div>{'ברוך הבא,'}</div>
@@ -230,18 +232,16 @@ function App(): MixedElement {
               'התחבר'
             )}
           </div>
-          <span className='logo'>Ptakim</span>
-          <div className='buttons-container'>
+          <span className="logo">Ptakim</span>
+          <div className="buttons-container">
             <div
-              className='statistics-button page-button'
-              onClick={handleOpenStory}
-            >
+              className="statistics-button page-button"
+              onClick={handleOpenStory}>
               {'📚'}
             </div>
             <div
-              className='statistics-button page-button'
-              onClick={handleOpenStatistics}
-            >
+              className="statistics-button page-button"
+              onClick={handleOpenStatistics}>
               {'📈'}
             </div>
           </div>
@@ -265,7 +265,7 @@ function App(): MixedElement {
               filteredByOwner={filteredByOwner}
               onOwnerClick={setOwnerFilterHeader}
             />
-            <Separator emoji='🤷‍♂️' />
+            <Separator emoji="🤷‍♂️" />
           </>
         )}
       </div>
@@ -286,13 +286,13 @@ function App(): MixedElement {
       />
       <div className={searchButtonClassName}>
         {filteredList && (
-          <div className='indicator'>{Object.keys(filteredList).length}</div>
+          <div className="indicator">{Object.keys(filteredList).length}</div>
         )}
-        <div className='button' onClick={handleSearchPageClick}>
+        <div className="button" onClick={handleSearchPageClick}>
           חפש
         </div>
         {filteredList && (
-          <div className='button clear-button' onClick={clearFilter}>
+          <div className="button clear-button" onClick={clearFilter}>
             <div>נקה</div>
             <div>חיפוש</div>
           </div>
