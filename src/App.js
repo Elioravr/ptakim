@@ -1,20 +1,28 @@
 // @flow
-import type { MixedElement } from "react";
+import type { MixedElement } from 'react';
+import type {
+  OwnerPics,
+  PageType,
+  PetekListType,
+  PetekType,
+  UserType,
+} from './AppTypes.flow';
 
-import React from "react";
-import { useState, useEffect, useCallback } from "react";
-import usePrevious from "use-previous";
+import React from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import usePrevious from 'use-previous';
 
-import MainButton from "./MainButton";
-import PetekList from "./PetekList";
-import NewPetekModal from "./NewPetekModal";
-import SearchPage from "./SearchPage";
-import StatisticsPage from "./StatisticsPage";
-import StoryPage from "./StoryPage";
-import SignInPage from "./SignInPage";
-import Separator from "./Separator";
-import Loading from "./Loading";
-import PermissionDenied from "./PermissionDenied";
+import { Page } from './AppTypes.flow';
+import MainButton from './MainButton';
+import PetekList from './PetekList';
+import NewPetekModal from './NewPetekModal';
+import SearchPage from './SearchPage';
+import StatisticsPage from './StatisticsPage';
+import StoryPage from './StoryPage';
+import SignInPage from './SignInPage';
+import Separator from './Separator';
+import Loading from './Loading';
+import PermissionDenied from './PermissionDenied';
 import {
   fetchPetekList,
   deletePetek,
@@ -22,28 +30,26 @@ import {
   logout,
   fetchCurrentUser,
   fetchOwnerPics,
-} from "./apiService";
-// $FlowIgnore - this module exists
-import "./App.scss";
-// $FlowIgnore - this is also fine and comes from the node modules
-import { setCurrentScreen } from "firebase/analytics";
+} from './apiService';
+import './App.scss';
+import { setCurrentScreen } from 'firebase/analytics';
 
 const PAGE_ANIMATION_DELAY = 300;
 let currentScroll = 0;
 
 function App(): MixedElement {
-  const [list, setList] = useState([]);
-  const [filteredList, setFilteredList] = useState(null);
+  const [list, setList] = useState<PetekListType>({});
+  const [filteredList, setFilteredList] = useState<?PetekListType>(null);
   const [filteredByOwner, setFilteredByOwner] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [petekToEdit, setPetekToEdit] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [ownerPics, setOwnerPics] = useState(null);
-  const [page, setPage] = useState("app");
-  const [lastAppScroll, setLastAppScroll] = useState(0);
-  const prevPage = usePrevious(page);
-  const prevFilteredList = usePrevious(filteredList);
-  const [isPermissionDenied, setIsPermissionDenied] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [petekToEdit, setPetekToEdit] = useState<?PetekType>(null);
+  const [currentUser, setCurrentUser] = useState<?UserType>(null);
+  const [ownerPics, setOwnerPics] = useState<?OwnerPics>(null);
+  const [page, setPage] = useState<PageType>(Page.App);
+  const [lastAppScroll, setLastAppScroll] = useState<number>(0);
+  const prevPage = usePrevious<PageType>(page);
+  const prevFilteredList = usePrevious<?PetekListType>(filteredList);
+  const [isPermissionDenied, setIsPermissionDenied] = useState<boolean>(false);
 
   const loadList = () => {
     setIsLoading(true);
@@ -63,7 +69,6 @@ function App(): MixedElement {
       })
       .catch((e) =>
         setTimeout(() => {
-          console.log("trying again!");
           loadList();
         }, 300)
       );
@@ -74,41 +79,41 @@ function App(): MixedElement {
 
   useEffect(() => {
     if (
-      page === "app" &&
-      (list.length === 0 ||
-        prevPage === "add-petek-modal" ||
+      page === Page.App &&
+      (Object.keys(list).length === 0 ||
+        prevPage === 'add-petek-modal' ||
         (filteredList !== null && filteredList !== prevFilteredList))
     ) {
       loadList();
-    } else if (page === "app") {
+    } else if (page === Page.App) {
       window.scrollTo({ top: lastAppScroll });
     }
 
-    if (page !== "add-petek-modal") {
+    if (page !== Page.AddNewPetek) {
       setPetekToEdit(null);
     }
 
-    if (page !== "app") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    if (page !== Page.App) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [page, lastAppScroll]);
 
   const handleScroll = useCallback(() => {
-    if (page === "app") {
+    if (page === Page.App) {
       currentScroll = window.scrollY;
     }
   }, [page]);
 
   useEffect(() => {
-    document.addEventListener("scroll", handleScroll);
+    document.addEventListener('scroll', handleScroll);
 
     return () => {
-      return document.removeEventListener("scroll", handleScroll);
+      return document.removeEventListener('scroll', handleScroll);
     };
   });
 
-  const changeToPage = (nextPage) => {
-    if (page === "app") {
+  const changeToPage = (nextPage: PageType) => {
+    if (page === Page.App) {
       setLastAppScroll(currentScroll);
     }
 
@@ -116,12 +121,12 @@ function App(): MixedElement {
   };
 
   const editPetek = (petek) => {
-    changeToPage("add-petek-modal");
+    changeToPage(Page.AddNewPetek);
     setPetekToEdit(petek);
   };
 
   const deletePetekAndLoadList = (petekId) => {
-    if (window.confirm("בטוח שאתה רוצה למחוק את הפתק?")) {
+    if (window.confirm('בטוח שאתה רוצה למחוק את הפתק?')) {
       deletePetek(petekId)
         .then(() => {
           loadList();
@@ -133,20 +138,20 @@ function App(): MixedElement {
   };
 
   const handleSearchPageClick = () => {
-    changeToPage("search");
+    changeToPage(Page.Search);
   };
 
   const handleOpenStatistics = () => {
-    changeToPage("statistics");
+    changeToPage(Page.Statistics);
   };
 
   const handleOpenStory = () => {
-    changeToPage("story");
+    changeToPage(Page.Story);
   };
 
   const handleOpenSignIn = () => {
     if (getCurrentUser()) {
-      if (window.confirm("בטוח שאתה רוצה להתנתק?")) {
+      if (window.confirm('בטוח שאתה רוצה להתנתק?')) {
         setIsLoading(true);
         logout().then(() => {
           setIsLoading(false);
@@ -154,7 +159,7 @@ function App(): MixedElement {
         });
       }
     } else {
-      changeToPage("sign-in");
+      changeToPage(Page.SignIn);
     }
   };
 
@@ -203,41 +208,41 @@ function App(): MixedElement {
         averageRating: (totalRating / totalAmount).toFixed(1),
       },
     });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setPage("app");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setPage(Page.App);
   };
 
   const searchButtonClassName = `search-button ${
-    filteredList ? "has-filter" : ""
+    filteredList ? 'has-filter' : ''
   }`;
 
   return (
-    <div className="App">
-      <div className={`page ${page === "app" ? "visible" : ""}`}>
-        <div className="app-header">
-          <div className="user-button" onClick={handleOpenSignIn}>
+    <div className='App'>
+      <div className={`page ${page === Page.App ? 'visible' : ''}`}>
+        <div className='app-header'>
+          <div className='user-button' onClick={handleOpenSignIn}>
             {currentUser ? (
               <>
-                <div>{"ברוך הבא,"}</div>
-                <div>{currentUser?.name.split(" ")[0]}</div>
+                <div>{'ברוך הבא,'}</div>
+                <div>{currentUser?.name.split(' ')[0]}</div>
               </>
             ) : (
-              "התחבר"
+              'התחבר'
             )}
           </div>
-          <span className="logo">Ptakim</span>
-          <div className="buttons-container">
+          <span className='logo'>Ptakim</span>
+          <div className='buttons-container'>
             <div
-              className="statistics-button page-button"
+              className='statistics-button page-button'
               onClick={handleOpenStory}
             >
-              {"📚"}
+              {'📚'}
             </div>
             <div
-              className="statistics-button page-button"
+              className='statistics-button page-button'
               onClick={handleOpenStatistics}
             >
-              {"📈"}
+              {'📈'}
             </div>
           </div>
         </div>
@@ -247,8 +252,8 @@ function App(): MixedElement {
           <>
             {!filteredList && (
               <MainButton
-                content={"🤦‍♂️ הוסף ציטוט 🤣"}
-                onClick={() => setPage("add-petek-modal")}
+                content={'🤦‍♂️ הוסף ציטוט 🤣'}
+                onClick={() => setPage(Page.AddNewPetek)}
               />
             )}
             <PetekList
@@ -260,7 +265,7 @@ function App(): MixedElement {
               filteredByOwner={filteredByOwner}
               onOwnerClick={setOwnerFilterHeader}
             />
-            <Separator emoji="🤷‍♂️" />
+            <Separator emoji='🤷‍♂️' />
           </>
         )}
       </div>
@@ -281,13 +286,13 @@ function App(): MixedElement {
       />
       <div className={searchButtonClassName}>
         {filteredList && (
-          <div className="indicator">{Object.keys(filteredList).length}</div>
+          <div className='indicator'>{Object.keys(filteredList).length}</div>
         )}
-        <div className="button" onClick={handleSearchPageClick}>
+        <div className='button' onClick={handleSearchPageClick}>
           חפש
         </div>
         {filteredList && (
-          <div className="button clear-button" onClick={clearFilter}>
+          <div className='button clear-button' onClick={clearFilter}>
             <div>נקה</div>
             <div>חיפוש</div>
           </div>
