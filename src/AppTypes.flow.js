@@ -1,5 +1,9 @@
 // @flow
 
+export type RelatedListType = $Shape<{
+  [string]: boolean,
+}>;
+
 export type PetekType = $Shape<{
   owner: string,
   rating: number,
@@ -8,6 +12,7 @@ export type PetekType = $Shape<{
   id: string,
   situation: string,
   createdAt: string,
+  allRelated: RelatedListType,
 }>;
 
 export type PetekListType = $Shape<{

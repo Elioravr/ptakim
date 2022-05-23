@@ -76,9 +76,6 @@ function App(): MixedElement {
       );
   };
 
-  // useEffect(() => {
-  // }, [setCurrentUser])
-
   useEffect(() => {
     if (
       page === Page.App &&

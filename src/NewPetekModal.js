@@ -1,46 +1,71 @@
-import { useState, useEffect, useRef } from "react";
+// @flow
 
-import Separator from "./Separator";
-import { addNewPetek } from "./apiService";
+import type {MixedElement} from 'react';
 
-export default ({
+import React, {useState, useEffect, useRef} from 'react';
+
+import Separator from './Separator';
+import {addNewPetek} from './apiService';
+import type {
+  PageType,
+  PetekListType,
+  PetekType,
+  RelatedListType,
+} from './AppTypes.flow';
+import {Page} from './AppTypes.flow';
+
+type Props = $ReadOnly<{
+  list: PetekListType,
+  petekToEdit: ?PetekType,
+  page: PageType,
+  setPage: (PageType) => void,
+  setIsPermissionDenied: (boolean) => void,
+}>;
+
+type AllOwnersListType = $Shape<{[string]: boolean}>;
+type AllCategoriesListType = $Shape<{[string]: boolean}>;
+
+export default function NewPetekModal({
   list,
   petekToEdit,
   page,
   setPage,
   setIsPermissionDenied,
-}) => {
-  const [owner, setOwner] = useState("");
-  const [content, setContent] = useState("");
-  const [situation, setSituation] = useState("");
-  const [category, setCategory] = useState("");
-  const [allCategories, setAllCategories] = useState([]);
-  const [allOwners, setAllOwners] = useState([]);
-  const [allRelated, setAllRelated] = useState({});
-  const [rating, setRating] = useState(0);
+}: Props): MixedElement {
+  const [owner, setOwner] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [situation, setSituation] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
+  const [allCategories, setAllCategories] = useState<AllCategoriesListType>({});
+  const [allOwners, setAllOwners] = useState<AllOwnersListType>({});
+  const [allRelated, setAllRelated] = useState<RelatedListType>({});
+  const [rating, setRating] = useState<number>(0);
   const pageRef = useRef(null);
   const className = `page modal new-petek-modal-container ${
-    page === "add-petek-modal" ? "visible" : ""
+    page === 'add-petek-modal' ? 'visible' : ''
   }`;
 
   const clearForm = () => {
-    setOwner("");
-    setContent("");
-    setSituation("");
-    setCategory("");
+    setOwner('');
+    setContent('');
+    setSituation('');
+    setCategory('');
     setRating(0);
     setAllRelated({});
   };
 
   useEffect(() => {
-    const allOwners = Object.keys(list).reduce((result, currentPetekKey) => {
-      const currentPetek = list[currentPetekKey];
-      if (!result[currentPetek.owner]) {
-        result[currentPetek.owner] = true;
-      }
+    const allOwners: AllOwnersListType = Object.keys(list).reduce(
+      (result, currentPetekKey) => {
+        const currentPetek = list[currentPetekKey];
+        if (!result[currentPetek.owner]) {
+          result[currentPetek.owner] = true;
+        }
 
-      return result;
-    }, {});
+        return result;
+      },
+      {},
+    );
     setAllOwners(allOwners);
 
     const allCategories = Object.keys(list).reduce(
@@ -52,13 +77,13 @@ export default ({
 
         return result;
       },
-      {}
+      {},
     );
     setAllCategories(allCategories);
   }, [list]);
 
   useEffect(() => {
-    if (page === "add-petek-modal") {
+    if (page === 'add-petek-modal') {
       pageRef?.current?.scrollTo(0, 0);
     }
   }, [page]);
@@ -68,10 +93,10 @@ export default ({
       return;
     }
 
-    setOwner(petekToEdit.owner ?? "");
-    setContent(petekToEdit.content ?? "");
-    setSituation(petekToEdit.situation ?? "");
-    setCategory(petekToEdit.category ?? "");
+    setOwner(petekToEdit.owner ?? '');
+    setContent(petekToEdit.content ?? '');
+    setSituation(petekToEdit.situation ?? '');
+    setCategory(petekToEdit.category ?? '');
     setRating(petekToEdit.rating ?? 0);
     setAllRelated(petekToEdit.allRelated ?? {});
   }, [petekToEdit]);
@@ -92,30 +117,30 @@ export default ({
     addNewPetek(petek).catch((e) => {
       setIsPermissionDenied(true);
     });
-    setPage("app");
+    setPage(Page.App);
   };
 
   const handleClose = () => {
     clearForm();
-    setPage("app");
+    setPage(Page.App);
   };
 
   const createHandleChange = (fieldName) => {
     return (e) => {
       switch (fieldName) {
-        case "owner": {
+        case 'owner': {
           setOwner(e.target.value);
           break;
         }
-        case "content": {
+        case 'content': {
           setContent(e.target.value);
           break;
         }
-        case "situation": {
+        case 'situation': {
           setSituation(e.target.value);
           break;
         }
-        case "category": {
+        case 'category': {
           setCategory(e.target.value);
           break;
         }
@@ -126,7 +151,7 @@ export default ({
   const createHandleOwnerClick = (newOwnerFromButton) => {
     return () => {
       if (owner === newOwnerFromButton) {
-        setOwner("");
+        setOwner('');
       }
 
       setOwner(newOwnerFromButton);
@@ -136,7 +161,7 @@ export default ({
   const createHandleCategoryClick = (newCategoryFromButton) => {
     return () => {
       if (category === newCategoryFromButton) {
-        setCategory("");
+        setCategory('');
       }
 
       setCategory(newCategoryFromButton);
@@ -145,7 +170,7 @@ export default ({
 
   const createHandleRelatedClick = (related) => {
     return () => {
-      const newRelated = { ...allRelated };
+      const newRelated = {...allRelated};
       if (newRelated[related]) {
         Reflect.deleteProperty(newRelated, related);
       } else {
@@ -178,19 +203,18 @@ export default ({
           className="input"
           type="text"
           placeholder="מי אמר?"
-          onChange={createHandleChange("owner")}
+          onChange={createHandleChange('owner')}
         />
         <div className="owners-list-container">
           {Object.keys(allOwners).map((currOwner, index) => {
             const className = `set-owner-button ${
-              currOwner === owner ? "selected" : ""
+              currOwner === owner ? 'selected' : ''
             }`;
             return (
               <div
                 key={index}
                 className={className}
-                onClick={createHandleOwnerClick(currOwner)}
-              >
+                onClick={createHandleOwnerClick(currOwner)}>
                 {currOwner}
               </div>
             );
@@ -203,14 +227,14 @@ export default ({
           value={content}
           className="input long-input"
           placeholder="מה אמרו?"
-          onChange={createHandleChange("content")}
+          onChange={createHandleChange('content')}
         />
         <textarea
           value={situation}
           className="input long-input"
           type="text"
           placeholder="באיזה סיטואציה?"
-          onChange={createHandleChange("situation")}
+          onChange={createHandleChange('situation')}
         />
 
         <Separator emoji="🤦‍♂️" />
@@ -220,14 +244,13 @@ export default ({
           <div className="related-list-container">
             {Object.keys(allOwners).map((owner, index) => {
               const className = `set-related-button ${
-                allRelated[owner] ? "selected" : ""
+                allRelated[owner] ? 'selected' : ''
               }`;
               return (
                 <div
                   key={index}
                   className={className}
-                  onClick={createHandleRelatedClick(owner)}
-                >
+                  onClick={createHandleRelatedClick(owner)}>
                   {owner}
                 </div>
               );
@@ -239,29 +262,24 @@ export default ({
 
         <div className="section-container rating-container">
           <div className="title">
-            {rating === 0 ? "כמה זה טוב?" : `זה שווה ${rating} כוכבים`}
+            {rating === 0 ? 'כמה זה טוב?' : `זה שווה ${rating} כוכבים`}
           </div>
           <div className="stars-container">
             <div
-              className={`star star-1 ${rating >= 1 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(1)}
-            ></div>
+              className={`star star-1 ${rating >= 1 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(1)}></div>
             <div
-              className={`star star-2 ${rating >= 2 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(2)}
-            ></div>
+              className={`star star-2 ${rating >= 2 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(2)}></div>
             <div
-              className={`star star-3 ${rating >= 3 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(3)}
-            ></div>
+              className={`star star-3 ${rating >= 3 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(3)}></div>
             <div
-              className={`star star-4 ${rating >= 4 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(4)}
-            ></div>
+              className={`star star-4 ${rating >= 4 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(4)}></div>
             <div
-              className={`star star-5 ${rating >= 5 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(5)}
-            ></div>
+              className={`star star-5 ${rating >= 5 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(5)}></div>
           </div>
         </div>
 
@@ -274,19 +292,18 @@ export default ({
             className="input"
             type="text"
             placeholder="קטגוריה?"
-            onChange={createHandleChange("category")}
+            onChange={createHandleChange('category')}
           />
           <div className="owners-list-container">
             {Object.keys(allCategories).map((currCategory, index) => {
               const className = `category-tag ${
-                currCategory === category ? "selected" : ""
+                currCategory === category ? 'selected' : ''
               }`;
               return (
                 <div
                   key={index}
                   className={className}
-                  onClick={createHandleCategoryClick(currCategory)}
-                >
+                  onClick={createHandleCategoryClick(currCategory)}>
                   {currCategory}
                 </div>
               );
@@ -302,4 +319,4 @@ export default ({
       </div>
     </div>
   );
-};
+}
