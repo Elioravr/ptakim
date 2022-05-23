@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from "react";
+// @flow
+
+import type {MixedElement} from 'react';
+import React, {useState, useEffect} from 'react';
+
+type Props = $ReadOnly<{
+  text?: string,
+  loadingSize?: 'small' | 'large',
+}>;
 
 let intervalId;
-const Loading = ({ text = "טוען פאדיחות...", loadingSize = "large" }) => {
-  const icons = ["🙊", "🤣", "🤦‍♂️", "🤓", "🤷‍♂️"];
-  const [currentStage, setCurrentStage] = useState(0);
+export default function Loading({
+  text = 'טוען פאדיחות...',
+  loadingSize = 'large',
+}: Props): MixedElement {
+  const icons = ['🙊', '🤣', '🤦‍♂️', '🤓', '🤷‍♂️'];
+  const [currentStage, setCurrentStage] = useState<number>(0);
 
   useEffect(() => {
     clearInterval(intervalId);
@@ -29,11 +40,9 @@ const Loading = ({ text = "טוען פאדיחות...", loadingSize = "large" })
           <div key={index} className="stage">
             {icon}
           </div>
-        ) : null
+        ) : null,
       )}
       <span className="text">{text}</span>
     </div>
   );
-};
-
-export default Loading;
+}
