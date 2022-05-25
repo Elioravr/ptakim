@@ -1,12 +1,31 @@
-import { useState, useEffect } from "react";
-import useRandomList from "./useRandomList";
-import Petek from "./Petek";
-import Separator from "./Separator";
+// @flow
+
+import React, {useState, useEffect} from 'react';
+import useRandomList from './useRandomList';
+import Petek from './Petek';
+import Separator from './Separator';
+import type {
+  FilteredByOwnerDetailsType,
+  OwnerPics,
+  PetekListType,
+  PetekType,
+} from './AppTypes.flow';
+import type {MixedElement} from 'react';
 
 const NO_OWNER_PIC_PLACEHOLDER =
-  "https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg";
+  'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
 
-export default ({
+type Props = $ReadOnly<{
+  list: PetekListType,
+  editPetek: (PetekType) => void,
+  deletePetek: (string) => void,
+  random: boolean,
+  ownerPics: ?OwnerPics,
+  filteredByOwner: ?FilteredByOwnerDetailsType,
+  onOwnerClick: (string) => void,
+}>;
+
+export default function PetekList({
   list,
   editPetek,
   deletePetek,
@@ -14,7 +33,7 @@ export default ({
   ownerPics,
   filteredByOwner,
   onOwnerClick,
-}) => {
+}: Props): MixedElement {
   // const [listToDisplay, setListToDisplay] = useState([]);
   // useEffect(() => {
   //     const sortedList = Object.keys(list)
@@ -43,7 +62,7 @@ export default ({
         <>
           <div className="filtered-by-owner-container">
             <div className="picture">
-              {filteredByOwner.owner === "אליאור" ? (
+              {filteredByOwner.owner === 'אליאור' ? (
                 <div className="crown">👑</div>
               ) : null}
               <img src={mainOwnerPic || NO_OWNER_PIC_PLACEHOLDER} />
@@ -54,7 +73,7 @@ export default ({
               <div className="statistics-item">{`ציון ממוצע: ${filteredByOwner.statistics.averageRating} ⭐️`}</div>
             </div>
           </div>
-          <Separator emoji={"🤩"} />
+          <Separator emoji={'🤩'} />
         </>
       )}
       <div className="petek-list-container">
@@ -67,7 +86,7 @@ export default ({
             list[petekKey] && (
               <Petek
                 key={index}
-                petek={{ ...list[petekKey], id: petekKey }}
+                petek={{...list[petekKey], id: petekKey}}
                 editPetek={editPetek}
                 deletePetek={deletePetek}
                 ownerPic={ownerPic}
@@ -80,4 +99,4 @@ export default ({
       </div>
     </>
   );
-};
+}

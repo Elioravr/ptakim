@@ -5,6 +5,7 @@ export type RelatedListType = $Shape<{
 }>;
 
 export type PetekType = $Shape<{
+  id: string,
   owner: string,
   rating: number,
   category: string,
@@ -26,6 +27,14 @@ export type UserType = $Shape<{
 
 export type OwnerPics = $Shape<{
   [string]: string,
+}>;
+
+export type FilteredByOwnerDetailsType = $ReadOnly<{
+  owner: string,
+  statistics: $ReadOnly<{
+    totalAmount: number,
+    averageRating: string,
+  }>,
 }>;
 
 export const Page = {

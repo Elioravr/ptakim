@@ -1,7 +1,26 @@
-const NO_OWNER_PIC_PLACEHOLDER =
-  "https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg";
+// @flow
 
-export default ({
+import type {OwnerPics, PetekType} from './AppTypes.flow';
+
+import type {MixedElement} from 'react';
+
+import React from 'react';
+
+const NO_OWNER_PIC_PLACEHOLDER =
+  'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
+
+type Props = $ReadOnly<{
+  petek: PetekType,
+  editPetek: (PetekType) => void,
+  deletePetek: (string) => void,
+  ownerPic: ?string,
+  ownerPics: ?OwnerPics,
+  enableScaleDown?: boolean,
+  isHidden?: boolean,
+  onOwnerClick: (string) => void,
+}>;
+
+export default function Petek({
   petek,
   editPetek,
   deletePetek,
@@ -10,7 +29,7 @@ export default ({
   enableScaleDown,
   isHidden,
   onOwnerClick,
-}) => {
+}: Props): MixedElement {
   const dateAsString = new Date(petek.createdAt).toLocaleDateString();
 
   const handleClick = () => {
@@ -33,10 +52,9 @@ export default ({
 
   return (
     <div
-      className={`petek-container ${isHidden ? "hidden" : ""}`}
+      className={`petek-container ${isHidden ? 'hidden' : ''}`}
       onClick={handleClick}
-      style={enableScaleDown ? { transform: `scale(0.8)` } : {}}
-    >
+      style={enableScaleDown ? {transform: `scale(0.8)`} : {}}>
       {deletePetek && (
         <div className="delete-button" onClick={handleDeleteClick}>
           X
@@ -44,7 +62,7 @@ export default ({
       )}
       <div className="petek-owner" onClick={handleOwnerClick}>
         <div className="picture">
-          {petek.owner === "אליאור" ? <div className="crown">👑</div> : null}
+          {petek.owner === 'אליאור' ? <div className="crown">👑</div> : null}
           <img src={ownerPic || NO_OWNER_PIC_PLACEHOLDER} />
         </div>
         {petek.owner}
@@ -53,13 +71,13 @@ export default ({
         {petek.situation && (
           <div className="petek-situation">{`${petek.situation}`}</div>
         )}
-        {petek.content.split("\n").map((line) => {
+        {petek.content.split('\n').map((line) => {
           // let lineWithBoldSupport = '';
           // line.split('*').map
           // Support for lines and bold
           return (
             <div dir="auto">
-              {line.split("*").map((part, index) => {
+              {line.split('*').map((part, index) => {
                 if (index % 2 === 0) {
                   return <span key={index}>{part}</span>;
                 } else {
@@ -76,7 +94,7 @@ export default ({
             const relatedPic = ownerPics && ownerPics[relatedKey];
             return (
               <div key={relatedKey} className="related-tag">
-                <img src={relatedPic || NO_OWNER_PIC_PLACEHOLDER} />{" "}
+                <img src={relatedPic || NO_OWNER_PIC_PLACEHOLDER} />{' '}
                 {relatedKey}
               </div>
             );
@@ -99,4 +117,4 @@ export default ({
       </div>
     </div>
   );
-};
+}
