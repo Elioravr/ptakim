@@ -7,6 +7,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import Separator from './Separator';
 import {addNewPetek} from './apiService';
 import type {
+  AllCategoriesListType,
+  AllOwnersListType,
   PageType,
   PetekListType,
   PetekType,
@@ -21,9 +23,6 @@ type Props = $ReadOnly<{
   setPage: (PageType) => void,
   setIsPermissionDenied: (boolean) => void,
 }>;
-
-type AllOwnersListType = $Shape<{[string]: boolean}>;
-type AllCategoriesListType = $Shape<{[string]: boolean}>;
 
 export default function NewPetekModal({
   list,

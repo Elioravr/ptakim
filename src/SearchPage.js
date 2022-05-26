@@ -1,49 +1,68 @@
-import { useState, useEffect, useRef } from "react";
+// @flow
 
-import Separator from "./Separator";
+import React, {useState, useEffect, useRef} from 'react';
 
-const RATING_SEARCH_TYPE_AND_ABOVE = "and_above";
-const RATING_SEARCH_TYPE_ONLY = "only";
+import Separator from './Separator';
+import type {
+  FilteredByOwnerDetailsType,
+  PageType,
+  PetekListType,
+  AllCategoriesListType,
+  RelatedListType,
+  RatingSearchType,
+  AllOwnersListType,
+} from './AppTypes.flow';
+import type {MixedElement} from 'react';
+import {RatingSearch} from './AppTypes.flow';
 
-export default ({
+type Props = $ReadOnly<{
+  page: PageType,
+  setPage: (PageType) => void,
+  list: PetekListType,
+  setFilteredList: (?PetekListType) => void,
+  filteredList: ?PetekListType,
+  setOwnerFilterHeader: (string, $Shape<{overrideList: boolean}>) => void,
+}>;
+
+export default function SearchPage({
   page,
   setPage,
   list,
   setFilteredList,
   filteredList,
   setOwnerFilterHeader,
-}) => {
-  const [freeTextFilter, setFreeTextFilter] = useState("");
-  const [allOwners, setAllOwners] = useState({});
-  const [allCategories, setAllCategories] = useState({});
-  const [allRelated, setAllRelated] = useState({});
-  const [owner, setOwner] = useState("");
-  const [category, setCategory] = useState("");
-  const [rating, setRating] = useState(0);
-  const [ratingSearchType, setRatingSearchType] = useState(
-    RATING_SEARCH_TYPE_AND_ABOVE
+}: Props): MixedElement {
+  const [freeTextFilter, setFreeTextFilter] = useState<string>('');
+  const [allOwners, setAllOwners] = useState<AllOwnersListType>({});
+  const [allCategories, setAllCategories] = useState<AllCategoriesListType>({});
+  const [allRelated, setAllRelated] = useState<RelatedListType>({});
+  const [owner, setOwner] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
+  const [rating, setRating] = useState<number>(0);
+  const [ratingSearchType, setRatingSearchType] = useState<RatingSearchType>(
+    RatingSearch.AND_ABOVE,
   );
-  const pageRef = useRef(null);
+  const pageRef = useRef<HTMLDivElement | null>(null);
   const summaryRef = useRef(null);
   const submitButtonRef = useRef(null);
   const className = `page modal search-page ${
-    page === "search" ? "visible" : ""
+    page === 'search' ? 'visible' : ''
   }`;
 
   const isFilteredBySomething =
-    freeTextFilter !== "" ||
-    owner !== "" ||
-    category !== "" ||
+    freeTextFilter !== '' ||
+    owner !== '' ||
+    category !== '' ||
     Object.keys(allRelated).length !== 0 ||
     rating !== 0;
 
   const clearAllFilters = () => {
-    setFreeTextFilter("");
-    setOwner("");
-    setCategory("");
+    setFreeTextFilter('');
+    setOwner('');
+    setCategory('');
     setAllRelated({});
     setRating(0);
-    setRatingSearchType(RATING_SEARCH_TYPE_AND_ABOVE);
+    setRatingSearchType(RatingSearch.AND_ABOVE);
 
     setFilteredList(null);
   };
@@ -73,7 +92,7 @@ export default ({
 
         return result;
       },
-      {}
+      {},
     );
     setAllCategories(allCategories);
   }, [list]);
@@ -81,18 +100,24 @@ export default ({
   useEffect(() => {
     let submitButtonPaddingBottom = 0;
     if (isFilteredBySomething) {
+      const summraryElementHeight =
+        summaryRef.current?.getBoundingClientRect().height ?? 0;
+      const submitButtonElementHeight =
+        submitButtonRef.current?.getBoundingClientRect().height ?? 0;
       submitButtonPaddingBottom =
-        summaryRef.current.getBoundingClientRect().height +
-        submitButtonRef.current.getBoundingClientRect().height;
+        summraryElementHeight + submitButtonElementHeight;
     }
 
-    pageRef.current.style = `padding-bottom: ${
-      submitButtonPaddingBottom + 35
-    }px`;
+    if (pageRef.current != null) {
+      // $FlowIgnore - Hardcode padding just for the submit button page
+      pageRef.current.style = `padding-bottom: ${
+        submitButtonPaddingBottom + 35
+      }px`;
+    }
   }, [freeTextFilter, owner, category, allRelated, rating]);
 
   useEffect(() => {
-    if (page === "search") {
+    if (page === 'search') {
       pageRef?.current?.scrollTo(0, 0);
     }
   }, [page]);
@@ -105,11 +130,11 @@ export default ({
   }, [filteredList]);
 
   const handleClose = () => {
-    setPage("app");
+    setPage('app');
   };
 
   const search = () => {
-    let result = { ...list };
+    let result = {...list};
 
     // Free text search
     if (freeTextFilter) {
@@ -120,7 +145,8 @@ export default ({
           currentPetek.content?.includes(freeTextFilter) ||
           currentPetek.category?.includes(freeTextFilter) ||
           currentPetek.owner?.includes(freeTextFilter) ||
-          currentPetek.related?.includes(freeTextFilter) ||
+          (currentPetek.allRelated &&
+            Object.keys(currentPetek.allRelated).includes(freeTextFilter)) ||
           currentPetek.situation?.includes(freeTextFilter)
         ) {
           filtered[currentPetekKey] = currentPetek;
@@ -152,7 +178,7 @@ export default ({
           Object.keys(allRelated).every(
             (related) =>
               currentPetek?.allRelated &&
-              Object.keys(currentPetek?.allRelated).includes(related)
+              Object.keys(currentPetek?.allRelated).includes(related),
           )
         ) {
           filtered[currentPetekKey] = currentPetek;
@@ -167,7 +193,7 @@ export default ({
       result = Object.keys(result).reduce((filtered, currentPetekKey) => {
         const currentPetek = list[currentPetekKey];
         const isInRating =
-          ratingSearchType === RATING_SEARCH_TYPE_AND_ABOVE
+          ratingSearchType === RatingSearch.AND_ABOVE
             ? currentPetek.rating >= rating
             : currentPetek.rating === rating;
 
@@ -193,12 +219,12 @@ export default ({
     }
 
     setFilteredList(result);
-    setOwnerFilterHeader(owner, { overrideList: false });
+    setOwnerFilterHeader(owner, {overrideList: false});
   };
 
   const handleSubmit = () => {
     search();
-    setPage("app");
+    setPage('app');
   };
 
   const handleFreeTextFilterChange = (e) => {
@@ -218,7 +244,7 @@ export default ({
   const createHandleOwnerClick = (selected) => {
     return () => {
       if (selected === owner) {
-        return setOwner("");
+        return setOwner('');
       }
 
       setOwner(selected);
@@ -228,11 +254,11 @@ export default ({
   const createHandleRelatedClick = (selected) => {
     return () => {
       if (allRelated[selected]) {
-        const newRelated = { ...allRelated };
+        const newRelated = {...allRelated};
         Reflect.deleteProperty(newRelated, selected);
         setAllRelated(newRelated);
       } else {
-        setAllRelated({ ...allRelated, [selected]: true });
+        setAllRelated({...allRelated, [selected]: true});
       }
     };
   };
@@ -252,6 +278,8 @@ export default ({
       setRatingSearchType(ratingSearchType);
     };
   };
+
+  console.log('pageRef', pageRef);
 
   return (
     <div className={className} ref={pageRef}>
@@ -274,14 +302,13 @@ export default ({
           <div className="owners-list-container">
             {Object.keys(allOwners).map((currOwner, index) => {
               const className = `set-owner-button ${
-                currOwner === owner ? "selected" : ""
+                currOwner === owner ? 'selected' : ''
               }`;
               return (
                 <div
                   key={index}
                   className={className}
-                  onClick={createHandleOwnerClick(currOwner)}
-                >
+                  onClick={createHandleOwnerClick(currOwner)}>
                   {currOwner}
                 </div>
               );
@@ -296,14 +323,13 @@ export default ({
           <div className="related-list-container">
             {Object.keys(allOwners).map((currRelated, index) => {
               const className = `set-related-button ${
-                allRelated[currRelated] ? "selected" : ""
+                allRelated[currRelated] ? 'selected' : ''
               }`;
               return (
                 <div
                   key={index}
                   className={className}
-                  onClick={createHandleRelatedClick(currRelated)}
-                >
+                  onClick={createHandleRelatedClick(currRelated)}>
                   {currRelated}
                 </div>
               );
@@ -316,56 +342,43 @@ export default ({
         <div className="section-container rating-container">
           <div className="title">
             {rating === 0
-              ? "כל הפתקים בלי דירוג"
+              ? 'כל הפתקים בלי דירוג'
               : `רק ${rating} כוכבים ${
-                  ratingSearchType === RATING_SEARCH_TYPE_AND_ABOVE
-                    ? "ומעלה"
-                    : ""
+                  ratingSearchType === RatingSearch.AND_ABOVE ? 'ומעלה' : ''
                 }`}
           </div>
           <div className="stars-container">
             <div
-              className={`star star-1 ${rating >= 1 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(1)}
-            ></div>
+              className={`star star-1 ${rating >= 1 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(1)}></div>
             <div
-              className={`star star-2 ${rating >= 2 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(2)}
-            ></div>
+              className={`star star-2 ${rating >= 2 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(2)}></div>
             <div
-              className={`star star-3 ${rating >= 3 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(3)}
-            ></div>
+              className={`star star-3 ${rating >= 3 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(3)}></div>
             <div
-              className={`star star-4 ${rating >= 4 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(4)}
-            ></div>
+              className={`star star-4 ${rating >= 4 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(4)}></div>
             <div
-              className={`star star-5 ${rating >= 5 ? "selected" : ""}`}
-              onClick={createHandleRatingClick(5)}
-            ></div>
+              className={`star star-5 ${rating >= 5 ? 'selected' : ''}`}
+              onClick={createHandleRatingClick(5)}></div>
           </div>
           <div className="rating-search-type-container">
             <div
               className={`search-type-button option-1 ${
-                ratingSearchType === RATING_SEARCH_TYPE_AND_ABOVE
-                  ? "selected"
-                  : ""
+                ratingSearchType === RatingSearch.AND_ABOVE ? 'selected' : ''
               }`}
               onClick={createHandleRatingSearchTypeClick(
-                RATING_SEARCH_TYPE_AND_ABOVE
-              )}
-            >
+                RatingSearch.AND_ABOVE,
+              )}>
               ומעלה
             </div>
             <div
               className={`search-type-button option-2 ${
-                ratingSearchType === RATING_SEARCH_TYPE_ONLY ? "selected" : ""
+                ratingSearchType === RatingSearch.ONLY ? 'selected' : ''
               }`}
-              onClick={createHandleRatingSearchTypeClick(
-                RATING_SEARCH_TYPE_ONLY
-              )}
-            >
+              onClick={createHandleRatingSearchTypeClick(RatingSearch.ONLY)}>
               רק
             </div>
           </div>
@@ -386,9 +399,8 @@ export default ({
             <div
               className="clear-category-text"
               onClick={() => {
-                setCategory("");
-              }}
-            >
+                setCategory('');
+              }}>
               x
             </div>
           </div>
@@ -399,14 +411,13 @@ export default ({
               })
               .map((currCategory, index) => {
                 const className = `category-tag ${
-                  currCategory === category ? "selected" : ""
+                  currCategory === category ? 'selected' : ''
                 }`;
                 return (
                   <div
                     key={index}
                     className={className}
-                    onClick={createHandleCategoryClick(currCategory)}
-                  >
+                    onClick={createHandleCategoryClick(currCategory)}>
                     {currCategory}
                   </div>
                 );
@@ -418,51 +429,47 @@ export default ({
 
         <div
           className={`main-submit-button filter-button ${
-            isFilteredBySomething ? "has-filter" : ""
+            isFilteredBySomething ? 'has-filter' : ''
           }`}
           onClick={handleSubmit}
-          ref={submitButtonRef}
-        >
+          ref={submitButtonRef}>
           🤦‍♂️ חפש 🤣
         </div>
 
         <div
           className={`filter-summary-container ${
-            isFilteredBySomething ? "visible" : ""
+            isFilteredBySomething ? 'visible' : ''
           }`}
-          ref={summaryRef}
-        >
+          ref={summaryRef}>
           <div className="summary">
             <b>סינון לפי:</b>
-            {freeTextFilter !== "" && (
+            {freeTextFilter !== '' && (
               <div>
-                {"✏️ טקסט חופשי: "} <span>{freeTextFilter}</span>
+                {'✏️ טקסט חופשי: '} <span>{freeTextFilter}</span>
               </div>
             )}
-            {owner !== "" && (
+            {owner !== '' && (
               <div>
-                {"🙊 מי אמר: "}
+                {'🙊 מי אמר: '}
                 <span>{owner}</span>
               </div>
             )}
             {Object.keys(allRelated).length !== 0 && (
               <div>
-                {"🧬 קשור למישהו: "}
-                <span>{Object.keys(allRelated).join(", ")}</span>
+                {'🧬 קשור למישהו: '}
+                <span>{Object.keys(allRelated).join(', ')}</span>
               </div>
             )}
             {rating !== 0 && (
               <div>
-                {"⭐️ דירוג: "}
+                {'⭐️ דירוג: '}
                 <span>{rating}</span>
-                {ratingSearchType === RATING_SEARCH_TYPE_ONLY
-                  ? " (רק)"
-                  : " (ומעלה)"}
+                {ratingSearchType === RatingSearch.ONLY ? ' (רק)' : ' (ומעלה)'}
               </div>
             )}
-            {category !== "" && (
+            {category !== '' && (
               <div>
-                {"☝️ קטגוריה: "} <span>{category}</span>
+                {'☝️ קטגוריה: '} <span>{category}</span>
               </div>
             )}
             <div className="clear-search-button" onClick={clearAllFilters}>
@@ -473,4 +480,4 @@ export default ({
       </div>
     </div>
   );
-};
+}

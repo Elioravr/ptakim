@@ -37,6 +37,9 @@ export type FilteredByOwnerDetailsType = $ReadOnly<{
   }>,
 }>;
 
+export type AllOwnersListType = $Shape<{[string]: boolean}>;
+export type AllCategoriesListType = $Shape<{[string]: boolean}>;
+
 export const Page = {
   App: 'app',
   AddNewPetek: 'add-petek-modal',
@@ -53,3 +56,10 @@ export type PageType =
   | 'sign-in'
   | 'statistics'
   | 'search';
+
+export const RatingSearch = {
+  AND_ABOVE: 'and_above',
+  ONLY: 'only',
+};
+
+export type RatingSearchType = 'and_above' | 'only';
