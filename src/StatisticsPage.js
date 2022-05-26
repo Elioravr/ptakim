@@ -1,15 +1,15 @@
-import { useEffect, useState, useMemo } from "react";
+import {useEffect, useState} from 'react';
 
-import Separator from "./Separator";
-import CountUp from "react-countup";
-import { PieChart } from "react-minimal-pie-chart";
+import Separator from './Separator';
+import CountUp from 'react-countup';
+import {PieChart} from 'react-minimal-pie-chart';
 
-export default ({ page, setPage, list, onOwnerClick }) => {
+export default ({page, setPage, list, onOwnerClick}) => {
   const [statistics, setStatistics] = useState({});
   const [ratingPerPerson, setRatingPerPerson] = useState({});
   const [ratingStats, setRatingStats] = useState({});
   const className = `page modal statistics-page ${
-    page === "statistics" ? "visible" : ""
+    page === 'statistics' ? 'visible' : ''
   }`;
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default ({ page, setPage, list, onOwnerClick }) => {
 
         return result;
       },
-      {}
+      {},
     );
 
     setStatistics(calculatedStatistics);
@@ -46,7 +46,7 @@ export default ({ page, setPage, list, onOwnerClick }) => {
 
         return result;
       },
-      {}
+      {},
     );
 
     setRatingStats(calculatedRatingStats);
@@ -67,11 +67,11 @@ export default ({ page, setPage, list, onOwnerClick }) => {
 
         return result;
       },
-      {}
+      {},
     );
 
     Object.keys(calculatedRatingPerPerson).forEach((currentPetekKey) => {
-      const { sum, count } = calculatedRatingPerPerson[currentPetekKey];
+      const {sum, count} = calculatedRatingPerPerson[currentPetekKey];
       calculatedRatingPerPerson[currentPetekKey].average = (
         sum / count
       ).toFixed(1);
@@ -92,7 +92,7 @@ export default ({ page, setPage, list, onOwnerClick }) => {
   // ratingSortedList = ratingSortedList.slice(1, ratingSortedList.length);
 
   const handleClose = () => {
-    setPage("app");
+    setPage('app');
   };
 
   return (
@@ -102,7 +102,7 @@ export default ({ page, setPage, list, onOwnerClick }) => {
         <div onClick={handleClose}>x</div>
       </div>
 
-      {page === "statistics" && (
+      {page === 'statistics' && (
         <div className="modal-body">
           <div className="section-container">
             <div className="title">
@@ -145,18 +145,18 @@ export default ({ page, setPage, list, onOwnerClick }) => {
               style={{
                 fontFamily:
                   '"Roboto Sans", -apple-system, Helvetica, Arial, sans-serif',
-                fontSize: "8px",
-                color: "white",
+                fontSize: '8px',
+                color: 'white',
               }}
-              label={({ dataEntry }) => dataEntry.title}
+              label={({dataEntry}) => dataEntry.title}
               data={Object.keys(ratingStats).map((ratingLabel, index) => {
-                let color = "";
+                let color = '';
                 if (index % 3 === 0) {
-                  color = "007bff";
+                  color = '007bff';
                 } else if (index % 3 === 1) {
-                  color = "FF530F";
+                  color = 'FF530F';
                 } else {
-                  color = "005abb";
+                  color = '005abb';
                 }
 
                 return {
@@ -195,12 +195,11 @@ const Stats = ({
       <div
         className="statistic-container"
         key={index}
-        onClick={() => handleOwnerClick(item)}
-      >
+        onClick={() => handleOwnerClick(item)}>
         <div className="metadata-container">
           <div className="name-and-rating-container">
             <div className="owner-name">{`${
-              namePrefix ? `${namePrefix} ` : ""
+              namePrefix ? `${namePrefix} ` : ''
             }${item}`}</div>
             {ratingPerPerson && (
               <div className="average-rating">{`(${ratingPerPerson[item].average} ⭐️)`}</div>
@@ -210,8 +209,7 @@ const Stats = ({
         </div>
         <div
           className="count-graph"
-          style={{ width: `${(count / maxCount) * 100}%` }}
-        ></div>
+          style={{width: `${(count / maxCount) * 100}%`}}></div>
       </div>
     );
   });

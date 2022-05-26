@@ -2,7 +2,7 @@
 
 import type {MixedElement} from 'react';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 
 type Props = $ReadOnly<{
   isOpen: boolean,

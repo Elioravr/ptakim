@@ -11,13 +11,13 @@ const NO_OWNER_PIC_PLACEHOLDER =
 
 type Props = $ReadOnly<{
   petek: PetekType,
-  editPetek: (PetekType) => void,
-  deletePetek: (string) => void,
+  editPetek?: (PetekType) => void,
+  deletePetek?: (string) => void,
   ownerPic: ?string,
   ownerPics: ?OwnerPics,
   enableScaleDown?: boolean,
   isHidden?: boolean,
-  onOwnerClick: (string) => void,
+  onOwnerClick?: (string) => void,
 }>;
 
 export default function Petek({
@@ -42,12 +42,18 @@ export default function Petek({
 
   const handleDeleteClick = (e) => {
     e.stopPropagation();
-    deletePetek(petek.id);
+
+    if (deletePetek != null) {
+      deletePetek(petek.id);
+    }
   };
 
   const handleOwnerClick = (e) => {
     e.stopPropagation();
-    onOwnerClick(petek.owner);
+
+    if (onOwnerClick != null) {
+      onOwnerClick(petek.owner);
+    }
   };
 
   return (

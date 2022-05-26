@@ -1,6 +1,6 @@
 // @flow
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import useRandomList from './useRandomList';
 import Petek from './Petek';
 import Separator from './Separator';
@@ -65,7 +65,7 @@ export default function PetekList({
               {filteredByOwner.owner === 'אליאור' ? (
                 <div className="crown">👑</div>
               ) : null}
-              <img src={mainOwnerPic || NO_OWNER_PIC_PLACEHOLDER} />
+              <img src={mainOwnerPic || NO_OWNER_PIC_PLACEHOLDER} alt="" />
             </div>
             <div className="name">{filteredByOwner.owner}</div>
             <div className="statistics">

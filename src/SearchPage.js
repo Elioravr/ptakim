@@ -4,7 +4,6 @@ import React, {useState, useEffect, useRef} from 'react';
 
 import Separator from './Separator';
 import type {
-  FilteredByOwnerDetailsType,
   PageType,
   PetekListType,
   AllCategoriesListType,

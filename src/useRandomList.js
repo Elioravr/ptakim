@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from 'react';
 
-export default (list, random) => {
+export default function useRandomList(list, random) {
   const [listToDisplay, setListToDisplay] = useState([]);
   useEffect(() => {
     const sortedList = Object.keys(list).sort((a, b) => {
@@ -15,4 +15,4 @@ export default (list, random) => {
   }, [random, list]);
 
   return [listToDisplay];
-};
+}

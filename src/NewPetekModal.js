@@ -143,6 +143,9 @@ export default function NewPetekModal({
           setCategory(e.target.value);
           break;
         }
+        default: {
+          break;
+        }
       }
     };
   };

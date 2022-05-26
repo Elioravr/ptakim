@@ -34,9 +34,7 @@ import {
 } from './apiService';
 // $FlowIgnore - This module exists
 import './App.scss';
-import {setCurrentScreen} from 'firebase/analytics';
 
-const PAGE_ANIMATION_DELAY = 300;
 let currentScroll = 0;
 
 function App(): MixedElement {
