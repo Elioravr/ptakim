@@ -17,22 +17,22 @@ const NO_OWNER_PIC_PLACEHOLDER =
 
 type Props = $ReadOnly<{
   list: PetekListType,
-  editPetek: (PetekType) => void,
-  deletePetek: (string) => void,
   random: boolean,
   ownerPics: ?OwnerPics,
   filteredByOwner: ?FilteredByOwnerDetailsType,
   onOwnerClick: (string) => void,
+  openPetekList: () => void,
+  setSelectedPetek: (PetekType) => void,
 }>;
 
 export default function PetekList({
   list,
-  editPetek,
-  deletePetek,
   random = false,
   ownerPics,
   filteredByOwner,
   onOwnerClick,
+  openPetekList,
+  setSelectedPetek,
 }: Props): MixedElement {
   // const [listToDisplay, setListToDisplay] = useState([]);
   // useEffect(() => {
@@ -55,6 +55,13 @@ export default function PetekList({
     ownerPics && filteredByOwner?.owner
       ? ownerPics[filteredByOwner?.owner]
       : null;
+
+  const createHandlePetekClick = (petek: PetekType) => {
+    return () => {
+      openPetekList();
+      setSelectedPetek(petek);
+    };
+  };
 
   return (
     <>
@@ -87,11 +94,13 @@ export default function PetekList({
               <Petek
                 key={index}
                 petek={{...list[petekKey], id: petekKey}}
-                editPetek={editPetek}
-                deletePetek={deletePetek}
                 ownerPic={ownerPic}
                 ownerPics={ownerPics}
                 onOwnerClick={onOwnerClick}
+                onClick={createHandlePetekClick({
+                  ...list[petekKey],
+                  id: petekKey,
+                })}
               />
             )
           );

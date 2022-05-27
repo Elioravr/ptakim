@@ -36,6 +36,7 @@ import {
 } from './apiService';
 // $FlowIgnore - This module exists
 import './App.scss';
+import PetekPage from './PetekPage';
 
 let currentScroll = 0;
 moment.locale('he');
@@ -53,6 +54,7 @@ function App(): MixedElement {
   const prevPage = usePrevious<PageType>(page);
   const prevFilteredList = usePrevious<?PetekListType>(filteredList);
   const [isPermissionDenied, setIsPermissionDenied] = useState<boolean>(false);
+  const [selectedPetek, setSelectedPetek] = useState<?PetekType>(null);
 
   const loadUser = () => {
     return fetchCurrentUser().then((user) => {
@@ -140,11 +142,12 @@ function App(): MixedElement {
     setPetekToEdit(petek);
   };
 
-  const deletePetekAndLoadList = (petekId) => {
+  const deletePetekAndLoadList = (petek) => {
     if (window.confirm('בטוח שאתה רוצה למחוק את הפתק?')) {
-      deletePetek(petekId)
+      deletePetek(petek.id)
         .then(() => {
           loadList();
+          setSelectedPetek(null);
         })
         .catch(() => {
           setIsPermissionDenied(true);
@@ -162,6 +165,10 @@ function App(): MixedElement {
 
   const handleOpenStory = () => {
     changeToPage(Page.Story);
+  };
+
+  const handleOpenPetekPage = () => {
+    changeToPage(Page.Petek);
   };
 
   const handleOpenSignIn = () => {
@@ -225,6 +232,9 @@ function App(): MixedElement {
     });
     window.scrollTo({top: 0, behavior: 'smooth'});
     setPage(Page.App);
+
+    // Clearing the selected petek in case there's one
+    setSelectedPetek(null);
   };
 
   const searchButtonClassName = `search-button ${
@@ -271,12 +281,12 @@ function App(): MixedElement {
             )}
             <PetekList
               list={filteredList || list}
-              editPetek={editPetek}
-              deletePetek={deletePetekAndLoadList}
               random={filteredList === null}
               ownerPics={ownerPics}
               filteredByOwner={filteredByOwner}
               onOwnerClick={setOwnerFilterHeader}
+              openPetekList={handleOpenPetekPage}
+              setSelectedPetek={setSelectedPetek}
             />
             <Separator emoji="🤷‍♂️" />
           </>
@@ -298,13 +308,15 @@ function App(): MixedElement {
         setIsPermissionDenied={setIsPermissionDenied}
       />
       <div className={searchButtonClassName}>
-        {filteredList && (
+        {filteredList && selectedPetek == null && (
           <div className="indicator">{Object.keys(filteredList).length}</div>
         )}
-        <div className="button" onClick={handleSearchPageClick}>
-          חפש
-        </div>
-        {filteredList && (
+        {selectedPetek == null && (
+          <div className="button" onClick={handleSearchPageClick}>
+            חפש
+          </div>
+        )}
+        {filteredList && selectedPetek == null && (
           <div className="button clear-button" onClick={clearFilter}>
             <div>נקה</div>
             <div>חיפוש</div>
@@ -324,6 +336,16 @@ function App(): MixedElement {
         ownerPics={ownerPics}
       />
       <SignInPage page={page} setPage={setPage} />
+      <PetekPage
+        page={page}
+        ownerPics={ownerPics}
+        petek={selectedPetek}
+        setPage={setPage}
+        onPetekDelete={deletePetekAndLoadList}
+        onPetekEdit={editPetek}
+        setSelectedPetek={setSelectedPetek}
+        onOwnerClick={setOwnerFilterHeader}
+      />
       <PermissionDenied
         isOpen={isPermissionDenied}
         setIsOpen={setIsPermissionDenied}

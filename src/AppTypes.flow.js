@@ -55,6 +55,7 @@ export const Page = {
   SignIn: 'sign-in',
   Statistics: 'statistics',
   Search: 'search',
+  Petek: 'petek-page',
 };
 
 export type PageType =
@@ -63,7 +64,8 @@ export type PageType =
   | 'story'
   | 'sign-in'
   | 'statistics'
-  | 'search';
+  | 'search'
+  | 'petek-page';
 
 export const RatingSearch = {
   AND_ABOVE: 'and_above',

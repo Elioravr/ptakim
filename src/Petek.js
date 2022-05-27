@@ -12,41 +12,39 @@ const NO_OWNER_PIC_PLACEHOLDER =
 
 type Props = $ReadOnly<{
   petek: PetekType,
-  editPetek?: (PetekType) => void,
-  deletePetek?: (string) => void,
+  deletePetek?: (PetekType) => void,
   ownerPic: ?string,
   ownerPics: ?OwnerPics,
   enableScaleDown?: boolean,
   isHidden?: boolean,
   onOwnerClick?: (string) => void,
+  onClick?: () => void,
 }>;
 
 export default function Petek({
   petek,
-  editPetek,
   deletePetek,
   ownerPic,
   ownerPics,
   enableScaleDown,
   isHidden,
   onOwnerClick,
+  onClick,
 }: Props): MixedElement {
   const dateAsString = new Date(petek.createdAt).toLocaleDateString();
   const isBeforeAppTime = new Date(petek.createdAt) < new Date('2022-02-22');
 
   const handleClick = () => {
-    if (editPetek == null) {
-      return;
+    if (onClick != null) {
+      onClick();
     }
-
-    editPetek(petek);
   };
 
   const handleDeleteClick = (e) => {
     e.stopPropagation();
 
     if (deletePetek != null) {
-      deletePetek(petek.id);
+      deletePetek(petek);
     }
   };
 
@@ -127,7 +125,7 @@ export default function Petek({
         {petek.rating != null && petek.rating !== 0 && (
           <div className="rating-container">
             <span>{petek.rating}</span>
-            <div className="star"></div>
+            <div className="rating-star"></div>
           </div>
         )}
         <div className="messages-count-container">

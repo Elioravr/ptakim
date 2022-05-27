@@ -165,7 +165,7 @@ html:lang(en) .petek-text {
 
   .delete-button {
     position: absolute;
-    left: 14px;
+    left: 0;
     top: 7px;
     font-size: 16px;
   }
@@ -281,7 +281,7 @@ html:lang(en) .petek-text {
     margin-bottom: 3px;
     font-size: 18px;
 
-    .star {
+    .rating-star {
       background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gold_Star.svg/1200px-Gold_Star.svg.png);
       height: 22px;
       width: 22px;
@@ -825,6 +825,36 @@ html:lang(en) .petek-text {
   }
 }
 
+.petek-page {
+  .modal-body {
+    padding-top: 60px;
+  }
+  .petek-container {
+    padding: 0;
+    border-bottom: none;
+
+    .rating-container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      flex-direction: row;
+    }
+  }
+  .coming-soon {
+    background-color: #ff4040;
+    border: 3px solid white;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    transform: rotate(-10deg);
+    color: white;
+    font-size: 32px;
+    margin: 50px auto;
+    margin-bottom: 80px;
+    padding: 5px;
+    border-radius: 3px;
+    animation: rotate-coming-soon 0.6s ease-in-out forwards;
+  }
+}
+
 .loading-container {
   padding: 50px;
 
@@ -880,5 +910,16 @@ html:lang(en) .petek-text {
   }
   100% {
     width: 100%;
+  }
+}
+
+@keyframes rotate-coming-soon {
+  0% {
+    transform: rotate(-800deg) scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(-10deg) scale(1);
+    opacity: 1;
   }
 }
