@@ -1,7 +1,7 @@
 @font-face {
-  font-family: "DanaYadAlefAlefAlef-Normal";
-  src: local("DanaYadAlefAlefAlef-Normal"),
-    url(./fonts/DanaYadAlefAlefAlef-Normal.woff) format("woff");
+  font-family: 'DanaYadAlefAlefAlef-Normal';
+  src: local('DanaYadAlefAlefAlef-Normal'),
+    url(./fonts/DanaYadAlefAlefAlef-Normal.woff) format('woff');
 }
 
 $header-height: 60px;
@@ -18,7 +18,7 @@ html:lang(en) .petek-text {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Fredoka", sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 100;
 }
 
@@ -86,7 +86,7 @@ html:lang(en) .petek-text {
     }
 
     .logo {
-      font-family: "Dancing Script", cursive;
+      font-family: 'Dancing Script', cursive;
       font-weight: bold;
       font-size: 36px;
     }
@@ -210,17 +210,18 @@ html:lang(en) .petek-text {
         object-fit: cover;
       }
     }
+
+    .petek-time {
+      text-align: right;
+      color: #aea8a8;
+      width: 100%;
+      font-size: 15px;
+    }
   }
 
   .petek-footer {
     width: 100%;
     margin-top: 15px;
-  }
-
-  .petek-time {
-    text-align: left;
-    color: #5a5858;
-    width: 100%;
   }
 
   .petek-text {
@@ -238,7 +239,7 @@ html:lang(en) .petek-text {
     align-items: flex-start;
     flex-direction: column;
     transition: transform 0.15s linear;
-    font-family: "DanaYadAlefAlefAlef-Normal", "Dancing Script";
+    font-family: 'DanaYadAlefAlefAlef-Normal', 'Dancing Script';
     font-size: 22px;
 
     div {
@@ -246,7 +247,7 @@ html:lang(en) .petek-text {
     }
 
     .petek-situation {
-      font-family: "Fredoka", sans-serif;
+      font-family: 'Fredoka', sans-serif;
       font-style: italic;
       margin-bottom: 10px;
       text-align: right;
@@ -355,7 +356,7 @@ html:lang(en) .petek-text {
   .input {
     width: 100%;
     height: $header-height;
-    font-family: "Fredoka", sans-serif;
+    font-family: 'Fredoka', sans-serif;
     font-weight: 100;
     border: none;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
@@ -558,7 +559,7 @@ html:lang(en) .petek-text {
 .separator {
   &::before,
   &::after {
-    content: " ";
+    content: ' ';
     height: 1px;
     width: 130px;
     background-color: #ccc;
@@ -603,7 +604,7 @@ html:lang(en) .petek-text {
   }
 
   .indicator {
-    content: " ";
+    content: ' ';
     height: 30px;
     width: 30px;
     border-radius: 50%;
