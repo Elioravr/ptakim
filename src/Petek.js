@@ -130,6 +130,14 @@ export default function Petek({
             <div className="star"></div>
           </div>
         )}
+        <div className="messages-count-container">
+          <span>0</span>
+          <img
+            className="message-icon"
+            // eslint-disable-next-line no-undef
+            src={(process.env.PUBLIC_URL ?? '') + '/message-icon.png'}
+          />
+        </div>
       </div>
     </div>
   );

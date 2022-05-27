@@ -222,6 +222,21 @@ html:lang(en) .petek-text {
   .petek-footer {
     width: 100%;
     margin-top: 15px;
+    display: flex;
+  }
+
+  .messages-count-container {
+    display: flex;
+    margin-bottom: 3px;
+    font-size: 18px;
+    margin-right: 5px;
+
+    .message-icon {
+      height: 20px;
+      width: 20px;
+      margin-right: 5px;
+      margin-top: 2px;
+    }
   }
 
   .petek-text {
