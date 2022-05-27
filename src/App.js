@@ -51,6 +51,12 @@ function App(): MixedElement {
   const prevFilteredList = usePrevious<?PetekListType>(filteredList);
   const [isPermissionDenied, setIsPermissionDenied] = useState<boolean>(false);
 
+  const loadUser = () => {
+    return fetchCurrentUser().then((user) => {
+      setCurrentUser(user);
+    });
+  };
+
   const loadList = useCallback(() => {
     setIsLoading(true);
     fetchPetekList()
@@ -58,10 +64,9 @@ function App(): MixedElement {
         list && setList(list);
         setIsLoading(false);
 
-        return fetchCurrentUser();
+        return loadUser();
       })
-      .then((user) => {
-        setCurrentUser(user);
+      .then(() => {
         return fetchOwnerPics();
       })
       .then((fetchedOwnerPics) => {
@@ -82,6 +87,8 @@ function App(): MixedElement {
         (filteredList !== null && filteredList !== prevFilteredList))
     ) {
       loadList();
+    } else if (prevPage === Page.SignIn) {
+      loadUser();
     } else if (page === Page.App) {
       window.scrollTo({top: lastAppScroll});
     }
