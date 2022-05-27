@@ -113,7 +113,7 @@ export default function NewPetekModal({
     };
 
     clearForm();
-    addNewPetek(petek).catch((e) => {
+    addNewPetek(petek).catch(() => {
       setIsPermissionDenied(true);
     });
     setPage(Page.App);

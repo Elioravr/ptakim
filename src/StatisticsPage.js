@@ -1,13 +1,38 @@
-import {useEffect, useState} from 'react';
+// @flow
+
+import React, {useEffect, useState} from 'react';
 
 import Separator from './Separator';
 import CountUp from 'react-countup';
 import {PieChart} from 'react-minimal-pie-chart';
+import type {
+  PageType,
+  PetekListType,
+  RatingPerPersonType,
+  StatisticsType,
+} from './AppTypes.flow';
+import type {MixedElement} from 'react';
 
-export default ({page, setPage, list, onOwnerClick}) => {
-  const [statistics, setStatistics] = useState({});
-  const [ratingPerPerson, setRatingPerPerson] = useState({});
-  const [ratingStats, setRatingStats] = useState({});
+type Props = $ReadOnly<{
+  page: PageType,
+  setPage: (PageType) => void,
+  list: PetekListType,
+  onOwnerClick: (string) => void,
+}>;
+
+export default function StatisticsPage({
+  page,
+  setPage,
+  list,
+  onOwnerClick,
+}: Props): MixedElement {
+  const [statistics, setStatistics] = useState<StatisticsType>({});
+  const [ratingPerPerson, setRatingPerPerson] = useState<RatingPerPersonType>(
+    {},
+  );
+  const [ratingStats, setRatingStats] = useState<$ReadOnly<{[number]: number}>>(
+    {},
+  );
   const className = `page modal statistics-page ${
     page === 'statistics' ? 'visible' : ''
   }`;
@@ -86,9 +111,9 @@ export default ({page, setPage, list, onOwnerClick}) => {
   const maxCount = statistics[sortedList[0]];
 
   let ratingSortedList = Object.keys(ratingStats).sort((a, b) => {
-    return ratingStats[b] - ratingStats[a];
+    return ratingStats[parseInt(b, 10)] - ratingStats[parseInt(a, 10)];
   });
-  const ratingMaxCount = ratingStats[ratingSortedList[0]];
+  const ratingMaxCount = ratingStats[parseInt(ratingSortedList[0], 10)];
   // ratingSortedList = ratingSortedList.slice(1, ratingSortedList.length);
 
   const handleClose = () => {
@@ -159,9 +184,11 @@ export default ({page, setPage, list, onOwnerClick}) => {
                   color = '005abb';
                 }
 
+                const ratingLabelAsNumber = parseInt(ratingLabel, 10);
+
                 return {
                   title: `⭐️ ${ratingLabel}`,
-                  value: ratingStats[ratingLabel],
+                  value: ratingStats[ratingLabelAsNumber],
                   color: `#${color}`,
                   key: index,
                 };
@@ -174,7 +201,7 @@ export default ({page, setPage, list, onOwnerClick}) => {
       )}
     </div>
   );
-};
+}
 
 const Stats = ({
   sortedList,
@@ -183,9 +210,18 @@ const Stats = ({
   namePrefix,
   ratingPerPerson,
   onOwnerClick,
-}) => {
+}: $ReadOnly<{
+  sortedList: $ReadOnlyArray<string>,
+  stats: StatisticsType,
+  maxCount: number,
+  namePrefix?: string,
+  ratingPerPerson?: RatingPerPersonType,
+  onOwnerClick?: (string) => void,
+}>) => {
   const handleOwnerClick = (item) => {
-    onOwnerClick(item);
+    if (onOwnerClick != null) {
+      onOwnerClick(item);
+    }
   };
 
   return sortedList.map((item, index) => {

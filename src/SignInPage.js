@@ -1,32 +1,42 @@
-import { useState } from "react";
+// @flow
+import React, {useState} from 'react';
 
-import Separator from "./Separator";
-import MainButton from "./MainButton";
-import Loading from "./Loading";
-import { createUserWithPhoneNumber, verifyCode } from "./apiService";
+import Separator from './Separator';
+import MainButton from './MainButton';
+import Loading from './Loading';
+import {createUserWithPhoneNumber, verifyCode} from './apiService';
+import type {MixedElement} from 'react';
+import type {PageType} from './AppTypes.flow';
 
-const PHONE_STAGE = "phone_stage";
-const CODE_STAGE = "code_stage";
+const PHONE_STAGE = 'phone_stage';
+const CODE_STAGE = 'code_stage';
 
-export default ({ page, setPage }) => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [stage, setStage] = useState(PHONE_STAGE);
-  const [enableErrorMessage, setEnableErrorMessage] = useState(false);
+type SigninPageStage = 'phone_stage' | 'code_stage';
+
+type Props = $ReadOnly<{
+  page: PageType,
+  setPage: (PageType) => void,
+}>;
+
+export default function SigninPage({page, setPage}: Props): MixedElement {
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [code, setCode] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [stage, setStage] = useState<SigninPageStage>(PHONE_STAGE);
+  const [enableErrorMessage, setEnableErrorMessage] = useState<boolean>(false);
 
   const className = `page modal sign-in-page ${
-    page === "sign-in" ? "visible" : ""
+    page === 'sign-in' ? 'visible' : ''
   }`;
 
   const handleClose = () => {
-    setPhoneNumber("");
-    setCode("");
+    setPhoneNumber('');
+    setCode('');
     setStage(PHONE_STAGE);
     setEnableErrorMessage(false);
 
-    setPage("app");
+    setPage('app');
   };
 
   const handlePhoneNumberInputChange = (e) => {
@@ -44,25 +54,24 @@ export default ({ page, setPage }) => {
   const handleSignInClick = () => {
     setIsLoading(true);
     if (stage === PHONE_STAGE) {
-      createUserWithPhoneNumber(phoneNumber).then((confirmationResult) => {
+      createUserWithPhoneNumber(phoneNumber).then(() => {
         setIsLoading(false);
         setStage(CODE_STAGE);
       });
     } else if (stage === CODE_STAGE) {
       verifyCode(code, name)
-        .then((user) => {
+        .then(() => {
           setIsLoading(false);
-          setPage("app");
+          setPage('app');
 
-          setPhoneNumber("");
-          setCode("");
+          setPhoneNumber('');
+          setCode('');
           setStage(PHONE_STAGE);
           setEnableErrorMessage(false);
         })
-        .catch((e) => {
-          console.log("e", e);
+        .catch(() => {
           setIsLoading(false);
-          setCode("");
+          setCode('');
           setEnableErrorMessage(true);
         });
     }
@@ -75,13 +84,13 @@ export default ({ page, setPage }) => {
         <div onClick={handleClose}>x</div>
       </div>
 
-      {page === "sign-in" && (
+      {page === 'sign-in' && (
         <div className="modal-body">
           <div className="section-container">
             <div className="title">
               <span>{`התחבר לפתקים`}</span>
             </div>
-            <Separator emoji={"☎️"} />
+            <Separator emoji={'☎️'} />
 
             <input
               value={name}
@@ -117,12 +126,12 @@ export default ({ page, setPage }) => {
             {isLoading ? (
               <Loading
                 text={
-                  stage === PHONE_STAGE ? "שולח הודעה..." : "בודק את הקוד..."
+                  stage === PHONE_STAGE ? 'שולח הודעה...' : 'בודק את הקוד...'
                 }
               />
             ) : (
               <MainButton
-                content={stage === PHONE_STAGE ? "שלח הודעה" : "התחבר"}
+                content={stage === PHONE_STAGE ? 'שלח הודעה' : 'התחבר'}
                 onClick={handleSignInClick}
               />
             )}
@@ -131,4 +140,4 @@ export default ({ page, setPage }) => {
       )}
     </div>
   );
-};
+}

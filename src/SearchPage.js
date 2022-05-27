@@ -1,6 +1,6 @@
 // @flow
 
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 
 import Separator from './Separator';
 import type {
@@ -11,6 +11,7 @@ import type {
   RatingSearchType,
   AllOwnersListType,
 } from './AppTypes.flow';
+import usePrevious from 'use-previous';
 import type {MixedElement} from 'react';
 import {RatingSearch} from './AppTypes.flow';
 
@@ -47,6 +48,7 @@ export default function SearchPage({
   const className = `page modal search-page ${
     page === 'search' ? 'visible' : ''
   }`;
+  const previousList = usePrevious(list);
 
   const isFilteredBySomething =
     freeTextFilter !== '' ||
@@ -55,7 +57,7 @@ export default function SearchPage({
     Object.keys(allRelated).length !== 0 ||
     rating !== 0;
 
-  const clearAllFilters = () => {
+  const clearAllFilters = useCallback(() => {
     setFreeTextFilter('');
     setOwner('');
     setCategory('');
@@ -64,75 +66,9 @@ export default function SearchPage({
     setRatingSearchType(RatingSearch.AND_ABOVE);
 
     setFilteredList(null);
-  };
+  }, [setFilteredList]);
 
-  useEffect(() => {
-    // Reset search in case the list changes (on edit for example)
-    if (isFilteredBySomething) {
-      search();
-    }
-
-    const allOwners = Object.keys(list).reduce((result, currentPetekKey) => {
-      const currentPetek = list[currentPetekKey];
-      if (!result[currentPetek.owner]) {
-        result[currentPetek.owner] = true;
-      }
-
-      return result;
-    }, {});
-    setAllOwners(allOwners);
-
-    const allCategories = Object.keys(list).reduce(
-      (result, currentPetekKey) => {
-        const currentPetek = list[currentPetekKey];
-        if (currentPetek.category && !result[currentPetek.category]) {
-          result[currentPetek.category] = true;
-        }
-
-        return result;
-      },
-      {},
-    );
-    setAllCategories(allCategories);
-  }, [list]);
-
-  useEffect(() => {
-    let submitButtonPaddingBottom = 0;
-    if (isFilteredBySomething) {
-      const summraryElementHeight =
-        summaryRef.current?.getBoundingClientRect().height ?? 0;
-      const submitButtonElementHeight =
-        submitButtonRef.current?.getBoundingClientRect().height ?? 0;
-      submitButtonPaddingBottom =
-        summraryElementHeight + submitButtonElementHeight;
-    }
-
-    if (pageRef.current != null) {
-      // $FlowIgnore - Hardcode padding just for the submit button page
-      pageRef.current.style = `padding-bottom: ${
-        submitButtonPaddingBottom + 35
-      }px`;
-    }
-  }, [freeTextFilter, owner, category, allRelated, rating]);
-
-  useEffect(() => {
-    if (page === 'search') {
-      pageRef?.current?.scrollTo(0, 0);
-    }
-  }, [page]);
-
-  // Used to clear all filters after clearing the filters from outside
-  useEffect(() => {
-    if (filteredList === null) {
-      clearAllFilters();
-    }
-  }, [filteredList]);
-
-  const handleClose = () => {
-    setPage('app');
-  };
-
-  const search = () => {
+  const search = useCallback(() => {
     let result = {...list};
 
     // Free text search
@@ -219,6 +155,92 @@ export default function SearchPage({
 
     setFilteredList(result);
     setOwnerFilterHeader(owner, {overrideList: false});
+  }, [
+    allRelated,
+    category,
+    freeTextFilter,
+    list,
+    owner,
+    rating,
+    ratingSearchType,
+    setFilteredList,
+    setOwnerFilterHeader,
+  ]);
+
+  useEffect(() => {
+    // Reset search in case the list changes (on edit for example)
+    if (
+      isFilteredBySomething &&
+      JSON.stringify(previousList) !== JSON.stringify(list)
+    ) {
+      search();
+    }
+
+    const allOwners = Object.keys(list).reduce((result, currentPetekKey) => {
+      const currentPetek = list[currentPetekKey];
+      if (!result[currentPetek.owner]) {
+        result[currentPetek.owner] = true;
+      }
+
+      return result;
+    }, {});
+    setAllOwners(allOwners);
+
+    const allCategories = Object.keys(list).reduce(
+      (result, currentPetekKey) => {
+        const currentPetek = list[currentPetekKey];
+        if (currentPetek.category && !result[currentPetek.category]) {
+          result[currentPetek.category] = true;
+        }
+
+        return result;
+      },
+      {},
+    );
+    setAllCategories(allCategories);
+  }, [isFilteredBySomething, list, previousList, search]);
+
+  useEffect(() => {
+    let submitButtonPaddingBottom = 0;
+    if (isFilteredBySomething) {
+      const summraryElementHeight =
+        summaryRef.current?.getBoundingClientRect().height ?? 0;
+      const submitButtonElementHeight =
+        submitButtonRef.current?.getBoundingClientRect().height ?? 0;
+      submitButtonPaddingBottom =
+        summraryElementHeight + submitButtonElementHeight;
+    }
+
+    if (pageRef.current != null) {
+      // $FlowIgnore - Hardcode padding just for the submit button page
+      pageRef.current.style = `padding-bottom: ${
+        submitButtonPaddingBottom + 35
+      }px`;
+    }
+  }, [
+    freeTextFilter,
+    owner,
+    category,
+    allRelated,
+    rating,
+    isFilteredBySomething,
+  ]);
+
+  useEffect(() => {
+    if (page === 'search') {
+      pageRef?.current?.scrollTo(0, 0);
+    }
+  }, [page]);
+
+  // Used to clear all filters after clearing the filters from outside
+  useEffect(() => {
+    if (filteredList === null) {
+      clearAllFilters();
+    }
+  }, [clearAllFilters, filteredList]);
+
+  const handleClose = () => {
+    setPage('app');
   };
 
   const handleSubmit = () => {
@@ -277,8 +299,6 @@ export default function SearchPage({
       setRatingSearchType(ratingSearchType);
     };
   };
-
-  console.log('pageRef', pageRef);
 
   return (
     <div className={className} ref={pageRef}>

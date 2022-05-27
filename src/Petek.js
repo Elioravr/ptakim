@@ -77,12 +77,12 @@ export default function Petek({
         {petek.situation && (
           <div className="petek-situation">{`${petek.situation}`}</div>
         )}
-        {petek.content.split('\n').map((line) => {
+        {petek.content.split('\n').map((line, index) => {
           // let lineWithBoldSupport = '';
           // line.split('*').map
           // Support for lines and bold
           return (
-            <div dir="auto">
+            <div dir="auto" key={`${line}-${index}`}>
               {line.split('*').map((part, index) => {
                 if (index % 2 === 0) {
                   return <span key={index}>{part}</span>;

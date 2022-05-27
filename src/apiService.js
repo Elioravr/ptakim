@@ -32,7 +32,7 @@ const recaptchaVerifier = new RecaptchaVerifier(
   'sign-in-button',
   {
     size: 'invisible',
-    callback: (response) => {
+    callback: () => {
       // reCAPTCHA solved, allow signInWithPhoneNumber.
     },
   },
@@ -93,6 +93,7 @@ export const createUserWithPhoneNumber = (phoneNumber) => {
       // ...
     })
     .catch((error) => {
+      // eslint-disable-next-line no-console
       console.log('error', error);
       // Error; SMS not sent
       // ...
@@ -115,6 +116,7 @@ export const logout = () => {
       // Sign-out successful.
     })
     .catch((error) => {
+      // eslint-disable-next-line no-console
       console.log('error', error);
     });
 };

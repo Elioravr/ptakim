@@ -37,6 +37,14 @@ export type FilteredByOwnerDetailsType = $ReadOnly<{
   }>,
 }>;
 
+export type StatisticsType = $ReadOnly<{
+  [string | number]: number,
+}>;
+
+export type RatingPerPersonType = $ReadOnly<{
+  [string]: $ReadOnly<{count: number, sum: number, average: string}>,
+}>;
+
 export type AllOwnersListType = $Shape<{[string]: boolean}>;
 export type AllCategoriesListType = $Shape<{[string]: boolean}>;
 
