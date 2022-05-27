@@ -91,7 +91,7 @@ function App(): MixedElement {
         prevPage === Page.AddNewPetek ||
         (filteredList !== null && filteredList !== prevFilteredList))
     ) {
-      loadList();
+      !isLoading && loadList();
     } else if (prevPage === Page.SignIn) {
       loadUser();
     } else if (page === Page.App) {
@@ -113,6 +113,7 @@ function App(): MixedElement {
     filteredList,
     prevFilteredList,
     loadList,
+    isLoading,
   ]);
 
   const handleScroll = useCallback(() => {
