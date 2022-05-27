@@ -16,6 +16,8 @@ import usePrevious from 'use-previous';
 import {Page} from './AppTypes.flow';
 import MainButton from './MainButton';
 import PetekList from './PetekList';
+import moment from 'moment';
+import 'moment/locale/he';
 import NewPetekModal from './NewPetekModal';
 import SearchPage from './SearchPage';
 import StatisticsPage from './StatisticsPage';
@@ -36,6 +38,7 @@ import {
 import './App.scss';
 
 let currentScroll = 0;
+moment.locale('he');
 
 function App(): MixedElement {
   const [list, setList] = useState<PetekListType>({});

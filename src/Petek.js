@@ -5,6 +5,7 @@ import type {OwnerPics, PetekType} from './AppTypes.flow';
 import type {MixedElement} from 'react';
 
 import React from 'react';
+import moment from 'moment';
 
 const NO_OWNER_PIC_PLACEHOLDER =
   'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
@@ -31,6 +32,7 @@ export default function Petek({
   onOwnerClick,
 }: Props): MixedElement {
   const dateAsString = new Date(petek.createdAt).toLocaleDateString();
+  const isBeforeAppTime = new Date(petek.createdAt) < new Date('2022-02-22');
 
   const handleClick = () => {
     if (editPetek == null) {
@@ -56,6 +58,12 @@ export default function Petek({
     }
   };
 
+  const dateString = isBeforeAppTime
+    ? 'זמן מקורי לא ידוע (נכתב לפני האפליקציה)'
+    : `${moment(petek.createdAt).fromNow()} (${moment(dateAsString).format(
+        'l',
+      )})`;
+
   return (
     <div
       className={`petek-container ${isHidden ? 'hidden' : ''}`}
@@ -71,7 +79,10 @@ export default function Petek({
           {petek.owner === 'אליאור' ? <div className="crown">👑</div> : null}
           <img src={ownerPic || NO_OWNER_PIC_PLACEHOLDER} />
         </div>
-        {petek.owner}
+        <div>
+          {petek.owner}
+          <div className="petek-time">{dateString}</div>
+        </div>
       </div>
       <div className="petek-text" direction="auto">
         {petek.situation && (
@@ -119,7 +130,6 @@ export default function Petek({
             <div className="star"></div>
           </div>
         )}
-        <div className="petek-time">התווסף ב: {dateAsString}</div>
       </div>
     </div>
   );
