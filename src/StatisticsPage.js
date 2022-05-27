@@ -12,6 +12,8 @@ import type {
   StatisticsType,
 } from './AppTypes.flow';
 import type {MixedElement} from 'react';
+import PageContainer from './PageContainer';
+import {Page} from './AppTypes.flow';
 
 type Props = $ReadOnly<{
   page: PageType,
@@ -33,9 +35,6 @@ export default function StatisticsPage({
   const [ratingStats, setRatingStats] = useState<$ReadOnly<{[number]: number}>>(
     {},
   );
-  const className = `page modal statistics-page ${
-    page === 'statistics' ? 'visible' : ''
-  }`;
 
   useEffect(() => {
     const calculatedStatistics = Object.keys(list).reduce(
@@ -116,90 +115,82 @@ export default function StatisticsPage({
   const ratingMaxCount = ratingStats[parseInt(ratingSortedList[0], 10)];
   // ratingSortedList = ratingSortedList.slice(1, ratingSortedList.length);
 
-  const handleClose = () => {
-    setPage('app');
-  };
-
   return (
-    <div className={className}>
-      <div className="page-header">
-        <span>סטטיסטיקות</span>
-        <div onClick={handleClose}>x</div>
+    <PageContainer
+      pageName={Page.Statistics}
+      currPage={page}
+      title="סטטיסטיקות"
+      setPage={setPage}
+      className="statistics-page">
+      <div className="section-container">
+        <div className="title">
+          <span>{`עד היום יש בסך הכל `}</span>
+          <CountUp end={Object.keys(list).length} />
+          <span>{` פתקים`}</span>
+        </div>
       </div>
 
-      {page === 'statistics' && (
-        <div className="modal-body">
-          <div className="section-container">
-            <div className="title">
-              <span>{`עד היום יש בסך הכל `}</span>
-              <CountUp end={Object.keys(list).length} />
-              <span>{` פתקים`}</span>
-            </div>
-          </div>
+      <Separator emoji="😱" />
 
-          <Separator emoji="😱" />
+      <Stats
+        stats={statistics}
+        sortedList={sortedList}
+        maxCount={maxCount}
+        ratingPerPerson={ratingPerPerson}
+        onOwnerClick={onOwnerClick}
+      />
 
-          <Stats
-            stats={statistics}
-            sortedList={sortedList}
-            maxCount={maxCount}
-            ratingPerPerson={ratingPerPerson}
-            onOwnerClick={onOwnerClick}
-          />
+      <Separator emoji="⭐️" />
 
-          <Separator emoji="⭐️" />
+      <div className="section-container">
+        <div className="title">התפלגות לפי ציונים</div>
+        <Stats
+          stats={ratingStats}
+          sortedList={ratingSortedList}
+          maxCount={ratingMaxCount}
+          namePrefix="⭐️"
+        />
+      </div>
 
-          <div className="section-container">
-            <div className="title">התפלגות לפי ציונים</div>
-            <Stats
-              stats={ratingStats}
-              sortedList={ratingSortedList}
-              maxCount={ratingMaxCount}
-              namePrefix="⭐️"
-            />
-          </div>
+      <Separator emoji="📊" />
 
-          <Separator emoji="📊" />
+      <div className="section-container">
+        <div className="title">התפלגות לפי ציונים</div>
+        <PieChart
+          animate={true}
+          animationDuration={500}
+          labelPosition={100 - 60 / 2}
+          style={{
+            fontFamily:
+              '"Roboto Sans", -apple-system, Helvetica, Arial, sans-serif',
+            fontSize: '8px',
+            color: 'white',
+          }}
+          label={({dataEntry}) => dataEntry.title}
+          data={Object.keys(ratingStats).map((ratingLabel, index) => {
+            let color = '';
+            if (index % 3 === 0) {
+              color = '007bff';
+            } else if (index % 3 === 1) {
+              color = 'FF530F';
+            } else {
+              color = '005abb';
+            }
 
-          <div className="section-container">
-            <div className="title">התפלגות לפי ציונים</div>
-            <PieChart
-              animate={true}
-              animationDuration={500}
-              labelPosition={100 - 60 / 2}
-              style={{
-                fontFamily:
-                  '"Roboto Sans", -apple-system, Helvetica, Arial, sans-serif',
-                fontSize: '8px',
-                color: 'white',
-              }}
-              label={({dataEntry}) => dataEntry.title}
-              data={Object.keys(ratingStats).map((ratingLabel, index) => {
-                let color = '';
-                if (index % 3 === 0) {
-                  color = '007bff';
-                } else if (index % 3 === 1) {
-                  color = 'FF530F';
-                } else {
-                  color = '005abb';
-                }
+            const ratingLabelAsNumber = parseInt(ratingLabel, 10);
 
-                const ratingLabelAsNumber = parseInt(ratingLabel, 10);
+            return {
+              title: `⭐️ ${ratingLabel}`,
+              value: ratingStats[ratingLabelAsNumber],
+              color: `#${color}`,
+              key: index,
+            };
+          })}
+        />
+      </div>
 
-                return {
-                  title: `⭐️ ${ratingLabel}`,
-                  value: ratingStats[ratingLabelAsNumber],
-                  color: `#${color}`,
-                  key: index,
-                };
-              })}
-            />
-          </div>
-
-          <Separator emoji="🤩" />
-        </div>
-      )}
-    </div>
+      <Separator emoji="🤩" />
+    </PageContainer>
   );
 }
 

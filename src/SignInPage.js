@@ -7,6 +7,8 @@ import Loading from './Loading';
 import {createUserWithPhoneNumber, verifyCode} from './apiService';
 import type {MixedElement} from 'react';
 import type {PageType} from './AppTypes.flow';
+import PageContainer from './PageContainer';
+import {Page} from './AppTypes.flow';
 
 const PHONE_STAGE = 'phone_stage';
 const CODE_STAGE = 'code_stage';
@@ -26,17 +28,11 @@ export default function SigninPage({page, setPage}: Props): MixedElement {
   const [stage, setStage] = useState<SigninPageStage>(PHONE_STAGE);
   const [enableErrorMessage, setEnableErrorMessage] = useState<boolean>(false);
 
-  const className = `page modal sign-in-page ${
-    page === 'sign-in' ? 'visible' : ''
-  }`;
-
   const handleClose = () => {
     setPhoneNumber('');
     setCode('');
     setStage(PHONE_STAGE);
     setEnableErrorMessage(false);
-
-    setPage('app');
   };
 
   const handlePhoneNumberInputChange = (e) => {
@@ -78,66 +74,58 @@ export default function SigninPage({page, setPage}: Props): MixedElement {
   };
 
   return (
-    <div className={className}>
-      <div className="page-header">
-        <span>התחברות</span>
-        <div onClick={handleClose}>x</div>
-      </div>
+    <PageContainer
+      currPage={page}
+      pageName={Page.SignIn}
+      setPage={setPage}
+      title="התחברות"
+      onClose={handleClose}>
+      <div className="section-container">
+        <div className="title">
+          <span>{`התחבר לפתקים`}</span>
+        </div>
+        <Separator emoji={'☎️'} />
 
-      {page === 'sign-in' && (
-        <div className="modal-body">
-          <div className="section-container">
-            <div className="title">
-              <span>{`התחבר לפתקים`}</span>
-            </div>
-            <Separator emoji={'☎️'} />
-
+        <input
+          value={name}
+          className="input"
+          type="text"
+          placeholder="שם מלא"
+          onChange={handleNameChange}
+        />
+        {stage === PHONE_STAGE ? (
+          <>
             <input
-              value={name}
+              value={phoneNumber}
               className="input"
               type="text"
-              placeholder="שם מלא"
-              onChange={handleNameChange}
+              placeholder="מספר טלפון"
+              onChange={handlePhoneNumberInputChange}
             />
-            {stage === PHONE_STAGE ? (
-              <>
-                <input
-                  value={phoneNumber}
-                  className="input"
-                  type="text"
-                  placeholder="מספר טלפון"
-                  onChange={handlePhoneNumberInputChange}
-                />
-              </>
-            ) : (
-              <input
-                value={code}
-                className="input"
-                type="text"
-                placeholder="מה הקוד שקיבלת?"
-                onChange={handleCodeInputChange}
-              />
-            )}
-            {enableErrorMessage && (
-              <div className="error-message">
-                בטוח שהזנת קוד נכון? נסה/י שוב!
-              </div>
-            )}
-            {isLoading ? (
-              <Loading
-                text={
-                  stage === PHONE_STAGE ? 'שולח הודעה...' : 'בודק את הקוד...'
-                }
-              />
-            ) : (
-              <MainButton
-                content={stage === PHONE_STAGE ? 'שלח הודעה' : 'התחבר'}
-                onClick={handleSignInClick}
-              />
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+          </>
+        ) : (
+          <input
+            value={code}
+            className="input"
+            type="text"
+            placeholder="מה הקוד שקיבלת?"
+            onChange={handleCodeInputChange}
+          />
+        )}
+        {enableErrorMessage && (
+          <div className="error-message">בטוח שהזנת קוד נכון? נסה/י שוב!</div>
+        )}
+        {isLoading ? (
+          <Loading
+            text={stage === PHONE_STAGE ? 'שולח הודעה...' : 'בודק את הקוד...'}
+          />
+        ) : (
+          <MainButton
+            content={stage === PHONE_STAGE ? 'שלח הודעה' : 'התחבר'}
+            onClick={handleSignInClick}
+          />
+        )}
+      </div>
+    </PageContainer>
   );
 }

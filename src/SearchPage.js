@@ -13,7 +13,8 @@ import type {
 } from './AppTypes.flow';
 import usePrevious from 'use-previous';
 import type {MixedElement} from 'react';
-import {RatingSearch} from './AppTypes.flow';
+import {Page, RatingSearch} from './AppTypes.flow';
+import PageContainer from './PageContainer';
 
 type Props = $ReadOnly<{
   page: PageType,
@@ -45,9 +46,6 @@ export default function SearchPage({
   const pageRef = useRef<HTMLDivElement | null>(null);
   const summaryRef = useRef(null);
   const submitButtonRef = useRef(null);
-  const className = `page modal search-page ${
-    page === 'search' ? 'visible' : ''
-  }`;
   const previousList = usePrevious(list);
 
   const isFilteredBySomething =
@@ -239,10 +237,6 @@ export default function SearchPage({
     }
   }, [clearAllFilters, filteredList]);
 
-  const handleClose = () => {
-    setPage('app');
-  };
-
   const handleSubmit = () => {
     search();
     setPage('app');
@@ -301,202 +295,200 @@ export default function SearchPage({
   };
 
   return (
-    <div className={className} ref={pageRef}>
-      <div className="page-header">
-        <span>חפש פתק</span>
-        <div onClick={handleClose}>x</div>
-      </div>
-      <div className="modal-body">
-        <input
-          value={freeTextFilter}
-          className="input"
-          type="text"
-          placeholder="טקסט חופשי לחיפוש"
-          onChange={handleFreeTextFilterChange}
-        />
-        <Separator emoji="🔍" />
+    <PageContainer
+      currPage={page}
+      pageName={Page.Search}
+      setPage={setPage}
+      title="חפש פתק"
+      pageRef={pageRef}
+      className="search-page">
+      <input
+        value={freeTextFilter}
+        className="input"
+        type="text"
+        placeholder="טקסט חופשי לחיפוש"
+        onChange={handleFreeTextFilterChange}
+      />
+      <Separator emoji="🔍" />
 
-        <div className="section-container">
-          <div className="title">מי אמר?</div>
-          <div className="owners-list-container">
-            {Object.keys(allOwners).map((currOwner, index) => {
-              const className = `set-owner-button ${
-                currOwner === owner ? 'selected' : ''
+      <div className="section-container">
+        <div className="title">מי אמר?</div>
+        <div className="owners-list-container">
+          {Object.keys(allOwners).map((currOwner, index) => {
+            const className = `set-owner-button ${
+              currOwner === owner ? 'selected' : ''
+            }`;
+            return (
+              <div
+                key={index}
+                className={className}
+                onClick={createHandleOwnerClick(currOwner)}>
+                {currOwner}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <Separator emoji="🤣" />
+
+      <div className="section-container relation-container">
+        <div className="title">קשור למישהו?</div>
+        <div className="related-list-container">
+          {Object.keys(allOwners).map((currRelated, index) => {
+            const className = `set-related-button ${
+              allRelated[currRelated] ? 'selected' : ''
+            }`;
+            return (
+              <div
+                key={index}
+                className={className}
+                onClick={createHandleRelatedClick(currRelated)}>
+                {currRelated}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <Separator emoji="✍️" />
+
+      <div className="section-container rating-container">
+        <div className="title">
+          {rating === 0
+            ? 'כל הפתקים בלי דירוג'
+            : `רק ${rating} כוכבים ${
+                ratingSearchType === RatingSearch.AND_ABOVE ? 'ומעלה' : ''
+              }`}
+        </div>
+        <div className="stars-container">
+          <div
+            className={`star star-1 ${rating >= 1 ? 'selected' : ''}`}
+            onClick={createHandleRatingClick(1)}></div>
+          <div
+            className={`star star-2 ${rating >= 2 ? 'selected' : ''}`}
+            onClick={createHandleRatingClick(2)}></div>
+          <div
+            className={`star star-3 ${rating >= 3 ? 'selected' : ''}`}
+            onClick={createHandleRatingClick(3)}></div>
+          <div
+            className={`star star-4 ${rating >= 4 ? 'selected' : ''}`}
+            onClick={createHandleRatingClick(4)}></div>
+          <div
+            className={`star star-5 ${rating >= 5 ? 'selected' : ''}`}
+            onClick={createHandleRatingClick(5)}></div>
+        </div>
+        <div className="rating-search-type-container">
+          <div
+            className={`search-type-button option-1 ${
+              ratingSearchType === RatingSearch.AND_ABOVE ? 'selected' : ''
+            }`}
+            onClick={createHandleRatingSearchTypeClick(RatingSearch.AND_ABOVE)}>
+            ומעלה
+          </div>
+          <div
+            className={`search-type-button option-2 ${
+              ratingSearchType === RatingSearch.ONLY ? 'selected' : ''
+            }`}
+            onClick={createHandleRatingSearchTypeClick(RatingSearch.ONLY)}>
+            רק
+          </div>
+        </div>
+      </div>
+
+      <Separator emoji="🤭" />
+
+      <div className="section-container">
+        <div className="title">קטגוריה?</div>
+        <div className="category-input-container">
+          <input
+            value={category}
+            className="input"
+            type="text"
+            placeholder="כתוב או בחר קטגוריה"
+            onChange={handleCategoryChange}
+          />
+          <div
+            className="clear-category-text"
+            onClick={() => {
+              setCategory('');
+            }}>
+            x
+          </div>
+        </div>
+        <div className="owners-list-container">
+          {Object.keys(allCategories)
+            .filter((currCategory) => {
+              return !category || currCategory.includes(category);
+            })
+            .map((currCategory, index) => {
+              const className = `category-tag ${
+                currCategory === category ? 'selected' : ''
               }`;
               return (
                 <div
                   key={index}
                   className={className}
-                  onClick={createHandleOwnerClick(currOwner)}>
-                  {currOwner}
+                  onClick={createHandleCategoryClick(currCategory)}>
+                  {currCategory}
                 </div>
               );
             })}
-          </div>
         </div>
+      </div>
 
-        <Separator emoji="🤣" />
+      <Separator emoji="🤪" />
 
-        <div className="section-container relation-container">
-          <div className="title">קשור למישהו?</div>
-          <div className="related-list-container">
-            {Object.keys(allOwners).map((currRelated, index) => {
-              const className = `set-related-button ${
-                allRelated[currRelated] ? 'selected' : ''
-              }`;
-              return (
-                <div
-                  key={index}
-                  className={className}
-                  onClick={createHandleRelatedClick(currRelated)}>
-                  {currRelated}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+      <div
+        className={`main-submit-button filter-button ${
+          isFilteredBySomething ? 'has-filter' : ''
+        }`}
+        onClick={handleSubmit}
+        ref={submitButtonRef}>
+        🤦‍♂️ חפש 🤣
+      </div>
 
-        <Separator emoji="✍️" />
-
-        <div className="section-container rating-container">
-          <div className="title">
-            {rating === 0
-              ? 'כל הפתקים בלי דירוג'
-              : `רק ${rating} כוכבים ${
-                  ratingSearchType === RatingSearch.AND_ABOVE ? 'ומעלה' : ''
-                }`}
-          </div>
-          <div className="stars-container">
-            <div
-              className={`star star-1 ${rating >= 1 ? 'selected' : ''}`}
-              onClick={createHandleRatingClick(1)}></div>
-            <div
-              className={`star star-2 ${rating >= 2 ? 'selected' : ''}`}
-              onClick={createHandleRatingClick(2)}></div>
-            <div
-              className={`star star-3 ${rating >= 3 ? 'selected' : ''}`}
-              onClick={createHandleRatingClick(3)}></div>
-            <div
-              className={`star star-4 ${rating >= 4 ? 'selected' : ''}`}
-              onClick={createHandleRatingClick(4)}></div>
-            <div
-              className={`star star-5 ${rating >= 5 ? 'selected' : ''}`}
-              onClick={createHandleRatingClick(5)}></div>
-          </div>
-          <div className="rating-search-type-container">
-            <div
-              className={`search-type-button option-1 ${
-                ratingSearchType === RatingSearch.AND_ABOVE ? 'selected' : ''
-              }`}
-              onClick={createHandleRatingSearchTypeClick(
-                RatingSearch.AND_ABOVE,
-              )}>
-              ומעלה
+      <div
+        className={`filter-summary-container ${
+          isFilteredBySomething ? 'visible' : ''
+        }`}
+        ref={summaryRef}>
+        <div className="summary">
+          <b>סינון לפי:</b>
+          {freeTextFilter !== '' && (
+            <div>
+              {'✏️ טקסט חופשי: '} <span>{freeTextFilter}</span>
             </div>
-            <div
-              className={`search-type-button option-2 ${
-                ratingSearchType === RatingSearch.ONLY ? 'selected' : ''
-              }`}
-              onClick={createHandleRatingSearchTypeClick(RatingSearch.ONLY)}>
-              רק
+          )}
+          {owner !== '' && (
+            <div>
+              {'🙊 מי אמר: '}
+              <span>{owner}</span>
             </div>
-          </div>
-        </div>
-
-        <Separator emoji="🤭" />
-
-        <div className="section-container">
-          <div className="title">קטגוריה?</div>
-          <div className="category-input-container">
-            <input
-              value={category}
-              className="input"
-              type="text"
-              placeholder="כתוב או בחר קטגוריה"
-              onChange={handleCategoryChange}
-            />
-            <div
-              className="clear-category-text"
-              onClick={() => {
-                setCategory('');
-              }}>
-              x
+          )}
+          {Object.keys(allRelated).length !== 0 && (
+            <div>
+              {'🧬 קשור למישהו: '}
+              <span>{Object.keys(allRelated).join(', ')}</span>
             </div>
-          </div>
-          <div className="owners-list-container">
-            {Object.keys(allCategories)
-              .filter((currCategory) => {
-                return !category || currCategory.includes(category);
-              })
-              .map((currCategory, index) => {
-                const className = `category-tag ${
-                  currCategory === category ? 'selected' : ''
-                }`;
-                return (
-                  <div
-                    key={index}
-                    className={className}
-                    onClick={createHandleCategoryClick(currCategory)}>
-                    {currCategory}
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-
-        <Separator emoji="🤪" />
-
-        <div
-          className={`main-submit-button filter-button ${
-            isFilteredBySomething ? 'has-filter' : ''
-          }`}
-          onClick={handleSubmit}
-          ref={submitButtonRef}>
-          🤦‍♂️ חפש 🤣
-        </div>
-
-        <div
-          className={`filter-summary-container ${
-            isFilteredBySomething ? 'visible' : ''
-          }`}
-          ref={summaryRef}>
-          <div className="summary">
-            <b>סינון לפי:</b>
-            {freeTextFilter !== '' && (
-              <div>
-                {'✏️ טקסט חופשי: '} <span>{freeTextFilter}</span>
-              </div>
-            )}
-            {owner !== '' && (
-              <div>
-                {'🙊 מי אמר: '}
-                <span>{owner}</span>
-              </div>
-            )}
-            {Object.keys(allRelated).length !== 0 && (
-              <div>
-                {'🧬 קשור למישהו: '}
-                <span>{Object.keys(allRelated).join(', ')}</span>
-              </div>
-            )}
-            {rating !== 0 && (
-              <div>
-                {'⭐️ דירוג: '}
-                <span>{rating}</span>
-                {ratingSearchType === RatingSearch.ONLY ? ' (רק)' : ' (ומעלה)'}
-              </div>
-            )}
-            {category !== '' && (
-              <div>
-                {'☝️ קטגוריה: '} <span>{category}</span>
-              </div>
-            )}
-            <div className="clear-search-button" onClick={clearAllFilters}>
-              נקה חיפוש
+          )}
+          {rating !== 0 && (
+            <div>
+              {'⭐️ דירוג: '}
+              <span>{rating}</span>
+              {ratingSearchType === RatingSearch.ONLY ? ' (רק)' : ' (ומעלה)'}
             </div>
+          )}
+          {category !== '' && (
+            <div>
+              {'☝️ קטגוריה: '} <span>{category}</span>
+            </div>
+          )}
+          <div className="clear-search-button" onClick={clearAllFilters}>
+            נקה חיפוש
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }
