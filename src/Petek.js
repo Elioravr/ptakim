@@ -131,8 +131,10 @@ export default function Petek({
           <span>0</span>
           <img
             className="message-icon"
+            alt=""
             // eslint-disable-next-line no-undef
-            src={(process.env.PUBLIC_URL ?? '') + '/message-icon.png'}
+            // src={(process.env.PUBLIC_URL ?? '') + '/message-icon.png'}
+            src={'https://elasq.com/wp-content/uploads/2021/08/message-1.png'}
           />
         </div>
       </div>
