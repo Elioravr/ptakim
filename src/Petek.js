@@ -31,7 +31,6 @@ export default function Petek({
   onOwnerClick,
   onClick,
 }: Props): MixedElement {
-  const dateAsString = new Date(petek.createdAt).toLocaleDateString();
   const isBeforeAppTime = new Date(petek.createdAt) < new Date('2022-02-22');
 
   const handleClick = () => {
@@ -58,7 +57,7 @@ export default function Petek({
 
   const dateString = isBeforeAppTime
     ? 'זמן מקורי לא ידוע (נכתב לפני האפליקציה)'
-    : `${moment(petek.createdAt).fromNow()} (${moment(dateAsString).format(
+    : `${moment(petek.createdAt).fromNow()} (${moment(petek.createdAt).format(
         'l',
       )})`;
 
