@@ -55,6 +55,7 @@ function App(): MixedElement {
   const prevFilteredList = usePrevious<?PetekListType>(filteredList);
   const [isPermissionDenied, setIsPermissionDenied] = useState<boolean>(false);
   const [selectedPetek, setSelectedPetek] = useState<?PetekType>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const loadUser = () => {
     return fetchCurrentUser().then((user) => {
@@ -186,6 +187,17 @@ function App(): MixedElement {
     }
   };
 
+  const handleMenuOpenClick = useCallback(() => {
+    setIsMenuOpen(true);
+  }, []);
+
+  const createMenuItemClick = (callback) => {
+    return () => {
+      setIsMenuOpen(false);
+      callback();
+    };
+  };
+
   const clearFilter = () => {
     setFilteredList(null);
     setFilteredByOwner(null);
@@ -243,115 +255,140 @@ function App(): MixedElement {
   }`;
 
   return (
-    <div className="App">
-      <div className={`page ${page === Page.App ? 'visible' : ''}`}>
-        <div className="app-header">
-          <div className="user-button" onClick={handleOpenSignIn}>
-            {currentUser ? (
-              <>
-                <div>{'ברוך הבא,'}</div>
-                <div>{currentUser?.name.split(' ')[0]}</div>
-              </>
-            ) : (
-              'התחבר'
-            )}
-          </div>
-          <span className="logo">Ptakim</span>
-          <div className="buttons-container">
-            <div
-              className="statistics-button page-button"
-              onClick={handleOpenStory}>
-              {'📚'}
+    <>
+      <div className={`App ${isMenuOpen ? 'menu-open' : ''}`}>
+        <div className={`page ${page === Page.App ? 'visible' : ''}`}>
+          <div className="app-header">
+            <div className="menu-button" onClick={handleMenuOpenClick}>
+              <div className="point"></div>
+              <div className="point"></div>
+              <div className="point"></div>
             </div>
-            <div
-              className="statistics-button page-button"
-              onClick={handleOpenStatistics}>
-              {'📈'}
+            <span className="logo">Ptakim</span>
+            <div className="buttons-container">
+              <div
+                className="statistics-button page-button"
+                onClick={handleOpenStory}>
+                {'📚'}
+              </div>
+              <div
+                className="statistics-button page-button"
+                onClick={handleOpenStatistics}>
+                {'📈'}
+              </div>
             </div>
           </div>
-        </div>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <>
-            {!filteredList && (
-              <MainButton
-                content={'🤦‍♂️ הוסף ציטוט 🤣'}
-                onClick={() => setPage(Page.AddNewPetek)}
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {!filteredList && (
+                <MainButton
+                  content={'🤦‍♂️ הוסף ציטוט 🤣'}
+                  onClick={() => setPage(Page.AddNewPetek)}
+                />
+              )}
+              <PetekList
+                list={filteredList || list}
+                random={filteredList === null}
+                ownerPics={ownerPics}
+                filteredByOwner={filteredByOwner}
+                onOwnerClick={setOwnerFilterHeader}
+                openPetekList={handleOpenPetekPage}
+                setSelectedPetek={setSelectedPetek}
               />
-            )}
-            <PetekList
-              list={filteredList || list}
-              random={filteredList === null}
-              ownerPics={ownerPics}
-              filteredByOwner={filteredByOwner}
-              onOwnerClick={setOwnerFilterHeader}
-              openPetekList={handleOpenPetekPage}
-              setSelectedPetek={setSelectedPetek}
-            />
-            <Separator emoji="🤷‍♂️" />
-          </>
-        )}
+              <Separator emoji="🤷‍♂️" />
+            </>
+          )}
+        </div>
+        <SearchPage
+          page={page}
+          setPage={setPage}
+          list={list}
+          setFilteredList={setFilteredList}
+          filteredList={filteredList}
+          setOwnerFilterHeader={setOwnerFilterHeader}
+        />
+        <NewPetekModal
+          list={list}
+          petekToEdit={petekToEdit}
+          page={page}
+          setPage={setPage}
+          setIsPermissionDenied={setIsPermissionDenied}
+        />
+        <div className={searchButtonClassName}>
+          {filteredList && selectedPetek == null && (
+            <div className="indicator">{Object.keys(filteredList).length}</div>
+          )}
+          {selectedPetek == null && (
+            <div className="button" onClick={handleSearchPageClick}>
+              חפש
+            </div>
+          )}
+          {filteredList && selectedPetek == null && (
+            <div className="button clear-button" onClick={clearFilter}>
+              <div>נקה</div>
+              <div>חיפוש</div>
+            </div>
+          )}
+        </div>
+        <StatisticsPage
+          page={page}
+          setPage={setPage}
+          list={list}
+          onOwnerClick={setOwnerFilterHeader}
+        />
+        <StoryPage
+          page={page}
+          setPage={setPage}
+          list={list}
+          ownerPics={ownerPics}
+        />
+        <SignInPage page={page} setPage={setPage} />
+        <PetekPage
+          page={page}
+          ownerPics={ownerPics}
+          petek={selectedPetek}
+          setPage={setPage}
+          onPetekDelete={deletePetekAndLoadList}
+          onPetekEdit={editPetek}
+          setSelectedPetek={setSelectedPetek}
+          onOwnerClick={setOwnerFilterHeader}
+        />
+        <PermissionDenied
+          isOpen={isPermissionDenied}
+          setIsOpen={setIsPermissionDenied}
+        />
       </div>
-      <SearchPage
-        page={page}
-        setPage={setPage}
-        list={list}
-        setFilteredList={setFilteredList}
-        filteredList={filteredList}
-        setOwnerFilterHeader={setOwnerFilterHeader}
-      />
-      <NewPetekModal
-        list={list}
-        petekToEdit={petekToEdit}
-        page={page}
-        setPage={setPage}
-        setIsPermissionDenied={setIsPermissionDenied}
-      />
-      <div className={searchButtonClassName}>
-        {filteredList && selectedPetek == null && (
-          <div className="indicator">{Object.keys(filteredList).length}</div>
-        )}
-        {selectedPetek == null && (
-          <div className="button" onClick={handleSearchPageClick}>
-            חפש
-          </div>
-        )}
-        {filteredList && selectedPetek == null && (
-          <div className="button clear-button" onClick={clearFilter}>
-            <div>נקה</div>
-            <div>חיפוש</div>
-          </div>
-        )}
+      <div className={`app-menu ${isMenuOpen ? 'visible' : ''}`}>
+        <span className="logo">Ptakim</span>
+
+        <div
+          className="menu-item"
+          onClick={createMenuItemClick(handleOpenSignIn)}>
+          {'👤  '}
+          {currentUser ? (
+            <>
+              <span>{'ברוך הבא, '}</span>
+              <span>{currentUser?.name.split(' ')[0]}</span>
+            </>
+          ) : (
+            'התחבר'
+          )}
+        </div>
+        <div
+          className="menu-item"
+          onClick={createMenuItemClick(
+            handleOpenStatistics,
+          )}>{`📈  סטטיסטיקות`}</div>
+        <div
+          className="menu-item"
+          onClick={createMenuItemClick(handleOpenStory)}>{`📚  סטורי`}</div>
+        <div className="close-button" onClick={() => setIsMenuOpen(false)}>
+          X
+        </div>
       </div>
-      <StatisticsPage
-        page={page}
-        setPage={setPage}
-        list={list}
-        onOwnerClick={setOwnerFilterHeader}
-      />
-      <StoryPage
-        page={page}
-        setPage={setPage}
-        list={list}
-        ownerPics={ownerPics}
-      />
-      <SignInPage page={page} setPage={setPage} />
-      <PetekPage
-        page={page}
-        ownerPics={ownerPics}
-        petek={selectedPetek}
-        setPage={setPage}
-        onPetekDelete={deletePetekAndLoadList}
-        onPetekEdit={editPetek}
-        setSelectedPetek={setSelectedPetek}
-        onOwnerClick={setOwnerFilterHeader}
-      />
-      <PermissionDenied
-        isOpen={isPermissionDenied}
-        setIsOpen={setIsPermissionDenied}
-      />
-    </div>
+    </>
   );
 }
 
