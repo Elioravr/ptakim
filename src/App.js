@@ -38,6 +38,8 @@ import {
 import './App.scss';
 import PetekPage from './PetekPage';
 
+const NO_OWNER_PIC_PLACEHOLDER =
+  'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
 let currentScroll = 0;
 moment.locale('he');
 
@@ -78,11 +80,13 @@ function App(): MixedElement {
       .then((fetchedOwnerPics) => {
         setOwnerPics(fetchedOwnerPics);
       })
-      .catch(() =>
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.log('e', e);
         setTimeout(() => {
           loadList();
-        }, 300),
-      );
+        }, 300);
+      });
   }, []);
 
   useEffect(() => {
@@ -366,12 +370,18 @@ function App(): MixedElement {
         <div
           className="menu-item"
           onClick={createMenuItemClick(handleOpenSignIn)}>
-          {'👤  '}
           {currentUser ? (
-            <>
-              <span>{'ברוך הבא, '}</span>
+            <div className="current-user-container">
+              <img
+                className="user-picture"
+                alt=""
+                src={
+                  (ownerPics && ownerPics[currentUser.ownerName ?? '']) ||
+                  NO_OWNER_PIC_PLACEHOLDER
+                }
+              />
               <span>{currentUser?.name.split(' ')[0]}</span>
-            </>
+            </div>
           ) : (
             'התחבר'
           )}

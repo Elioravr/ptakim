@@ -60,9 +60,18 @@ export const fetchCurrentUser = () => {
     return Promise.resolve(null);
   }
 
-  return get(ref(db, `users/${currentUser.phoneNumber}`)).then((snap) => {
-    return snap.val();
-  });
+  const userPromises = Promise.all([
+    get(ref(db, `users/${currentUser.phoneNumber}`)),
+    get(ref(db, `usersMappedToPhoneNumber/${currentUser.phoneNumber}`)),
+  ]);
+
+  return userPromises
+    .then(([snapForUser, snapForOwnerName]) => {
+      return Promise.all([snapForUser.val(), snapForOwnerName.val()]);
+    })
+    .then(([currentUser, ownerName]) => {
+      return {...currentUser, ownerName};
+    });
 };
 
 export const addNewPetek = async (petek) => {

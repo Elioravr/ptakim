@@ -23,6 +23,7 @@ export type PetekListType = $Shape<{
 export type UserType = $Shape<{
   name: string,
   phoneNumber: string,
+  ownerName: ?string,
 }>;
 
 export type OwnerPics = $Shape<{

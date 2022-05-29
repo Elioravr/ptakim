@@ -14,11 +14,14 @@ html:lang(en) .petek-text {
   font-size: 22px;
 }
 
+body {
+  font-family: 'Fredoka', sans-serif;
+}
+
 .App {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Fredoka', sans-serif;
   font-weight: 100;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 
@@ -945,6 +948,23 @@ html:lang(en) .petek-text {
   .menu-item {
     font-size: 25px;
     margin: 18px 0;
+
+    .current-user-container {
+      display: flex;
+      align-items: center;
+
+      .user-picture {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        margin-left: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        display: inline-block;
+      }
+    }
   }
 }
 
