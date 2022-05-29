@@ -37,9 +37,8 @@ import {
 // $FlowIgnore - This module exists
 import './App.scss';
 import PetekPage from './PetekPage';
+import AppMenu from './AppMenu';
 
-const NO_OWNER_PIC_PLACEHOLDER =
-  'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
 let currentScroll = 0;
 moment.locale('he');
 
@@ -194,13 +193,6 @@ function App(): MixedElement {
   const handleMenuOpenClick = useCallback(() => {
     setIsMenuOpen(true);
   }, []);
-
-  const createMenuItemClick = (callback) => {
-    return () => {
-      setIsMenuOpen(false);
-      callback();
-    };
-  };
 
   const clearFilter = () => {
     setFilteredList(null);
@@ -364,40 +356,15 @@ function App(): MixedElement {
           setIsOpen={setIsPermissionDenied}
         />
       </div>
-      <div className={`app-menu ${isMenuOpen ? 'visible' : ''}`}>
-        <span className="logo">Ptakim</span>
-
-        <div
-          className="menu-item"
-          onClick={createMenuItemClick(handleOpenSignIn)}>
-          {currentUser ? (
-            <div className="current-user-container">
-              <img
-                className="user-picture"
-                alt=""
-                src={
-                  (ownerPics && ownerPics[currentUser.ownerName ?? '']) ||
-                  NO_OWNER_PIC_PLACEHOLDER
-                }
-              />
-              <span>{currentUser?.name.split(' ')[0]}</span>
-            </div>
-          ) : (
-            'התחבר'
-          )}
-        </div>
-        <div
-          className="menu-item"
-          onClick={createMenuItemClick(
-            handleOpenStatistics,
-          )}>{`📈  סטטיסטיקות`}</div>
-        <div
-          className="menu-item"
-          onClick={createMenuItemClick(handleOpenStory)}>{`📚  סטורי`}</div>
-        <div className="close-button" onClick={() => setIsMenuOpen(false)}>
-          X
-        </div>
-      </div>
+      <AppMenu
+        currentUser={currentUser}
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        handleOpenSignIn={handleOpenSignIn}
+        handleOpenStatistics={handleOpenStatistics}
+        handleOpenStory={handleOpenStory}
+        ownerPics={ownerPics}
+      />
     </>
   );
 }
