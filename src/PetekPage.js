@@ -70,6 +70,10 @@ export default function PetekPage({
           <div className="coming-soon">
             בקרוב תוכלו להגיב על פתקים... {'😱'}
           </div>
+
+          <div className="comment-input-container">
+            <input className="comment-input" type="text" />
+          </div>
         </>
       )}
     </PageContainer>

@@ -850,6 +850,23 @@ body {
       flex-direction: row;
     }
   }
+
+  .comment-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    display: none;
+
+    .comment-input {
+      height: 40px;
+      width: 100%;
+      border: none;
+      box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    }
+  }
+
   .coming-soon {
     background-color: #ff4040;
     border: 3px solid white;
