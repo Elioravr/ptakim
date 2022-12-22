@@ -119,7 +119,6 @@ export const addNewPetek = async (petek) => {
   }
 
   return push(ref(db, 'peteks/'), petek).then((data) => {
-    const currentUser = getCurrentUser();
     return addNotification(
       petek.owner,
       data.key,

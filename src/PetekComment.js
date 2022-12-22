@@ -4,6 +4,7 @@ import type {MixedElement} from 'react';
 
 import UserPicture from './UserPicture';
 
+import moment from 'moment';
 import React from 'react';
 
 type Props = $ReadOnly<{
@@ -18,9 +19,14 @@ export default function PetekComment({
   return (
     <div className="comment-container">
       <UserPicture ownerName={comment.user.nickname} ownerPics={ownerPics} />
-      <div className="comment-bubble">
-        <div className="owner-name">{comment.user.nickname}</div>
-        <div className="content">{comment.content}</div>
+      <div className="bubble-and-date">
+        <div className="comment-bubble">
+          <div className="owner-name">{comment.user.nickname}</div>
+          <div className="content">{comment.content}</div>
+        </div>
+        <div className="date">{`${moment(
+          comment.createdAt,
+        ).fromNow()} (${moment(comment.createdAt).format('l')})`}</div>
       </div>
     </div>
   );

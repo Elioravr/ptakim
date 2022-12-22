@@ -12,6 +12,7 @@ import PageContainer from './PageContainer';
 import UserPicture from './UserPicture';
 import {fetchNotifications} from './apiService';
 
+import moment from 'moment';
 import React from 'react';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 
@@ -71,7 +72,14 @@ export default function NotificationsPage({
                 ownerName={currentNoficiations.ownerName}
                 ownerPics={ownerPics}
               />
-              {currentNoficiations.content}
+              <div className="notification-content">
+                {currentNoficiations.content}
+                <span className="date">{`${moment(
+                  currentNoficiations.createdAt,
+                ).fromNow()} (${moment(currentNoficiations.createdAt).format(
+                  'l',
+                )})`}</span>
+              </div>
             </div>
           );
         })}

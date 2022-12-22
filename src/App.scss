@@ -969,16 +969,29 @@ body {
   display: flex;
   margin-bottom: 20px;
 
-  .comment-bubble {
-    background-color: #e3e3e3;
+  .bubble-and-date {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     width: 75%;
-    text-align: right;
-    border-radius: 7px;
-    padding: 10px;
 
-    .owner-name {
-      font-weight: bold;
-      margin-bottom: 5px;
+    .comment-bubble {
+      background-color: #e3e3e3;
+      width: 100%;
+      text-align: right;
+      border-radius: 7px;
+      padding: 10px;
+
+      .owner-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+    }
+
+    .date {
+      margin-top: 3px;
+      color: #aea8a8;
+      font-size: 15px;
     }
   }
 }
@@ -1092,10 +1105,21 @@ body {
 
     .notifications-container {
       .notification-container {
-        display: flex;
-        align-items: center;
         border-bottom: 1px solid #ccc;
         padding: 20px 0;
+        text-align: right;
+        display: flex;
+
+        .notification-content {
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+        }
+        .date {
+          margin-top: 3px;
+          color: #aea8a8;
+          font-size: 15px;
+        }
       }
     }
   }
