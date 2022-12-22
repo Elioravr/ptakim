@@ -233,6 +233,22 @@ body {
     display: flex;
   }
 
+  .comments-preview {
+    width: 100%;
+    margin-top: 10px;
+    text-align: right;
+
+    .title {
+      margin: 10px;
+      margin-right: 0;
+    }
+
+    .total-comments-message {
+      margin: 10px 0;
+      color: blueviolet;
+    }
+  }
+
   .messages-count-container {
     display: flex;
     margin-bottom: 3px;
@@ -921,24 +937,6 @@ body {
     font-size: 20px;
   }
 
-  .comment-container {
-    display: flex;
-    margin-bottom: 20px;
-
-    .comment-bubble {
-      background-color: #e3e3e3;
-      width: 100%;
-      text-align: right;
-      border-radius: 7px;
-      padding: 10px;
-
-      .owner-name {
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-    }
-  }
-
   .register-link {
     color: blueviolet;
   }
@@ -955,6 +953,24 @@ body {
     padding: 5px;
     border-radius: 3px;
     animation: rotate-coming-soon 0.6s ease-in-out forwards;
+  }
+}
+
+.comment-container {
+  display: flex;
+  margin-bottom: 20px;
+
+  .comment-bubble {
+    background-color: #e3e3e3;
+    width: 75%;
+    text-align: right;
+    border-radius: 7px;
+    padding: 10px;
+
+    .owner-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
   }
 }
 

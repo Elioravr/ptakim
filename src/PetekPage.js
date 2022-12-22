@@ -77,6 +77,7 @@ export default function PetekPage({
             ownerPics={ownerPics}
             onClick={handleClick}
             onOwnerClick={onOwnerClick}
+            enableLastComment={false}
           />
 
           <Separator emoji="📱" />

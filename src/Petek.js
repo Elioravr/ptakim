@@ -3,6 +3,7 @@
 import type {OwnerPics, PetekType} from './AppTypes.flow';
 import type {MixedElement} from 'react';
 
+import PetekComment from './PetekComment';
 import UserPicture from './UserPicture';
 
 import moment from 'moment';
@@ -19,6 +20,7 @@ type Props = $ReadOnly<{
   isHidden?: boolean,
   onOwnerClick?: (string) => void,
   onClick?: () => void,
+  enableLastComment?: boolean,
 }>;
 
 export default function Petek({
@@ -29,6 +31,7 @@ export default function Petek({
   isHidden,
   onOwnerClick,
   onClick,
+  enableLastComment = true,
 }: Props): MixedElement {
   const isBeforeAppTime = new Date(petek.createdAt) < new Date('2022-02-22');
 
@@ -134,6 +137,28 @@ export default function Petek({
           />
         </div>
       </div>
+      {enableLastComment && petek.comments.length > 0 && (
+        <>
+          <div className="comments-preview">
+            <div className="title">תגובות אחרונות</div>
+            {petek.comments.length - 2 > 0 && (
+              <div className="total-comments-message">
+                צפה בעוד {petek.comments.length - 2} תגובות...
+              </div>
+            )}
+            {petek.comments[petek.comments.length - 2] != null && (
+              <PetekComment
+                comment={petek.comments[petek.comments.length - 2]}
+                ownerPics={ownerPics}
+              />
+            )}
+            <PetekComment
+              comment={petek.comments[petek.comments.length - 1]}
+              ownerPics={ownerPics}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }
