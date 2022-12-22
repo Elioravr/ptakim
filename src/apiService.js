@@ -118,7 +118,15 @@ export const addNewPetek = async (petek) => {
     return set(ref(db, `peteks/${petek.id}`), petek);
   }
 
-  return push(ref(db, 'peteks/'), petek);
+  return push(ref(db, 'peteks/'), petek).then((data) => {
+    const currentUser = getCurrentUser();
+    return addNotification(
+      petek.owner,
+      data.key,
+      `נוסף פתק חדש ל${petek.owner}`,
+      // eslint-disable-next-line no-console
+    ).catch((e) => console.log('Notification not created', e));
+  });
 };
 
 export const deletePetek = (petekId) => {
@@ -151,7 +159,47 @@ export const addComment = (petek, content) => {
     },
   ];
 
-  return set(ref(db, `comments/${petek.id}`), newCommentCollection);
+  return set(ref(db, `comments/${petek.id}`), newCommentCollection).then(
+    async () => {
+      const ownerNameSnap = await get(
+        ref(db, `usersMappedToPhoneNumber/${currentUser.phoneNumber}`),
+      );
+      const ownerName = await ownerNameSnap.val();
+
+      return addNotification(
+        ownerName,
+        petek.id,
+        `${ownerName} הגיב/ה על הפתק של ${petek.owner}`,
+        // eslint-disable-next-line no-console
+      ).catch((e) => console.log('Notification not created', e));
+    },
+  );
+};
+
+export const addNotification = (ownerId, petekId, content) => {
+  return push(ref(db, 'notifications/'), {
+    ownerId,
+    petekId,
+    content,
+    createdAt: new Date().toISOString(),
+  });
+};
+
+export const fetchNotifications = async () => {
+  const notificationsCollectionSnap = await get(ref(db, 'notifications/'));
+  const notificationsCollection = await notificationsCollectionSnap.val();
+  const notificationsArray = await Promise.all(
+    Object.keys(notificationsCollection).map(async (notificationKey) => {
+      const currentNotification = notificationsCollection[notificationKey];
+
+      return {
+        ...currentNotification,
+        ownerName: currentNotification.ownerId,
+      };
+    }),
+  );
+
+  return notificationsArray;
 };
 
 export const createUserWithPhoneNumber = (phoneNumber) => {

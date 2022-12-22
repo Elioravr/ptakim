@@ -16,6 +16,7 @@ type Props = $ReadOnly<{
   setIsMenuOpen: (boolean) => void,
   handleOpenStatistics: () => void,
   handleOpenStory: () => void,
+  handleOpenNotifications: () => void,
   ownerPics: ?OwnerPics,
 }>;
 
@@ -26,6 +27,7 @@ export default function AppMenu({
   setIsMenuOpen,
   handleOpenStatistics,
   handleOpenStory,
+  handleOpenNotifications,
   ownerPics,
 }: Props): MixedElement {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -86,6 +88,11 @@ export default function AppMenu({
           'התחבר'
         )}
       </div>
+      <div
+        className="menu-item"
+        onClick={createMenuItemClick(
+          handleOpenNotifications,
+        )}>{`🔔 התראות`}</div>
       <div
         className="menu-item"
         onClick={createMenuItemClick(

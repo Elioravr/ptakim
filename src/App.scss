@@ -1086,6 +1086,21 @@ body {
   }
 }
 
+.notifications-page {
+  .modal-body {
+    padding-top: 40px;
+
+    .notifications-container {
+      .notification-container {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding: 20px 0;
+      }
+    }
+  }
+}
+
 @keyframes icon-popup {
   0% {
     transform: scale(0) rotate(-90deg);

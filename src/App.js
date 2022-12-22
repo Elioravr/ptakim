@@ -16,6 +16,7 @@ import {Page} from './AppTypes.flow';
 import Loading from './Loading';
 import MainButton from './MainButton';
 import NewPetekModal from './NewPetekModal';
+import NotificationsPage from './NotificationsPage';
 import PermissionDenied from './PermissionDenied';
 import PetekList from './PetekList';
 import PetekPage from './PetekPage';
@@ -103,6 +104,10 @@ function App(): MixedElement {
 
   const handleOpenStory = () => {
     changeToPage(Page.Story);
+  };
+
+  const handleOpenNotifications = () => {
+    changeToPage(Page.Notifications);
   };
 
   const handleOpenPetekPage = useCallback(() => {
@@ -272,8 +277,8 @@ function App(): MixedElement {
             <div className="buttons-container">
               <div
                 className="statistics-button page-button"
-                onClick={handleOpenStory}>
-                {'📚'}
+                onClick={handleOpenNotifications}>
+                {'🔔'}
               </div>
               <div
                 className="statistics-button page-button"
@@ -374,6 +379,14 @@ function App(): MixedElement {
             changeToPage(Page.SignIn);
           }}
         />
+        <NotificationsPage
+          page={page}
+          ownerPics={ownerPics}
+          petek={selectedPetek}
+          setPage={setPage}
+          setSelectedPetek={setSelectedPetek}
+          list={list}
+        />
         <PermissionDenied
           isOpen={isPermissionDenied}
           setIsOpen={setIsPermissionDenied}
@@ -386,6 +399,7 @@ function App(): MixedElement {
         handleOpenSignIn={handleOpenSignIn}
         handleOpenStatistics={handleOpenStatistics}
         handleOpenStory={handleOpenStory}
+        handleOpenNotifications={handleOpenNotifications}
         ownerPics={ownerPics}
       />
     </>
