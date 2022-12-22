@@ -137,7 +137,7 @@ export default function Petek({
           />
         </div>
       </div>
-      {enableLastComment && petek.comments.length > 0 && (
+      {enableLastComment && petek.comments.length > 0 ? (
         <>
           <div className="comments-preview">
             <div className="title">תגובות אחרונות</div>
@@ -158,6 +158,10 @@ export default function Petek({
             />
           </div>
         </>
+      ) : (
+        enableLastComment && (
+          <div className="click-to-comment">📝 לחץ כדי להוסיף תגובה</div>
+        )
       )}
     </div>
   );

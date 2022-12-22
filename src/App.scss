@@ -249,6 +249,15 @@ body {
     }
   }
 
+  .click-to-comment {
+    background-color: #e3e3e3;
+    width: 100%;
+    text-align: right;
+    border-radius: 7px;
+    padding: 10px;
+    margin: 10px 0;
+  }
+
   .messages-count-container {
     display: flex;
     margin-bottom: 3px;
