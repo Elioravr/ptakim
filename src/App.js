@@ -115,6 +115,10 @@ function App(): MixedElement {
       .then((list) => {
         list && setList(list);
 
+        if (selectedPetek != null) {
+          setSelectedPetek(list.find((petek) => petek.id === selectedPetek.id));
+        }
+
         setIsLoading(false);
 
         return loadUser();
@@ -132,7 +136,7 @@ function App(): MixedElement {
           loadList();
         }, 300);
       });
-  }, []);
+  }, [selectedPetek]);
 
   useEffect(() => {
     if (
