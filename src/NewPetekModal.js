@@ -1,11 +1,5 @@
 // @flow
 
-import type {MixedElement} from 'react';
-
-import React, {useState, useEffect, useRef} from 'react';
-
-import Separator from './Separator';
-import {addNewPetek} from './apiService';
 import type {
   AllCategoriesListType,
   AllOwnersListType,
@@ -14,7 +8,13 @@ import type {
   PetekType,
   RelatedListType,
 } from './AppTypes.flow';
+import type {MixedElement} from 'react';
+
 import {Page} from './AppTypes.flow';
+import Separator from './Separator';
+import {addNewPetek} from './apiService';
+
+import React, {useState, useEffect, useRef} from 'react';
 
 type Props = $ReadOnly<{
   list: PetekListType,
@@ -112,11 +112,14 @@ export default function NewPetekModal({
       createdAt: petekToEdit?.createdAt ?? new Date().toISOString(),
     };
 
-    clearForm();
-    addNewPetek(petek).catch(() => {
-      setIsPermissionDenied(true);
-    });
-    setPage(Page.App);
+    addNewPetek(petek)
+      .then(() => {
+        clearForm();
+        setPage(Page.App);
+      })
+      .catch(() => {
+        setIsPermissionDenied(true);
+      });
   };
 
   const handleClose = () => {
