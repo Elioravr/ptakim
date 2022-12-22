@@ -20,6 +20,14 @@
   "plugins": ["react", "react-hooks", "flowtype"],
   "rules": {
     "no-console": "error",
+    // "sort-imports": [
+    //   2,
+    //   {
+    //     "ignoreCase": false,
+    //     "ignoreMemberSort": false,
+    //     "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+    //   }
+    // ],
     "flowtype/boolean-style": [2, "boolean"],
     "flowtype/define-flow-type": 1,
     "flowtype/generic-spacing": [2, "never"],

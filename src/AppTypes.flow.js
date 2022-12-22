@@ -14,6 +14,13 @@ export type PetekType = $Shape<{
   situation: string,
   createdAt: string,
   allRelated: RelatedListType,
+  comments: $ReadOnlyArray<CommentType>,
+}>;
+
+export type CommentType = $ReadOnly<{
+  content: string,
+  createdAt: string,
+  petekId: string,
 }>;
 
 export type PetekListType = $Shape<{

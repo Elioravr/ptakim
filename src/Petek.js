@@ -1,11 +1,12 @@
 // @flow
 
 import type {OwnerPics, PetekType} from './AppTypes.flow';
-
 import type {MixedElement} from 'react';
 
-import React from 'react';
+import UserPicture from './UserPicture';
+
 import moment from 'moment';
+import React from 'react';
 
 const NO_OWNER_PIC_PLACEHOLDER =
   'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
@@ -13,7 +14,6 @@ const NO_OWNER_PIC_PLACEHOLDER =
 type Props = $ReadOnly<{
   petek: PetekType,
   deletePetek?: (PetekType) => void,
-  ownerPic: ?string,
   ownerPics: ?OwnerPics,
   enableScaleDown?: boolean,
   isHidden?: boolean,
@@ -24,7 +24,6 @@ type Props = $ReadOnly<{
 export default function Petek({
   petek,
   deletePetek,
-  ownerPic,
   ownerPics,
   enableScaleDown,
   isHidden,
@@ -72,10 +71,7 @@ export default function Petek({
         </div>
       )}
       <div className="petek-owner" onClick={handleOwnerClick}>
-        <div className="picture">
-          {petek.owner === 'אליאור' ? <div className="crown">👑</div> : null}
-          <img src={ownerPic || NO_OWNER_PIC_PLACEHOLDER} />
-        </div>
+        <UserPicture ownerName={petek.owner} ownerPics={ownerPics} />
         <div>
           {petek.owner}
           <div className="petek-time">{dateString}</div>
@@ -128,7 +124,7 @@ export default function Petek({
           </div>
         )}
         <div className="messages-count-container">
-          <span>0</span>
+          <span>{petek.comments != null ? petek.comments.length : 0}</span>
           <img
             className="message-icon"
             alt=""

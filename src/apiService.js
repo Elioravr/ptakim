@@ -42,10 +42,49 @@ const recaptchaVerifier = new RecaptchaVerifier(
 auth.languageCode = 'he';
 // let confirmationResult = null;
 
-export const fetchPetekList = () => {
-  return get(ref(db, 'peteks/')).then((snap) => {
-    return snap.val();
-  });
+export const fetchPetekList = async () => {
+  const peteksSnap = await get(ref(db, 'peteks/'));
+  const petekList = await peteksSnap.val();
+  const commentsPerPetekSnap = await get(ref(db, `comments`));
+  const commentsPerPetek = await commentsPerPetekSnap.val();
+
+  const peteks = await Promise.all(
+    Object.keys(petekList).map(async (petekId) => {
+      if (commentsPerPetek[petekId] == null) {
+        return {
+          id: petekId,
+          ...petekList[petekId],
+          comments: [],
+        };
+      }
+
+      const commentsWithUsers = await Promise.all(
+        Object.keys(commentsPerPetek[petekId])?.map(async (commentId) => {
+          const currentComment = commentsPerPetek[petekId][commentId];
+          const userSnap = await get(ref(db, `users/${currentComment.userId}`));
+          const user = await userSnap.val();
+          const userNicknameByPhoneNumberSnap = await get(
+            ref(db, `usersMappedToPhoneNumber/${user.phoneNumber}`),
+          );
+          const userNicknameByPhoneNumber =
+            await userNicknameByPhoneNumberSnap.val();
+
+          return {
+            ...currentComment,
+            user: {...user, nickname: userNicknameByPhoneNumber},
+          };
+        }),
+      );
+
+      return {
+        id: petekId,
+        ...petekList[petekId],
+        comments: commentsWithUsers,
+      };
+    }),
+  );
+
+  return peteks;
 };
 
 export const fetchOwnerPics = () => {
@@ -61,7 +100,7 @@ export const fetchCurrentUser = () => {
   }
 
   const userPromises = Promise.all([
-    get(ref(db, `users/${currentUser.phoneNumber}`)),
+    get(ref(db, `users/${currentUser.uid}`)),
     get(ref(db, `usersMappedToPhoneNumber/${currentUser.phoneNumber}`)),
   ]);
 
@@ -86,8 +125,33 @@ export const deletePetek = (petekId) => {
   return remove(ref(db, `peteks/${petekId}`));
 };
 
-export const createUser = (phoneNumber, name) => {
-  return set(ref(db, `users/${phoneNumber}`), {name, phoneNumber});
+export const createUser = async (id, phoneNumber, name) => {
+  try {
+    await set(ref(db, `users/${id}`), {id, name, phoneNumber});
+    const ownerNameSnap = await get(
+      ref(db, `usersMappedToPhoneNumber/${phoneNumber}`),
+    );
+    const ownerName = await ownerNameSnap.val();
+    return set(ref(db, `usersMappedToPhoneNumber/${id}`), ownerName);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e);
+  }
+};
+
+export const addComment = (petek, content) => {
+  const currentUser = getCurrentUser();
+  const newCommentCollection = [
+    ...(petek.comments ?? []),
+    {
+      petekId: petek.id,
+      content,
+      createdAt: new Date().toISOString(),
+      userId: currentUser.uid,
+    },
+  ];
+
+  return set(ref(db, `comments/${petek.id}`), newCommentCollection);
 };
 
 export const createUserWithPhoneNumber = (phoneNumber) => {
@@ -113,7 +177,7 @@ export const verifyCode = (code, name) => {
   return window.confirmationResult.confirm(code).then((result) => {
     // User signed in successfully.
     const user = result.user;
-    return createUser(user.phoneNumber, name);
+    return createUser(user.uid, user.phoneNumber, name);
     // return user
     // ...
   });

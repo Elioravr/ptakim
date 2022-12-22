@@ -1,14 +1,15 @@
 // @flow
-import React, {useState} from 'react';
-
-import Separator from './Separator';
-import MainButton from './MainButton';
-import Loading from './Loading';
-import {createUserWithPhoneNumber, verifyCode} from './apiService';
-import type {MixedElement} from 'react';
 import type {PageType} from './AppTypes.flow';
-import PageContainer from './PageContainer';
+import type {MixedElement} from 'react';
+
 import {Page} from './AppTypes.flow';
+import Loading from './Loading';
+import MainButton from './MainButton';
+import PageContainer from './PageContainer';
+import Separator from './Separator';
+import {createUserWithPhoneNumber, verifyCode} from './apiService';
+
+import React, {useState} from 'react';
 
 const PHONE_STAGE = 'phone_stage';
 const CODE_STAGE = 'code_stage';
@@ -18,9 +19,14 @@ type SigninPageStage = 'phone_stage' | 'code_stage';
 type Props = $ReadOnly<{
   page: PageType,
   setPage: (PageType) => void,
+  handleRegisterSuccess: () => void,
 }>;
 
-export default function SigninPage({page, setPage}: Props): MixedElement {
+export default function SigninPage({
+  page,
+  setPage,
+  handleRegisterSuccess,
+}: Props): MixedElement {
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [code, setCode] = useState<string>('');
   const [name, setName] = useState<string>('');
@@ -58,7 +64,7 @@ export default function SigninPage({page, setPage}: Props): MixedElement {
       verifyCode(code, name)
         .then(() => {
           setIsLoading(false);
-          setPage('app');
+          handleRegisterSuccess();
 
           setPhoneNumber('');
           setCode('');

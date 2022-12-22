@@ -1,6 +1,5 @@
 // @flow
 
-import type {MixedElement} from 'react';
 import type {
   OwnerPics,
   PageType,
@@ -8,24 +7,23 @@ import type {
   PetekType,
   UserType,
 } from './AppTypes.flow';
+import type {MixedElement} from 'react';
 
-import React from 'react';
-import {useState, useEffect, useCallback} from 'react';
-import usePrevious from 'use-previous';
-
+// $FlowIgnore - This module exists
+import './App.scss';
+import AppMenu from './AppMenu';
 import {Page} from './AppTypes.flow';
+import Loading from './Loading';
 import MainButton from './MainButton';
-import PetekList from './PetekList';
-import moment from 'moment';
-import 'moment/locale/he';
 import NewPetekModal from './NewPetekModal';
+import PermissionDenied from './PermissionDenied';
+import PetekList from './PetekList';
+import PetekPage from './PetekPage';
 import SearchPage from './SearchPage';
+import Separator from './Separator';
+import SignInPage from './SignInPage';
 import StatisticsPage from './StatisticsPage';
 import StoryPage from './StoryPage';
-import SignInPage from './SignInPage';
-import Separator from './Separator';
-import Loading from './Loading';
-import PermissionDenied from './PermissionDenied';
 import {
   fetchPetekList,
   deletePetek,
@@ -34,10 +32,12 @@ import {
   fetchCurrentUser,
   fetchOwnerPics,
 } from './apiService';
-// $FlowIgnore - This module exists
-import './App.scss';
-import PetekPage from './PetekPage';
-import AppMenu from './AppMenu';
+
+import moment from 'moment';
+import 'moment/locale/he';
+import React from 'react';
+import {useState, useEffect, useCallback} from 'react';
+import usePrevious from 'use-previous';
 
 let currentScroll = 0;
 moment.locale('he');
@@ -64,11 +64,57 @@ function App(): MixedElement {
     });
   };
 
+  const changeToPage = useCallback(
+    (nextPage: PageType) => {
+      if (page === Page.App) {
+        setLastAppScroll(currentScroll);
+      }
+
+      setPage(nextPage);
+    },
+    [page],
+  );
+
+  const editPetek = (petek) => {
+    changeToPage(Page.AddNewPetek);
+    setPetekToEdit(petek);
+  };
+
+  const deletePetekAndLoadList = (petek) => {
+    if (window.confirm('בטוח שאתה רוצה למחוק את הפתק?')) {
+      deletePetek(petek.id)
+        .then(() => {
+          loadList();
+          setSelectedPetek(null);
+        })
+        .catch(() => {
+          setIsPermissionDenied(true);
+        });
+    }
+  };
+
+  const handleSearchPageClick = () => {
+    changeToPage(Page.Search);
+  };
+
+  const handleOpenStatistics = () => {
+    changeToPage(Page.Statistics);
+  };
+
+  const handleOpenStory = () => {
+    changeToPage(Page.Story);
+  };
+
+  const handleOpenPetekPage = useCallback(() => {
+    changeToPage(Page.Petek);
+  }, [changeToPage]);
+
   const loadList = useCallback(() => {
     setIsLoading(true);
     fetchPetekList()
       .then((list) => {
         list && setList(list);
+
         setIsLoading(false);
 
         return loadUser();
@@ -133,48 +179,6 @@ function App(): MixedElement {
       return document.removeEventListener('scroll', handleScroll);
     };
   });
-
-  const changeToPage = (nextPage: PageType) => {
-    if (page === Page.App) {
-      setLastAppScroll(currentScroll);
-    }
-
-    setPage(nextPage);
-  };
-
-  const editPetek = (petek) => {
-    changeToPage(Page.AddNewPetek);
-    setPetekToEdit(petek);
-  };
-
-  const deletePetekAndLoadList = (petek) => {
-    if (window.confirm('בטוח שאתה רוצה למחוק את הפתק?')) {
-      deletePetek(petek.id)
-        .then(() => {
-          loadList();
-          setSelectedPetek(null);
-        })
-        .catch(() => {
-          setIsPermissionDenied(true);
-        });
-    }
-  };
-
-  const handleSearchPageClick = () => {
-    changeToPage(Page.Search);
-  };
-
-  const handleOpenStatistics = () => {
-    changeToPage(Page.Statistics);
-  };
-
-  const handleOpenStory = () => {
-    changeToPage(Page.Story);
-  };
-
-  const handleOpenPetekPage = () => {
-    changeToPage(Page.Petek);
-  };
 
   const handleOpenSignIn = () => {
     if (getCurrentUser()) {
@@ -340,7 +344,17 @@ function App(): MixedElement {
           list={list}
           ownerPics={ownerPics}
         />
-        <SignInPage page={page} setPage={setPage} />
+        <SignInPage
+          page={page}
+          setPage={setPage}
+          handleRegisterSuccess={() => {
+            if (selectedPetek != null) {
+              changeToPage(Page.Petek);
+            } else {
+              changeToPage(Page.App);
+            }
+          }}
+        />
         <PetekPage
           page={page}
           ownerPics={ownerPics}
@@ -350,6 +364,11 @@ function App(): MixedElement {
           onPetekEdit={editPetek}
           setSelectedPetek={setSelectedPetek}
           onOwnerClick={setOwnerFilterHeader}
+          refetchPetek={loadList}
+          currentUser={currentUser}
+          moveToRegister={() => {
+            changeToPage(Page.SignIn);
+          }}
         />
         <PermissionDenied
           isOpen={isPermissionDenied}

@@ -1,9 +1,5 @@
 // @flow
 
-import React from 'react';
-import useRandomList from './useRandomList';
-import Petek from './Petek';
-import Separator from './Separator';
 import type {
   FilteredByOwnerDetailsType,
   OwnerPics,
@@ -11,6 +7,12 @@ import type {
   PetekType,
 } from './AppTypes.flow';
 import type {MixedElement} from 'react';
+
+import Petek from './Petek';
+import Separator from './Separator';
+import useRandomList from './useRandomList';
+
+import React from 'react';
 
 const NO_OWNER_PIC_PLACEHOLDER =
   'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
@@ -99,7 +101,6 @@ export default function PetekList({
                 onOwnerClick={onOwnerClick}
                 onClick={createHandlePetekClick({
                   ...list[petekKey],
-                  id: petekKey,
                 })}
               />
             )
