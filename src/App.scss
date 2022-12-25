@@ -1125,6 +1125,47 @@ body {
   }
 }
 
+.admin-page {
+  .modal-body {
+    padding-top: 50px;
+
+    .admin-owner-list {
+      .owner-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 1px 8px 0 rgb(0 0 0 / 20%);
+        padding: 20px;
+        margin: 10px 0;
+
+        &.empty {
+          border: 5px solid red;
+        }
+
+        .owner-name {
+          font-size: 20px;
+          margin-bottom: 10px;
+        }
+
+        .owner-phone-number {
+          width: 100%;
+
+          .input {
+            direction: ltr;
+            width: 100%;
+            text-align: center;
+          }
+        }
+
+        .update-button {
+          text-align: center;
+          color: $main-color;
+        }
+      }
+    }
+  }
+}
+
 @keyframes icon-popup {
   0% {
     transform: scale(0) rotate(-90deg);

@@ -201,6 +201,19 @@ export const fetchNotifications = async () => {
   return notificationsArray;
 };
 
+export const fetchUsersMappedToPhoneNumber = async () => {
+  const phoneNumberCollectionSnap = await get(
+    ref(db, 'usersMappedToPhoneNumber/'),
+  );
+  const phoneNumberCollection = await phoneNumberCollectionSnap.val();
+
+  return phoneNumberCollection;
+};
+
+export const setPhoneNumberForUser = async (ownerName, phoneNumber) => {
+  return set(ref(db, `usersMappedToPhoneNumber/${phoneNumber}`), ownerName);
+};
+
 export const createUserWithPhoneNumber = (phoneNumber) => {
   const appVerifier = recaptchaVerifier;
 

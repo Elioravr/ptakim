@@ -10,6 +10,7 @@ import type {
 import type {MixedElement} from 'react';
 
 // $FlowIgnore - This module exists
+import AdminPage from './AdminPage';
 import './App.scss';
 import AppMenu from './AppMenu';
 import {Page} from './AppTypes.flow';
@@ -108,6 +109,10 @@ function App(): MixedElement {
 
   const handleOpenNotifications = () => {
     changeToPage(Page.Notifications);
+  };
+
+  const handleOpenAdmin = () => {
+    changeToPage(Page.Admin);
   };
 
   const handleOpenPetekPage = useCallback(() => {
@@ -387,6 +392,14 @@ function App(): MixedElement {
           setSelectedPetek={setSelectedPetek}
           list={list}
         />
+        <AdminPage
+          page={page}
+          ownerPics={ownerPics}
+          petek={selectedPetek}
+          setPage={setPage}
+          setSelectedPetek={setSelectedPetek}
+          list={list}
+        />
         <PermissionDenied
           isOpen={isPermissionDenied}
           setIsOpen={setIsPermissionDenied}
@@ -400,6 +413,7 @@ function App(): MixedElement {
         handleOpenStatistics={handleOpenStatistics}
         handleOpenStory={handleOpenStory}
         handleOpenNotifications={handleOpenNotifications}
+        handleOpenAdmin={handleOpenAdmin}
         ownerPics={ownerPics}
       />
     </>

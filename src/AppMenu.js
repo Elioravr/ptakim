@@ -17,6 +17,7 @@ type Props = $ReadOnly<{
   handleOpenStatistics: () => void,
   handleOpenStory: () => void,
   handleOpenNotifications: () => void,
+  handleOpenAdmin: () => void,
   ownerPics: ?OwnerPics,
 }>;
 
@@ -28,6 +29,7 @@ export default function AppMenu({
   handleOpenStatistics,
   handleOpenStory,
   handleOpenNotifications,
+  handleOpenAdmin,
   ownerPics,
 }: Props): MixedElement {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -101,6 +103,11 @@ export default function AppMenu({
       <div
         className="menu-item"
         onClick={createMenuItemClick(handleOpenStory)}>{`📚  סטורי`}</div>
+      {currentUser?.ownerName === 'אליאור' && (
+        <div
+          className="menu-item"
+          onClick={createMenuItemClick(handleOpenAdmin)}>{`👮‍♂️  מנהל`}</div>
+      )}
       <div className="close-button" onClick={() => setIsMenuOpen(false)}>
         X
       </div>
