@@ -21,7 +21,9 @@ export default function UserPicture({
       {ownerName === 'אליאור' ? <div className="crown">👑</div> : null}
       <img
         src={
-          ownerPics != null ? ownerPics[ownerName] : NO_OWNER_PIC_PLACEHOLDER
+          ownerPics != null && ownerPics[ownerName] != null
+            ? ownerPics[ownerName]
+            : NO_OWNER_PIC_PLACEHOLDER
         }
       />
     </div>
