@@ -36,6 +36,13 @@ export default function AdminPage({page, setPage, list}: Props): MixedElement {
     if (page === Page.Admin) {
       fetchUsersMappedToPhoneNumber().then((data) => {
         setPhoneNumbers(data);
+
+        Object.keys(data).forEach((phoneNumber) => {
+          setPhoneNumbersFromInputs((phoneNumbersFromInputs) => ({
+            ...phoneNumbersFromInputs,
+            [data[phoneNumber]]: phoneNumber,
+          }));
+        });
       });
     }
   }, [page]);
@@ -95,7 +102,7 @@ export default function AdminPage({page, setPage, list}: Props): MixedElement {
               <div className="owner-name">{ownerName}</div>
               <div className="owner-phone-number">
                 <input
-                  value={ownerPhoneNumber}
+                  value={phoneNumbersFromInputs[ownerName]}
                   className="input"
                   type="text"
                   placeholder="הזן מספר טלפון"

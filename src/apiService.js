@@ -66,12 +66,17 @@ export const fetchPetekList = async () => {
           const userNicknameByPhoneNumberSnap = await get(
             ref(db, `usersMappedToPhoneNumber/${user.phoneNumber}`),
           );
+
           const userNicknameByPhoneNumber =
             await userNicknameByPhoneNumberSnap.val();
 
           return {
             ...currentComment,
-            user: {...user, nickname: userNicknameByPhoneNumber},
+            user: {
+              ...user,
+              nickname: userNicknameByPhoneNumber,
+              commenterFullName: user.name,
+            },
           };
         }),
       );
@@ -164,11 +169,17 @@ export const addComment = (petek, content) => {
         ref(db, `usersMappedToPhoneNumber/${currentUser.phoneNumber}`),
       );
       const ownerName = await ownerNameSnap.val();
+      const userFullNameSnap = await get(
+        ref(db, `users/${currentUser.uid}/name`),
+      );
+      const userFullName = await userFullNameSnap.val();
+
+      const nameForNotification = ownerName || userFullName;
 
       return addNotification(
-        ownerName,
+        nameForNotification,
         petek.id,
-        `${ownerName} הגיב/ה על הפתק של ${petek.owner}`,
+        `${nameForNotification} הגיב/ה על הפתק של ${petek.owner}`,
         // eslint-disable-next-line no-console
       ).catch((e) => console.log('Notification not created', e));
     },

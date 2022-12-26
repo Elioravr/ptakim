@@ -21,7 +21,9 @@ export default function PetekComment({
       <UserPicture ownerName={comment.user.nickname} ownerPics={ownerPics} />
       <div className="bubble-and-date">
         <div className="comment-bubble">
-          <div className="owner-name">{comment.user.nickname}</div>
+          <div className="owner-name">
+            {comment.user.nickname || comment.user.commenterFullName}
+          </div>
           <div className="content">{comment.content}</div>
         </div>
         <div className="date">{`${moment(
