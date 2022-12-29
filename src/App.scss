@@ -424,7 +424,8 @@ body {
     }
 
     .set-owner-button,
-    .set-related-button {
+    .set-related-button,
+    .set-commenter-button {
       background-color: $owners-color;
       border-radius: 2px;
       color: white;
@@ -485,6 +486,14 @@ body {
   }
 
   .relation-container .related-list-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .commenters-container .commenters-list-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -602,6 +611,12 @@ body {
     background-color: white;
     border: 2px solid $related-color;
     color: $related-color;
+  }
+
+  .set-commenter-button.selected {
+    background-color: white;
+    border: 2px solid $owners-color;
+    color: $owners-color;
   }
 }
 

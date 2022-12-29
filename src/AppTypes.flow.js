@@ -4,6 +4,10 @@ export type RelatedListType = $Shape<{
   [string]: boolean,
 }>;
 
+export type CommenterListType = $Shape<{
+  [string]: boolean,
+}>;
+
 export type PetekType = $Shape<{
   id: string,
   owner: string,

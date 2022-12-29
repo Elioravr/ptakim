@@ -1,8 +1,5 @@
 // @flow
 
-import React, {useState, useEffect, useRef, useCallback} from 'react';
-
-import Separator from './Separator';
 import type {
   PageType,
   PetekListType,
@@ -10,11 +7,16 @@ import type {
   RelatedListType,
   RatingSearchType,
   AllOwnersListType,
+  CommenterListType,
 } from './AppTypes.flow';
-import usePrevious from 'use-previous';
 import type {MixedElement} from 'react';
+
 import {Page, RatingSearch} from './AppTypes.flow';
 import PageContainer from './PageContainer';
+import Separator from './Separator';
+
+import React, {useState, useEffect, useRef, useCallback} from 'react';
+import usePrevious from 'use-previous';
 
 type Props = $ReadOnly<{
   page: PageType,
@@ -37,6 +39,7 @@ export default function SearchPage({
   const [allOwners, setAllOwners] = useState<AllOwnersListType>({});
   const [allCategories, setAllCategories] = useState<AllCategoriesListType>({});
   const [allRelated, setAllRelated] = useState<RelatedListType>({});
+  const [allCommenters, setAllCommenters] = useState<CommenterListType>({});
   const [owner, setOwner] = useState<string>('');
   const [category, setCategory] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
@@ -53,6 +56,7 @@ export default function SearchPage({
     owner !== '' ||
     category !== '' ||
     Object.keys(allRelated).length !== 0 ||
+    Object.keys(allCommenters).length !== 0 ||
     rating !== 0;
 
   const clearAllFilters = useCallback(() => {
@@ -121,6 +125,26 @@ export default function SearchPage({
       }, {});
     }
 
+    if (allCommenters) {
+      result = Object.keys(result).reduce((filtered, currentPetekKey) => {
+        const currentPetek = list[currentPetekKey];
+
+        if (
+          Object.keys(allCommenters).every(
+            (commenter) =>
+              currentPetek?.comments &&
+              currentPetek?.comments.find(
+                (comment) => comment.user.nickname === commenter,
+              ) != null,
+          )
+        ) {
+          filtered[currentPetekKey] = currentPetek;
+        }
+
+        return filtered;
+      }, {});
+    }
+
     // Rating
     if (rating !== 0) {
       result = Object.keys(result).reduce((filtered, currentPetekKey) => {
@@ -154,6 +178,7 @@ export default function SearchPage({
     setFilteredList(result);
     setOwnerFilterHeader(owner, {overrideList: false});
   }, [
+    allCommenters,
     allRelated,
     category,
     freeTextFilter,
@@ -278,6 +303,18 @@ export default function SearchPage({
     };
   };
 
+  const createHandleCommentersClick = (selected) => {
+    return () => {
+      if (allCommenters[selected]) {
+        const newCommenters = {...allCommenters};
+        Reflect.deleteProperty(newCommenters, selected);
+        setAllCommenters(newCommenters);
+      } else {
+        setAllCommenters({...allCommenters, [selected]: true});
+      }
+    };
+  };
+
   const createHandleRatingClick = (selectedRating) => {
     return () => {
       if (selectedRating === rating) {
@@ -345,6 +382,27 @@ export default function SearchPage({
                 className={className}
                 onClick={createHandleRelatedClick(currRelated)}>
                 {currRelated}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <Separator emoji="📝" />
+
+      <div className="section-container commenters-container">
+        <div className="title">מי הגיב?</div>
+        <div className="commenters-list-container">
+          {Object.keys(allOwners).map((currCommenter, index) => {
+            const className = `set-commenter-button ${
+              allCommenters[currCommenter] ? 'selected' : ''
+            }`;
+            return (
+              <div
+                key={index}
+                className={className}
+                onClick={createHandleCommentersClick(currCommenter)}>
+                {currCommenter}
               </div>
             );
           })}
@@ -470,6 +528,12 @@ export default function SearchPage({
             <div>
               {'🧬 קשור למישהו: '}
               <span>{Object.keys(allRelated).join(', ')}</span>
+            </div>
+          )}
+          {Object.keys(allCommenters).length !== 0 && (
+            <div>
+              {'📝 מי הגיב: '}
+              <span>{Object.keys(allCommenters).join(', ')}</span>
             </div>
           )}
           {rating !== 0 && (

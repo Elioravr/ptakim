@@ -299,33 +299,37 @@ function App(): MixedElement {
             <Loading />
           ) : (
             <>
-              <CommentsSummary list={list} ownerPics={ownerPics} />
+              {filteredList == null && (
+                <CommentsSummary list={list} ownerPics={ownerPics} />
+              )}
               {!filteredList && (
                 <MainButton
                   content={'🤦‍♂️ הוסף ציטוט 🤣'}
                   onClick={() => setPage(Page.AddNewPetek)}
                 />
               )}
-              <div className="petek-list-order-toggle">
-                <div
-                  onClick={() => {
-                    setOrder('random');
-                  }}
-                  className={`button random-button ${
-                    order === 'random' ? 'selected' : ''
-                  }`}>
-                  סדר רנדומאלי
+              {filteredList == null && (
+                <div className="petek-list-order-toggle">
+                  <div
+                    onClick={() => {
+                      setOrder('random');
+                    }}
+                    className={`button random-button ${
+                      order === 'random' ? 'selected' : ''
+                    }`}>
+                    סדר רנדומאלי
+                  </div>
+                  <div
+                    onClick={() => {
+                      setOrder('chronological');
+                    }}
+                    className={`button chronological-button ${
+                      order === 'chronological' ? 'selected' : ''
+                    }`}>
+                    סדר כרונולוגי
+                  </div>
                 </div>
-                <div
-                  onClick={() => {
-                    setOrder('chronological');
-                  }}
-                  className={`button chronological-button ${
-                    order === 'chronological' ? 'selected' : ''
-                  }`}>
-                  סדר כרונולוגי
-                </div>
-              </div>
+              )}
               <PetekList
                 list={filteredList || list}
                 random={filteredList === null && order !== 'chronological'}
