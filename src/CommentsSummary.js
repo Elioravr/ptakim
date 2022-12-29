@@ -5,14 +5,19 @@ import type {MixedElement} from 'react';
 import UserPicture from './UserPicture';
 
 import React from 'react';
-import {useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 
 type Props = $ReadOnly<{
   list: PetekListType,
   ownerPics: ?OwnerPics,
+  setFilteredList: (?PetekListType) => void,
 }>;
 
-function CommentsSummary({list, ownerPics}: Props): MixedElement {
+function CommentsSummary({
+  list,
+  ownerPics,
+  setFilteredList,
+}: Props): MixedElement {
   const commentsByOwnerName = useMemo(() => {
     const commentsByUserIDs = Object.keys(list).reduce(
       (result, currentPetekId) => {
@@ -47,13 +52,38 @@ function CommentsSummary({list, ownerPics}: Props): MixedElement {
     return commentsByOwnerName;
   }, [list]);
 
+  const createHandleOwnerClick = useCallback(
+    (ownerName) => {
+      return () => {
+        const result = Object.keys(list).reduce((filtered, currentPetekKey) => {
+          const currentPetek = list[currentPetekKey];
+
+          if (
+            currentPetek?.comments &&
+            currentPetek?.comments.find(
+              (comment) => comment.user.nickname === ownerName,
+            ) != null
+          ) {
+            filtered[currentPetekKey] = currentPetek;
+          }
+
+          return filtered;
+        }, {});
+
+        setFilteredList(result);
+      };
+    },
+    [list, setFilteredList],
+  );
+
   return (
     <div className="comments-summary">
       {commentsByOwnerName.map(({ownerName, commentsQuantity}) => {
         return (
           <div
             className="comment-summary-item-container"
-            key={`comment-summary-item-${ownerName}`}>
+            key={`comment-summary-item-${ownerName}`}
+            onClick={createHandleOwnerClick(ownerName)}>
             <div className="comment-summary-item">
               <UserPicture ownerName={ownerName} ownerPics={ownerPics} />
             </div>

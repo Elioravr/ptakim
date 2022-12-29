@@ -300,7 +300,11 @@ function App(): MixedElement {
           ) : (
             <>
               {filteredList == null && (
-                <CommentsSummary list={list} ownerPics={ownerPics} />
+                <CommentsSummary
+                  list={list}
+                  ownerPics={ownerPics}
+                  setFilteredList={setFilteredList}
+                />
               )}
               {!filteredList && (
                 <MainButton
