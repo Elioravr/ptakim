@@ -12,9 +12,9 @@ import type {MixedElement} from 'react';
 
 import {Page} from './AppTypes.flow';
 import Separator from './Separator';
-import {addNewPetek} from './apiService';
+import {addNewPetek, uploadPhoto} from './apiService';
 
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 
 type Props = $ReadOnly<{
   list: PetekListType,
@@ -39,6 +39,8 @@ export default function NewPetekModal({
   const [allOwners, setAllOwners] = useState<AllOwnersListType>({});
   const [allRelated, setAllRelated] = useState<RelatedListType>({});
   const [rating, setRating] = useState<number>(0);
+  const [progress, setProgress] = useState<?number>(null);
+  const [photoURL, setPhotoURL] = useState<?string>(null);
   const pageRef = useRef(null);
   const className = `page modal new-petek-modal-container ${
     page === 'add-petek-modal' ? 'visible' : ''
@@ -51,6 +53,8 @@ export default function NewPetekModal({
     setCategory('');
     setRating(0);
     setAllRelated({});
+    setPhotoURL(null);
+    setProgress(null);
   };
 
   useEffect(() => {
@@ -98,6 +102,7 @@ export default function NewPetekModal({
     setCategory(petekToEdit.category ?? '');
     setRating(petekToEdit.rating ?? 0);
     setAllRelated(petekToEdit.allRelated ?? {});
+    setPhotoURL(petekToEdit.photoURL ?? null);
   }, [petekToEdit]);
 
   const handleSubmit = () => {
@@ -110,6 +115,7 @@ export default function NewPetekModal({
       category,
       allRelated: Object.keys(allRelated).length === 0 ? null : allRelated,
       createdAt: petekToEdit?.createdAt ?? new Date().toISOString(),
+      photoURL,
     };
 
     addNewPetek(petek)
@@ -196,6 +202,11 @@ export default function NewPetekModal({
     };
   };
 
+  const handleFileUpload = useCallback((e) => {
+    const file = e.target.files[0];
+    uploadPhoto(file, setProgress, setPhotoURL);
+  }, []);
+
   return (
     <div className={className} ref={pageRef}>
       <div className="modal-header">
@@ -261,6 +272,30 @@ export default function NewPetekModal({
               );
             })}
           </div>
+        </div>
+
+        <Separator emoji="📸" />
+
+        <div className="section-container upload-photo-container">
+          <div className="title">לצרף תמונה?</div>
+          <div className="upload-button">
+            {progress == null && (
+              <input
+                className="input"
+                type="file"
+                onChange={handleFileUpload}
+              />
+            )}
+            <div className="emoji">🤳</div>
+            {progress == null ? (
+              <div>לחץ כדי להעלות תמונה</div>
+            ) : (
+              <div>{progress}%</div>
+            )}
+          </div>
+          {photoURL != null && (
+            <img className="uploaded-photo" src={photoURL} />
+          )}
         </div>
 
         <Separator emoji="🤪" />

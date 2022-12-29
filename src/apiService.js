@@ -2,6 +2,12 @@
 import {initializeApp} from 'firebase/app';
 import {getDatabase, ref, set, push, get, remove} from 'firebase/database';
 import {
+  getStorage,
+  ref as refForStorage,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
+import {
   getAuth,
   RecaptchaVerifier,
   signInWithPhoneNumber,
@@ -26,6 +32,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
+const storage = getStorage();
+const imagesRef = refForStorage(storage, 'petekImages');
 
 const auth = getAuth();
 const recaptchaVerifier = new RecaptchaVerifier(
@@ -210,6 +219,34 @@ export const fetchNotifications = async () => {
   );
 
   return notificationsArray;
+};
+
+export const uploadPhoto = (file, setProgress, setImageURL) => {
+  if (!file) {
+    return;
+  }
+
+  const uploadTask = uploadBytesResumable(imagesRef, file);
+
+  uploadTask.on(
+    'state_changed',
+    (snapshot) => {
+      // Observe state change events such as progress, pause, and resume
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setProgress(parseInt(progress));
+    },
+    (e) => {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        setImageURL(downloadURL);
+        setProgress(null);
+      });
+    },
+  );
 };
 
 export const fetchUsersMappedToPhoneNumber = async () => {

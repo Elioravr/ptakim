@@ -100,6 +100,10 @@ export default function Petek({
             </div>
           );
         })}
+
+        {petek.photoURL != null && (
+          <img className="petek-photo" src={petek.photoURL} />
+        )}
       </div>
       {petek.allRelated && (
         <div className="related-tags-container">
