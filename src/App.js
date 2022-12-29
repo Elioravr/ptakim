@@ -14,6 +14,7 @@ import AdminPage from './AdminPage';
 import './App.scss';
 import AppMenu from './AppMenu';
 import {Page} from './AppTypes.flow';
+import CommentsSummary from './CommentsSummary';
 import Loading from './Loading';
 import MainButton from './MainButton';
 import NewPetekModal from './NewPetekModal';
@@ -296,6 +297,7 @@ function App(): MixedElement {
             <Loading />
           ) : (
             <>
+              <CommentsSummary list={list} ownerPics={ownerPics} />
               {!filteredList && (
                 <MainButton
                   content={'🤦‍♂️ הוסף ציטוט 🤣'}

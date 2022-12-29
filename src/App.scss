@@ -1166,6 +1166,45 @@ body {
   }
 }
 
+.comments-summary {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+  overflow: scroll;
+  padding-right: 10px;
+
+  .comment-summary-item-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+
+    .comment-summary-item {
+      border: 3px solid $main-color;
+      padding: 3px;
+      border-radius: 50%;
+
+      .user-picture {
+        margin-left: 0;
+        height: 60px;
+        width: 60px;
+      }
+    }
+
+    .owner-name {
+      font-weight: bold;
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+    .comments-length {
+      font-size: 12px;
+      background: red;
+      color: white;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+  }
+}
+
 @keyframes icon-popup {
   0% {
     transform: scale(0) rotate(-90deg);
