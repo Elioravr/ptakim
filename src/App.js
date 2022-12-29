@@ -1,6 +1,7 @@
 // @flow
 
 import type {
+  OrderType,
   OwnerPics,
   PageType,
   PetekListType,
@@ -60,6 +61,7 @@ function App(): MixedElement {
   const [isPermissionDenied, setIsPermissionDenied] = useState<boolean>(false);
   const [selectedPetek, setSelectedPetek] = useState<?PetekType>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [order, setOrder] = useState<OrderType>('random');
 
   const loadUser = () => {
     return fetchCurrentUser().then((user) => {
@@ -304,9 +306,29 @@ function App(): MixedElement {
                   onClick={() => setPage(Page.AddNewPetek)}
                 />
               )}
+              <div className="petek-list-order-toggle">
+                <div
+                  onClick={() => {
+                    setOrder('random');
+                  }}
+                  className={`button random-button ${
+                    order === 'random' ? 'selected' : ''
+                  }`}>
+                  סדר רנדומאלי
+                </div>
+                <div
+                  onClick={() => {
+                    setOrder('chronological');
+                  }}
+                  className={`button chronological-button ${
+                    order === 'chronological' ? 'selected' : ''
+                  }`}>
+                  סדר כרונולוגי
+                </div>
+              </div>
               <PetekList
                 list={filteredList || list}
-                random={filteredList === null}
+                random={filteredList === null && order !== 'chronological'}
                 ownerPics={ownerPics}
                 filteredByOwner={filteredByOwner}
                 onOwnerClick={setOwnerFilterHeader}

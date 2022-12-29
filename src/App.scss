@@ -1205,6 +1205,32 @@ body {
   }
 }
 
+.petek-list-order-toggle {
+  display: flex;
+  border-radius: 3px;
+  width: 88%;
+  margin: auto;
+  overflow: hidden;
+  margin-top: 10px;
+  border: 2px solid $owners-color;
+
+  .button {
+    width: 50%;
+    background-color: $owners-color;
+    color: white;
+    font-size: 16px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.selected {
+      color: $owners-color;
+      background-color: white;
+    }
+  }
+}
+
 @keyframes icon-popup {
   0% {
     transform: scale(0) rotate(-90deg);

@@ -79,6 +79,13 @@ export type PageType =
   | 'notifications'
   | 'admin';
 
+export const Order = {
+  Random: 'random',
+  Chronological: 'chronological',
+};
+
+export type OrderType = 'random' | 'chronological';
+
 export const RatingSearch = {
   AND_ABOVE: 'and_above',
   ONLY: 'only',
