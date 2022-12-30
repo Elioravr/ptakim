@@ -34,7 +34,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const storage = getStorage();
-const imagesRef = refForStorage(storage, 'petekImages');
 
 const auth = getAuth();
 const recaptchaVerifier = new RecaptchaVerifier(
@@ -225,6 +224,11 @@ export const uploadPhoto = (file, setProgress, setImageURL) => {
   if (!file) {
     return;
   }
+
+  const imagesRef = refForStorage(
+    storage,
+    `petekImages-${new Date().toISOString()}`,
+  );
 
   const uploadTask = uploadBytesResumable(imagesRef, file);
 
