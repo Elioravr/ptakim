@@ -45,7 +45,9 @@ export default function PageContainer({
     <div className={className} {...refProp}>
       <div className="page-header">
         <span>{title}</span>
-        <div onClick={handleClose}>{'>'}</div>
+        <div className="close-modal-button" onClick={handleClose}>
+          {'חזרה >'}
+        </div>
       </div>
 
       {currPage === pageName && <div className="modal-body">{children}</div>}

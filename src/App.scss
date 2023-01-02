@@ -67,6 +67,11 @@ body {
     right: 0;
     top: 0;
     z-index: 1;
+
+    .close-modal-button {
+      font-size: 20px;
+      color: $main-color;
+    }
   }
 
   .app-header {
