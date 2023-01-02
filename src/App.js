@@ -10,8 +10,8 @@ import type {
 } from './AppTypes.flow';
 import type {MixedElement} from 'react';
 
-// $FlowIgnore - This module exists
 import AdminPage from './AdminPage';
+// $FlowIgnore - This module exists
 import './App.scss';
 import AppMenu from './AppMenu';
 import {Page} from './AppTypes.flow';

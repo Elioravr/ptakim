@@ -45,7 +45,7 @@ export default function PageContainer({
     <div className={className} {...refProp}>
       <div className="page-header">
         <span>{title}</span>
-        <div onClick={handleClose}>x</div>
+        <div onClick={handleClose}>{'>'}</div>
       </div>
 
       {currPage === pageName && <div className="modal-body">{children}</div>}

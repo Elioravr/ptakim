@@ -211,7 +211,7 @@ export default function NewPetekModal({
     <div className={className} ref={pageRef}>
       <div className="modal-header">
         <span>הוסף פתק</span>
-        <div onClick={handleClose}>x</div>
+        <div onClick={handleClose}>{'>'}</div>
       </div>
       <div className="modal-body">
         <input
