@@ -1224,9 +1224,29 @@ body {
 .comments-summary {
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 15px;
   overflow: scroll;
   padding-right: 10px;
+  padding-left: 10px;
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+  }
 
   .comment-summary-item-container {
     display: flex;
