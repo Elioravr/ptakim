@@ -7,6 +7,7 @@ import React from 'react';
 type Props = $ReadOnly<{
   ownerName: string,
   ownerPics: ?OwnerPics,
+  size: ?number,
 }>;
 
 const NO_OWNER_PIC_PLACEHOLDER =
@@ -15,9 +16,12 @@ const NO_OWNER_PIC_PLACEHOLDER =
 export default function UserPicture({
   ownerName,
   ownerPics,
+  size,
 }: Props): MixedElement {
+  const style = {height: size, width: size};
+
   return (
-    <div className="user-picture">
+    <div className="user-picture" style={size != null ? style : {}}>
       {ownerName === 'אליאור' ? <div className="crown">👑</div> : null}
       <img
         src={

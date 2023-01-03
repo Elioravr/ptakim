@@ -21,6 +21,7 @@ import MainButton from './MainButton';
 import NewPetekModal from './NewPetekModal';
 import NotificationsPage from './NotificationsPage';
 import PermissionDenied from './PermissionDenied';
+import UserPicture from './UserPicture';
 import PetekList from './PetekList';
 import PetekPage from './PetekPage';
 import SearchPage from './SearchPage';
@@ -281,6 +282,13 @@ function App(): MixedElement {
               <div className="point"></div>
               <div className="point"></div>
             </div>
+            <div className="user-picture-container" onClick={handleOpenSignIn}>
+              <UserPicture
+                ownerPics={ownerPics}
+                ownerName={currentUser?.ownerName}
+                size={35}
+              />
+            </div>
             <span className="logo">Ptakim</span>
             <div className="buttons-container">
               <div
@@ -431,6 +439,7 @@ function App(): MixedElement {
           setPage={setPage}
           setSelectedPetek={setSelectedPetek}
           list={list}
+          setOwnerPics={setOwnerPics}
         />
         <PermissionDenied
           isOpen={isPermissionDenied}

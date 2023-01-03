@@ -9,9 +9,12 @@ import type {MixedElement} from 'react';
 
 import {Page} from './AppTypes.flow';
 import PageContainer from './PageContainer';
+import UserPicture from './UserPicture';
 import {
   fetchUsersMappedToPhoneNumber,
   setPhoneNumberForUser,
+  uploadUserPhoto,
+  fetchOwnerPics,
 } from './apiService';
 import useGetAllOwnersAndCategoriesFromList from './useGetAllOwnersAndCategoriesFromList';
 
@@ -25,9 +28,16 @@ type Props = $ReadOnly<{
   setPage: (PageType) => void,
   ownerPics: ?OwnerPics,
   list: PetekListType,
+  setOwnerPics: (?OwnerPics) => void,
 }>;
 
-export default function AdminPage({page, setPage, list}: Props): MixedElement {
+export default function AdminPage({
+  page,
+  setPage,
+  list,
+  ownerPics,
+  setOwnerPics,
+}: Props): MixedElement {
   const [allOwners] = useGetAllOwnersAndCategoriesFromList(list);
   const [phoneNumbers, setPhoneNumbers] = useState({});
   const [phoneNumbersFromInputs, setPhoneNumbersFromInputs] = useState({});
@@ -75,6 +85,18 @@ export default function AdminPage({page, setPage, list}: Props): MixedElement {
     [phoneNumbersFromInputs, setPage],
   );
 
+  const createHandleUploadChange = useCallback(
+    (ownerName) => (e) => {
+      const file = e.target.files[0];
+      uploadUserPhoto(file, ownerName, () => {
+        return fetchOwnerPics().then((fetchedOwnerPics) => {
+          setOwnerPics(fetchedOwnerPics);
+        });
+      });
+    },
+    [setOwnerPics],
+  );
+
   return (
     <PageContainer
       currPage={page}
@@ -100,6 +122,16 @@ export default function AdminPage({page, setPage, list}: Props): MixedElement {
                 ownerPhoneNumber == null ? 'empty' : ''
               }`}>
               <div className="owner-name">{ownerName}</div>
+              <div className="user-picture-container">
+                {ownerPics && (
+                  <UserPicture ownerName={ownerName} ownerPics={ownerPics} />
+                )}
+                <input
+                  type="file"
+                  className="upload-user-picture-input"
+                  onChange={createHandleUploadChange(ownerName)}
+                />
+              </div>
               <div className="owner-phone-number">
                 <input
                   value={phoneNumbersFromInputs[ownerName]}

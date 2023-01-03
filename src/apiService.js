@@ -220,6 +220,47 @@ export const fetchNotifications = async () => {
   return notificationsArray;
 };
 
+export const uploadUserPhoto = (file, ownerName, refetchOwnerPics) => {
+  if (!file) {
+    return;
+  }
+
+  const imagesRef = refForStorage(
+    storage,
+    `userImage-${new Date().toISOString()}`,
+  );
+
+  const uploadTask = uploadBytesResumable(imagesRef, file);
+
+  uploadTask.on(
+    'state_changed',
+    () => {
+      // (snapshot) => {
+      // Observe state change events such as progress, pause, and resume
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      // let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      // setProgress(parseInt(progress));
+    },
+    (e) => {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        // setImageURL(downloadURL);
+        // setProgress(null);
+        return (
+          set(ref(db, `ownerPics/${ownerName}`), downloadURL)
+            // .then((snap) => {
+            //   return snap.val();
+            // })
+            .then(refetchOwnerPics)
+        );
+      });
+    },
+  );
+};
+
 export const uploadPhoto = (file, setProgress, setImageURL) => {
   if (!file) {
     return;

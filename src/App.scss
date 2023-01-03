@@ -1071,6 +1071,11 @@ body {
   }
 }
 
+.user-picture-container {
+  position: absolute;
+  right: 60px;
+}
+
 .menu-button {
   position: absolute;
   right: 14px;
@@ -1195,6 +1200,18 @@ body {
         .owner-name {
           font-size: 20px;
           margin-bottom: 10px;
+        }
+        .user-picture-container {
+          position: relative;
+
+          .upload-user-picture-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            bottom: 0;
+          }
         }
 
         .owner-phone-number {
