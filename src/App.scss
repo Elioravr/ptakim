@@ -1152,6 +1152,35 @@ body {
       }
     }
   }
+
+  .footer {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+
+    .user-picture {
+      margin: auto;
+      margin-bottom: 3px;
+    }
+
+    .all-rights-reserved {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .c-logo {
+        font-size: 20px;
+        margin-left: 5px;
+        margin-top: 2px;
+      }
+    }
+
+    .all-rights-reserved-name {
+      text-align: center;
+    }
+  }
 }
 
 .notifications-page {
@@ -1203,6 +1232,10 @@ body {
         }
         .user-picture-container {
           position: relative;
+          margin: auto;
+          left: 0;
+          right: 0;
+          margin-bottom: 6px;
 
           .upload-user-picture-input {
             position: absolute;

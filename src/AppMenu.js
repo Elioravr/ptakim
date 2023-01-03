@@ -5,6 +5,7 @@ import type {MixedElement} from 'react';
 
 import React from 'react';
 import {useCallback, useEffect, useRef} from 'react';
+import UserPicture from './UserPicture';
 
 const NO_OWNER_PIC_PLACEHOLDER =
   'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
@@ -110,6 +111,15 @@ export default function AppMenu({
       )}
       <div className="close-button" onClick={() => setIsMenuOpen(false)}>
         X
+      </div>
+
+      <div className="footer">
+        <UserPicture ownerPics={ownerPics} ownerName="אליאור" />
+        <div className="all-rights-reserved-name">Elior Abramoviz</div>
+        <div className="all-rights-reserved">
+          <div className="c-logo">©</div>
+          כל הזכויות שמורות
+        </div>
       </div>
     </div>
   );
