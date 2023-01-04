@@ -275,7 +275,7 @@ function App(): MixedElement {
   return (
     <>
       <div className={`App ${isMenuOpen ? 'menu-open' : ''}`}>
-        <div className={`page ${page === Page.App ? 'visible' : ''}`}>
+        <div className={`page app-page ${page === Page.App ? 'visible' : ''}`}>
           <div className="app-header">
             <div className="menu-button" onClick={handleMenuOpenClick}>
               <div className="point"></div>
@@ -301,6 +301,44 @@ function App(): MixedElement {
                 onClick={handleOpenStatistics}>
                 {'📈'}
               </div>
+            </div>
+          </div>
+          <div className="app-footer">
+            <div
+              className="footer-search-button footer-button"
+              onClick={handleSearchPageClick}>
+              <div className="footer-button-icon">
+                <div
+                  className="user-picture-container"
+                  onClick={handleOpenSignIn}>
+                  <UserPicture
+                    ownerPics={ownerPics}
+                    ownerName={currentUser?.ownerName}
+                    size={40}
+                  />
+                </div>
+              </div>
+              <div className="footer-button-label">
+                {currentUser?.ownerName}
+              </div>
+            </div>
+            <div
+              className="footer-search-button footer-button"
+              onClick={handleSearchPageClick}>
+              <div className="footer-button-icon">{'🔍'}</div>
+              <div className="footer-button-label">{'חפש'}</div>
+            </div>
+            <div
+              className="footer-search-button footer-button"
+              onClick={handleOpenNotifications}>
+              <div className="footer-button-icon">{'🔔'}</div>
+              <div className="footer-button-label">{'התראות'}</div>
+            </div>
+            <div
+              className="footer-search-button footer-button"
+              onClick={handleOpenStatistics}>
+              <div className="footer-button-icon">{'📈'}</div>
+              <div className="footer-button-label">{'סטטיסטיקות'}</div>
             </div>
           </div>
           {isLoading ? (
@@ -370,22 +408,26 @@ function App(): MixedElement {
           setPage={setPage}
           setIsPermissionDenied={setIsPermissionDenied}
         />
-        <div className={searchButtonClassName}>
-          {filteredList && selectedPetek == null && (
-            <div className="indicator">{Object.keys(filteredList).length}</div>
-          )}
-          {selectedPetek == null && (
-            <div className="button" onClick={handleSearchPageClick}>
-              חפש
-            </div>
-          )}
-          {filteredList && selectedPetek == null && (
-            <div className="button clear-button" onClick={clearFilter}>
-              <div>נקה</div>
-              <div>חיפוש</div>
-            </div>
-          )}
-        </div>
+        {filteredList && selectedPetek == null && (
+          <div className={searchButtonClassName}>
+            {filteredList && selectedPetek == null && (
+              <div className="indicator">
+                {Object.keys(filteredList).length}
+              </div>
+            )}
+            {selectedPetek == null && (
+              <div className="button" onClick={handleSearchPageClick}>
+                חפש
+              </div>
+            )}
+            {filteredList && selectedPetek == null && (
+              <div className="button clear-button" onClick={clearFilter}>
+                <div>נקה</div>
+                <div>חיפוש</div>
+              </div>
+            )}
+          </div>
+        )}
         <StatisticsPage
           page={page}
           setPage={setPage}

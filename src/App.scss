@@ -5,10 +5,12 @@
 }
 
 $header-height: 60px;
+$footer-height: 80px;
 $main-color: #007bff;
 $owners-color: #005abb;
 $related-color: #ff530f;
 $padding-for-view-with-header: calc($header-height + 15px);
+$padding-for-view-with-footer: calc($footer-height + 60px);
 
 html:lang(en) .petek-text {
   font-size: 22px;
@@ -37,6 +39,10 @@ body {
   pointer-events: none;
   transition: opacity 0.3s ease-in-out;
   overflow: hidden;
+
+  &.app-page {
+    padding-bottom: $padding-for-view-with-footer;
+  }
 
   &.visible {
     bottom: auto;
@@ -91,6 +97,42 @@ body {
       }
 
       .statistics-button {
+      }
+    }
+  }
+
+  .app-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    height: $footer-height;
+    background-color: white;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+
+    .footer-button {
+      display: flex;
+      flex-direction: column;
+
+      .footer-button-icon {
+        font-size: 30px;
+
+        .user-picture-container {
+          position: static;
+
+          .user-picture {
+            margin: 0;
+          }
+        }
+      }
+
+      .footer-button-label {
+        font-size: 16px;
       }
     }
   }
@@ -675,7 +717,7 @@ body {
 
 .search-button {
   position: fixed;
-  bottom: 60px;
+  bottom: calc($footer-height + 10px);
   left: 20px;
   display: flex;
   justify-content: center;
