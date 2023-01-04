@@ -301,45 +301,47 @@ function App(): MixedElement {
               </div> */}
             </div>
           </div>
-          <div className="app-footer">
-            <div
-              className="footer-search-button footer-button"
-              onClick={handleOpenSignIn}>
-              <div className="footer-button-icon">
-                <div className="user-picture-container">
-                  <UserPicture
-                    ownerPics={ownerPics}
-                    ownerName={currentUser?.ownerName}
-                    size={40}
-                  />
+          {!isLoading && (
+            <div className="app-footer">
+              <div
+                className="footer-search-button footer-button"
+                onClick={handleOpenSignIn}>
+                <div className="footer-button-icon">
+                  <div className="user-picture-container">
+                    <UserPicture
+                      ownerPics={ownerPics}
+                      ownerName={currentUser?.ownerName}
+                      size={40}
+                    />
+                  </div>
+                </div>
+                <div className="footer-button-label">
+                  {currentUser == null ? 'התחבר' : currentUser?.ownerName}
                 </div>
               </div>
-              <div className="footer-button-label">
-                {currentUser == null ? 'התחבר' : currentUser?.ownerName}
+              <div
+                className="footer-search-button footer-button"
+                onClick={handleSearchPageClick}>
+                <div className="footer-button-icon">{'🔍'}</div>
+                <div className="footer-button-label">{'חפש'}</div>
+              </div>
+              <div
+                className="footer-search-button footer-button"
+                onClick={handleOpenNotifications}>
+                {enableNotificationIndicator && (
+                  <div className="notification-indicator"></div>
+                )}
+                <div className="footer-button-icon">{'🔔'}</div>
+                <div className="footer-button-label">{'התראות'}</div>
+              </div>
+              <div
+                className="footer-search-button footer-button"
+                onClick={handleOpenStatistics}>
+                <div className="footer-button-icon">{'📈'}</div>
+                <div className="footer-button-label">{'סטטיסטיקות'}</div>
               </div>
             </div>
-            <div
-              className="footer-search-button footer-button"
-              onClick={handleSearchPageClick}>
-              <div className="footer-button-icon">{'🔍'}</div>
-              <div className="footer-button-label">{'חפש'}</div>
-            </div>
-            <div
-              className="footer-search-button footer-button"
-              onClick={handleOpenNotifications}>
-              {enableNotificationIndicator && (
-                <div className="notification-indicator"></div>
-              )}
-              <div className="footer-button-icon">{'🔔'}</div>
-              <div className="footer-button-label">{'התראות'}</div>
-            </div>
-            <div
-              className="footer-search-button footer-button"
-              onClick={handleOpenStatistics}>
-              <div className="footer-button-icon">{'📈'}</div>
-              <div className="footer-button-label">{'סטטיסטיקות'}</div>
-            </div>
-          </div>
+          )}
           {isLoading ? (
             <Loading />
           ) : (

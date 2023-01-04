@@ -116,6 +116,8 @@ body {
     align-items: center;
     padding: 0 20px;
     padding-bottom: $iphone-home-bar-padding;
+    transform: translateY($footer-height);
+    animation: footer-slides-up 1s 0.5s ease-in-out forwards;
 
     .footer-button {
       display: flex;
@@ -1466,6 +1468,15 @@ body {
   }
   20% {
     transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes footer-slides-up {
+  0% {
+    transform: translateY($footer-height);
   }
   100% {
     transform: translateY(0);
