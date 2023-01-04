@@ -319,7 +319,7 @@ function App(): MixedElement {
                 </div>
               </div>
               <div className="footer-button-label">
-                {currentUser?.ownerName}
+                {currentUser == null ? 'התחבר' : currentUser?.ownerName}
               </div>
             </div>
             <div

@@ -5,7 +5,8 @@
 }
 
 $header-height: 60px;
-$footer-height: 80px;
+$iphone-home-bar-padding: 25px;
+$footer-height: calc(80px + $iphone-home-bar-padding);
 $main-color: #007bff;
 $owners-color: #005abb;
 $related-color: #ff530f;
@@ -114,6 +115,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    padding-bottom: $iphone-home-bar-padding;
 
     .footer-button {
       display: flex;
@@ -121,6 +123,7 @@ body {
 
       .footer-button-icon {
         font-size: 30px;
+        margin: auto;
 
         .user-picture-container {
           position: static;
