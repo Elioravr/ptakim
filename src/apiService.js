@@ -351,3 +351,15 @@ export const getCurrentUser = () => {
   const user = auth.currentUser;
   return user;
 };
+
+export const fetchGateKeepers = async () => {
+  const gateKeepersSnap = await get(ref(db, 'GateKeepers/'));
+  const gateKeepers = await gateKeepersSnap.val();
+
+  window.gateKeepers = gateKeepers;
+
+  // Overriding GKs
+  // window.gateKeepers = {
+  //   enableUserRating: true,
+  // };
+};

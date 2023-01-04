@@ -7,7 +7,7 @@ import PetekComment from './PetekComment';
 import UserPicture from './UserPicture';
 
 import moment from 'moment';
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 
 const NO_OWNER_PIC_PLACEHOLDER =
   'https://erasmuscoursescroatia.com/wp-content/uploads/2015/11/no-user.jpg';
@@ -33,6 +33,7 @@ export default function Petek({
   onClick,
   enableLastComment = true,
 }: Props): MixedElement {
+  const [userRating, setUserRating] = useState<number>(0);
   const isBeforeAppTime = new Date(petek.createdAt) < new Date('2022-02-22');
 
   const handleClick = () => {
@@ -56,6 +57,13 @@ export default function Petek({
       onOwnerClick(petek.owner);
     }
   };
+
+  const createHandleRatingClick = useCallback((rating) => {
+    return (e) => {
+      e.stopPropagation();
+      setUserRating(rating);
+    };
+  }, []);
 
   const dateString = isBeforeAppTime
     ? 'זמן מקורי לא ידוע (נכתב לפני האפליקציה)'
@@ -141,6 +149,48 @@ export default function Petek({
           />
         </div>
       </div>
+      {window.gateKeepers?.enableUserRating && (
+        <div className="user-rating-section">
+          <div className="label">הדירוג שלי</div>
+          <div className="stars-container">
+            <div
+              className={`user-rating-star ${
+                userRating >= 1 ? 'selected' : ''
+              }`}
+              onClick={createHandleRatingClick(1)}>
+              ⭐️
+            </div>
+            <div
+              className={`user-rating-star ${
+                userRating >= 2 ? 'selected' : ''
+              }`}
+              onClick={createHandleRatingClick(2)}>
+              ⭐️
+            </div>
+            <div
+              className={`user-rating-star ${
+                userRating >= 3 ? 'selected' : ''
+              }`}
+              onClick={createHandleRatingClick(3)}>
+              ⭐️
+            </div>
+            <div
+              className={`user-rating-star ${
+                userRating >= 4 ? 'selected' : ''
+              }`}
+              onClick={createHandleRatingClick(4)}>
+              ⭐️
+            </div>
+            <div
+              className={`user-rating-star ${
+                userRating >= 5 ? 'selected' : ''
+              }`}
+              onClick={createHandleRatingClick(5)}>
+              ⭐️
+            </div>
+          </div>
+        </div>
+      )}
       {enableLastComment && petek.comments.length > 0 ? (
         <>
           <div className="comments-preview">

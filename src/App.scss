@@ -289,6 +289,30 @@ body {
     display: flex;
   }
 
+  .user-rating-section {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+
+    .stars-container {
+      display: flex;
+      justify-content: center;
+
+      .user-rating-star {
+        font-size: 40px;
+        margin-right: 3px;
+        background-size: 100%;
+        margin: 0 6px;
+        filter: grayscale(1);
+
+        &.selected {
+          filter: grayscale(0);
+        }
+      }
+    }
+  }
+
   .comments-preview {
     width: 100%;
     margin-top: 10px;

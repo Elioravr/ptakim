@@ -36,6 +36,7 @@ import {
   logout,
   fetchCurrentUser,
   fetchOwnerPics,
+  fetchGateKeepers,
 } from './apiService';
 
 import moment from 'moment';
@@ -128,7 +129,8 @@ function App(): MixedElement {
 
   const loadList = useCallback(() => {
     setIsLoading(true);
-    fetchPetekList()
+    fetchGateKeepers()
+      .then(() => fetchPetekList())
       .then((list) => {
         list && setList(list);
 
