@@ -228,6 +228,11 @@ export default function NewPetekModal({
             const className = `set-owner-button ${
               currOwner === owner ? 'selected' : ''
             }`;
+
+            if (owner !== '' && !currOwner.includes(owner)) {
+              return null;
+            }
+
             return (
               <div
                 key={index}
