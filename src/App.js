@@ -282,13 +282,6 @@ function App(): MixedElement {
               <div className="point"></div>
               <div className="point"></div>
             </div>
-            <div className="user-picture-container" onClick={handleOpenSignIn}>
-              <UserPicture
-                ownerPics={ownerPics}
-                ownerName={currentUser?.ownerName}
-                size={35}
-              />
-            </div>
             <span className="logo">Ptakim</span>
             <div className="buttons-container">
               <div
@@ -306,11 +299,9 @@ function App(): MixedElement {
           <div className="app-footer">
             <div
               className="footer-search-button footer-button"
-              onClick={handleSearchPageClick}>
+              onClick={handleOpenSignIn}>
               <div className="footer-button-icon">
-                <div
-                  className="user-picture-container"
-                  onClick={handleOpenSignIn}>
+                <div className="user-picture-container">
                   <UserPicture
                     ownerPics={ownerPics}
                     ownerName={currentUser?.ownerName}
