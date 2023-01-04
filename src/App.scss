@@ -120,6 +120,17 @@ body {
     .footer-button {
       display: flex;
       flex-direction: column;
+      position: relative;
+
+      .notification-indicator {
+        width: 16px;
+        height: 16px;
+        background-color: red;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        right: 10px;
+      }
 
       .footer-button-icon {
         font-size: 30px;

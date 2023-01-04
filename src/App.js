@@ -63,6 +63,8 @@ function App(): MixedElement {
   const [selectedPetek, setSelectedPetek] = useState<?PetekType>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [order, setOrder] = useState<OrderType>('random');
+  const [enableNotificationIndicator, setEnableNotificationIndicator] =
+    useState(true);
 
   const loadUser = () => {
     return fetchCurrentUser().then((user) => {
@@ -112,6 +114,7 @@ function App(): MixedElement {
   };
 
   const handleOpenNotifications = () => {
+    setEnableNotificationIndicator(false);
     changeToPage(Page.Notifications);
   };
 
@@ -284,16 +287,16 @@ function App(): MixedElement {
             </div>
             <span className="logo">Ptakim</span>
             <div className="buttons-container">
-              <div
+              {/* <div
                 className="statistics-button page-button"
                 onClick={handleOpenNotifications}>
                 {'🔔'}
-              </div>
-              <div
+              </div> */}
+              {/* <div
                 className="statistics-button page-button"
                 onClick={handleOpenStatistics}>
                 {'📈'}
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="app-footer">
@@ -322,6 +325,9 @@ function App(): MixedElement {
             <div
               className="footer-search-button footer-button"
               onClick={handleOpenNotifications}>
+              {enableNotificationIndicator && (
+                <div className="notification-indicator"></div>
+              )}
               <div className="footer-button-icon">{'🔔'}</div>
               <div className="footer-button-label">{'התראות'}</div>
             </div>
