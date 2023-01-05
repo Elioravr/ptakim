@@ -360,7 +360,7 @@ function App(): MixedElement {
                 />
               )}
               {filteredList == null && (
-                <div className="petek-list-order-toggle">
+                <div className={`petek-list-order-toggle ${order}`}>
                   <div
                     onClick={() => {
                       setOrder('random');
@@ -379,6 +379,7 @@ function App(): MixedElement {
                     }`}>
                     סדר כרונולוגי
                   </div>
+                  <div className="selected-underline"></div>
                 </div>
               )}
               <PetekList

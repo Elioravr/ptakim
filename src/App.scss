@@ -1396,21 +1396,44 @@ body {
   margin: auto;
   overflow: hidden;
   margin-top: 10px;
-  border: 2px solid $owners-color;
+  position: relative;
+  border-bottom: 2px solid $owners-color;
+
+  .selected-underline {
+    content: ' ';
+    height: 2px;
+    background-color: $owners-color;
+    position: absolute;
+    right: 0;
+    width: 50%;
+    bottom: 0px;
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  &.chronological {
+    .selected-underline {
+      transform: translateX(-100%);
+    }
+  }
 
   .button {
     width: 50%;
-    background-color: $owners-color;
     color: white;
     font-size: 16px;
-    height: 30px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: bold;
+    color: $owners-color;
 
     &.selected {
       color: $owners-color;
-      background-color: white;
+      font-weight: bold;
+
+      &.chronological-button {
+      }
     }
   }
 }
