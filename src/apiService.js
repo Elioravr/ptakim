@@ -13,6 +13,8 @@ import {
   signInWithPhoneNumber,
   signOut,
 } from 'firebase/auth';
+import {getMessaging} from 'firebase/messaging';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -48,7 +50,69 @@ const recaptchaVerifier = new RecaptchaVerifier(
 );
 
 auth.languageCode = 'he';
-// let confirmationResult = null;
+
+const messaging = getMessaging();
+
+navigator.serviceWorker.register('./firebase-message-sw.js').then(
+  function (registration) {
+    // Registration was successful
+    console.log(
+      'firebase-message-sw :ServiceWorker registration successful with scope: ',
+      registration.scope,
+    );
+    messaging.useServiceWorker(registration);
+  },
+  function (err) {
+    // registration failed :(
+    console.log(
+      'firebase-message-sw: ServiceWorker registration failed: ',
+      err,
+    );
+  },
+);
+function requestPermission() {
+  console.log('Requesting permission...');
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      console.log('Notification permission granted.');
+    } else {
+      console.log('Notification permission denied.');
+    }
+  });
+}
+
+requestPermission();
+// getToken(
+//   messaging,
+//   'BBQhTsEjC-MEKQ098ERpix-smOvSMBITBSdopupTpe9pZ4F5TajnwfpCCpjblfRLbkmhcSzSbI_3KO1F1lv_K40',
+// )
+//   .then(() => {
+//     console.log('success!');
+//   })
+//   .catch((e) => console.log('messaging e', e));
+//   .then(function (currentToken) {
+//     if (currentToken) {
+//       console.log('Got token:', currentToken);
+//       return set(
+//         ref(db, `users/${getCurrentUser().uid}/tokens/${currentToken}`),
+//         true,
+//       )
+//         // .then(() => {
+//         //   console.log('Subscribed to topic');
+//         // })
+//         .then(() => {
+//           return subscribeToTopic('GENERAL_NOTIFICATIONS');
+//         })
+//         .catch((error) => {
+//           console.log('Error subscribing to topic:', error);
+//         });
+//     } else {
+//       console.log('No token available');
+//     }
+//   })
+//   .catch(function (err) {
+//     console.log('An error occurred while retrieving token. ', err);
+//   });
 
 export const fetchPetekList = async () => {
   const peteksSnap = await get(ref(db, 'peteks/'));
