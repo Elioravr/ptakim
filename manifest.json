@@ -1,12 +1,13 @@
 {
   "short_name": "Ptakim",
-  "name": "Ptakim is a social network for funny quotes of friends and family",
+  "name": "Ptakim",
   "icons": [
     {"src": "app-logo-6.png", "sizes": "192x192", "type": "image/png"},
     {"src": "app-logo-6.png", "sizes": "512x512", "type": "image/png"}
   ],
-  "start_url": "/?source=pwa",
-  "scope": "/",
+  "id": "/ptakim/", // מזהה יציב לאפליקציה (מומלץ ב-iOS/Chrome)
+  "scope": "/ptakim/", // איפה האפליקציה “חוקית”
+  "start_url": "/ptakim/?source=pwa", // מאיפה להתחיל כשפותחים מהמסך הראשי
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
